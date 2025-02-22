@@ -1,8 +1,30 @@
-@if (group) {
 <form [formGroup]="group" (ngSubmit)="this.login.emit()">
-  <input formControlName="username" type="text" placeholder="Username" />
-  <input formControlName="password" type="password" placeholder="Password" />
-
-  <button type="submit" [disabled]="group.invalid">Login with Jellyfin</button>
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-subtitle>
+      Enter your Jellyfin credentials for
+      <a [href]="getJellyfinInstanceUrl()" target="_blank">{{
+        getJellyfinInstanceUrl()
+      }}</a>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <app-shared-reactive-input
+        controlName="username"
+        placeholder="Username"
+        [group]="group"
+      ></app-shared-reactive-input>
+      <app-shared-reactive-input
+        controlName="password"
+        placeholder="Password"
+        [group]="group"
+        type="password"
+      ></app-shared-reactive-input>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-fab extended type="submit" [disabled]="group.invalid">
+        <mat-icon>login</mat-icon>
+        Login with Jellyfin
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </form>
-}

@@ -1,1 +1,5 @@
-<app-login-form [group]="loginForm" (login)="login()"></app-login-form>
+<div class="content">
+  @if (loginForm) {
+  <app-login-form [group]="loginForm" (login)="login()"></app-login-form>
+  }
+</div>
