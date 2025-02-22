@@ -24,8 +24,16 @@ export class JellyfinService {
     this.api = this.sdk.createApi(environment.jellyfin.baseUrl);
   }
 
-  public async login(username: string, password: string): Promise<void> {
-    await this.api.authenticateUserByName(username, password);
+  public async login(username: string, password: string): Promise<boolean> {
+    try {
+      const response = await this.api.authenticateUserByName(
+        username,
+        password
+      );
+      return response.status === 200 && !!response.data.AccessToken;
+    } catch {
+      return false;
+    }
   }
 
   public get isAuthenticated(): boolean {
