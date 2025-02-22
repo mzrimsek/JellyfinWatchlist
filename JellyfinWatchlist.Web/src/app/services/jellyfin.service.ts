@@ -40,6 +40,10 @@ export class JellyfinService {
     return !!this.api.accessToken;
   }
 
+  public async logout(): Promise<void> {
+    await this.api.logout();
+  }
+
   public async getCurrentUser(): Promise<UserDto> {
     const userApi = getUserApi(this.api);
     const response = await userApi.getCurrentUser();
