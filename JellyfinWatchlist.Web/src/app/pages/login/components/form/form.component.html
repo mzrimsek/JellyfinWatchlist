@@ -1,0 +1,8 @@
+@if (group) {
+<form [formGroup]="group" (ngSubmit)="this.login.emit()">
+  <input formControlName="username" type="text" placeholder="Username" />
+  <input formControlName="password" type="password" placeholder="Password" />
+
+  <button type="submit" [disabled]="group.invalid">Login with Jellyfin</button>
+</form>
+}
