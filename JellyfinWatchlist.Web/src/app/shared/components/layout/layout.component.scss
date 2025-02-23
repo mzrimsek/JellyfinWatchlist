@@ -1,0 +1,10 @@
+@use "../../../../variables.scss";
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .layout-content {
+    padding: variables.$base-spacing * 2;
+  }
+}

@@ -1,0 +1,23 @@
+<form [formGroup]="group" (ngSubmit)="this.search.emit()">
+  <mat-card>
+    <mat-card-title>Search</mat-card-title>
+    <mat-card-subtitle>Add New Media to Your Watchlist</mat-card-subtitle>
+    <mat-card-content>
+      <app-shared-reactive-input
+        [group]="group"
+        controlName="query"
+        placeholder="Search media"
+      ></app-shared-reactive-input>
+      <button
+        mat-fab
+        extended
+        color="primary"
+        type="submit"
+        [disabled]="group.invalid"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </mat-card-content>
+  </mat-card>
+</form>
