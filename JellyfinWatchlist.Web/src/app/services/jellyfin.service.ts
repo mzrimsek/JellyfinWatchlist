@@ -7,6 +7,8 @@ import {
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
+import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
 import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
@@ -71,6 +73,15 @@ export class JellyfinService {
       searchTerm: query,
       userId: currentUser.Id,
       includeItemTypes: ['Movie', 'Series'],
+    });
+    return response.data;
+  }
+
+  public async getItemPrimaryImage(id: string): Promise<File> {
+    const imageApi = getImageApi(this.api);
+    const response = await imageApi.getItemImage({
+      itemId: id,
+      imageType: 'Primary',
     });
     return response.data;
   }
