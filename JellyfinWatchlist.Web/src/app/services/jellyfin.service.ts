@@ -1,13 +1,15 @@
 import { Api, Jellyfin } from '@jellyfin/sdk';
 import {
   PublicSystemInfo,
+  SearchHintResult,
   UserDto,
 } from '@jellyfin/sdk/lib/generated-client/models';
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { getSystemApi } from '../../../node_modules/@jellyfin/sdk/lib/utils/api/system-api';
-import { getUserApi } from '../../../node_modules/@jellyfin/sdk/lib/utils/api/user-api';
+import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
+import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
+import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +60,18 @@ export class JellyfinService {
   public async getSystemInfo(): Promise<PublicSystemInfo> {
     const systemApi = getSystemApi(this.api);
     const response = await systemApi.getPublicSystemInfo();
+    return response.data;
+  }
+
+  public async search(query: string): Promise<SearchHintResult> {
+    const searchApi = getSearchApi(this.api);
+
+    const currentUser = await this.getCurrentUser();
+    const response = await searchApi.getSearchHints({
+      searchTerm: query,
+      userId: currentUser.Id,
+      includeItemTypes: ['Movie', 'Series'],
+    });
     return response.data;
   }
 }

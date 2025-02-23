@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CommonModule } from '@angular/common';
@@ -32,8 +37,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: [''],
-      password: [''],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
     this.jellyfinService.getSystemInfo().then((systemInfo) => {
       this.instanceName = systemInfo.ServerName ?? this.getInstanceUrl();

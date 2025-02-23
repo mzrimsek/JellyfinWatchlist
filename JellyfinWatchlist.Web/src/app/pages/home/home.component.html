@@ -8,3 +8,20 @@
     <li>Display watch list on home page</li>
   </ol>
 </div>
+<form [formGroup]="searchForm" (ngSubmit)="search()">
+  <app-shared-reactive-input
+    [group]="searchForm"
+    controlName="query"
+    placeholder="Search media"
+  ></app-shared-reactive-input>
+  <button
+    mat-fab
+    extended
+    color="primary"
+    type="submit"
+    [disabled]="searchForm.invalid"
+  >
+    <mat-icon>search</mat-icon>
+    Search
+  </button>
+</form>
