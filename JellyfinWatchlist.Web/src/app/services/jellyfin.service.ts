@@ -25,6 +25,7 @@ export class JellyfinService {
   });
   private api: Api;
   constructor() {
+    // TODO need to persist this so we don't have to login every time
     this.api = this.sdk.createApi(environment.jellyfin.baseUrl);
   }
 
