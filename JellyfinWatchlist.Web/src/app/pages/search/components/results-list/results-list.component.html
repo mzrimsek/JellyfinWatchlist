@@ -1,0 +1,12 @@
+@if (results.length === 0) {
+<p>No results found.</p>
+} @else {
+<ul>
+  @for (resultItem of results; track resultItem.id) {
+  <li>
+    <div>{{ resultItem.name }} ({{ resultItem.year }})</div>
+    <img src="{{ resultItem.primaryImage }}" alt="{{ resultItem.name }}" />
+  </li>
+  }
+</ul>
+}

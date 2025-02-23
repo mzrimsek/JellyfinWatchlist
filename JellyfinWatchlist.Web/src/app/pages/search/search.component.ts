@@ -4,11 +4,12 @@ import { Component } from '@angular/core';
 import { FormComponent } from './components/form/form.component';
 import { JellyfinService } from '../../services/jellyfin.service';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { ResultsListComponent } from './components/results-list/results-list.component';
 import { SearchResult } from './models';
 
 @Component({
   selector: 'app-search',
-  imports: [LayoutComponent, FormComponent],
+  imports: [LayoutComponent, FormComponent, ResultsListComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })

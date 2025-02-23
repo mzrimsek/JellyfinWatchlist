@@ -77,12 +77,24 @@ export class JellyfinService {
     return response.data;
   }
 
-  public async getItemPrimaryImage(id: string): Promise<File> {
+  public async getItemPrimaryImage(id: string): Promise<string> {
     const imageApi = getImageApi(this.api);
     const response = await imageApi.getItemImage({
       itemId: id,
       imageType: 'Primary',
+      format: 'Jpg',
     });
-    return response.data;
+
+    const file = response.data;
+    return await this.convertFileToBase64(file);
+  }
+
+  private convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   }
 }
