@@ -3,9 +3,7 @@
     <mat-card-title>Login</mat-card-title>
     <mat-card-subtitle>
       Enter your Jellyfin credentials for
-      <a [href]="getJellyfinInstanceUrl()" target="_blank">{{
-        getJellyfinInstanceUrl()
-      }}</a>
+      <a [href]="instanceUrl" target="_blank">{{ instanceName }}</a>
     </mat-card-subtitle>
     <mat-card-content>
       <app-shared-reactive-input

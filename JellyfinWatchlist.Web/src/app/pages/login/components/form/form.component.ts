@@ -13,7 +13,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveInputComponent } from '../../../../shared/components/form/reactive-input/reactive-input.component';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login-form',
@@ -33,9 +32,7 @@ import { environment } from '../../../../../environments/environment';
 export class FormComponent {
   @Input()
   group!: FormGroup;
+  @Input() instanceUrl = '';
+  @Input() instanceName: string | null = '';
   @Output() login: EventEmitter<void> = new EventEmitter<void>();
-
-  getJellyfinInstanceUrl(): string {
-    return environment.jellyfin.baseUrl;
-  }
 }

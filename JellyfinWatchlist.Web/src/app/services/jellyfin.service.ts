@@ -1,8 +1,12 @@
 import { Api, Jellyfin } from '@jellyfin/sdk';
+import {
+  PublicSystemInfo,
+  UserDto,
+} from '@jellyfin/sdk/lib/generated-client/models';
 
 import { Injectable } from '@angular/core';
-import { UserDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { environment } from '../../environments/environment';
+import { getSystemApi } from '../../../node_modules/@jellyfin/sdk/lib/utils/api/system-api';
 import { getUserApi } from '../../../node_modules/@jellyfin/sdk/lib/utils/api/user-api';
 
 @Injectable({
@@ -47,6 +51,12 @@ export class JellyfinService {
   public async getCurrentUser(): Promise<UserDto> {
     const userApi = getUserApi(this.api);
     const response = await userApi.getCurrentUser();
+    return response.data;
+  }
+
+  public async getSystemInfo(): Promise<PublicSystemInfo> {
+    const systemApi = getSystemApi(this.api);
+    const response = await systemApi.getPublicSystemInfo();
     return response.data;
   }
 }
