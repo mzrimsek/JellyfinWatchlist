@@ -1,0 +1,18 @@
+@use "../../../../variables";
+
+mat-card,
+mat-card-title,
+mat-card-subtitle,
+mat-card-content {
+  padding: variables.$base-spacing;
+}
+
+mat-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  app-shared-reactive-input {
+    width: 80%;
+  }
+}

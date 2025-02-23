@@ -1,12 +1,13 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Component } from '@angular/core';
+import { FormComponent } from './form/form.component';
 import { JellyfinService } from '../../services/jellyfin.service';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 
 @Component({
   selector: 'app-search',
-  imports: [LayoutComponent],
+  imports: [LayoutComponent, FormComponent, FormComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
