@@ -1,7 +1,7 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Component } from '@angular/core';
-import { FormComponent } from './form/form.component';
+import { FormComponent } from './components/form/form.component';
 import { JellyfinService } from '../../services/jellyfin.service';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 

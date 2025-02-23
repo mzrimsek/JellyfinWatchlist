@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
+import { ReactiveInputComponent } from '../../../../shared/components/form/reactive-input/reactive-input.component';
 
 @Component({
   selector: 'app-search-form',
