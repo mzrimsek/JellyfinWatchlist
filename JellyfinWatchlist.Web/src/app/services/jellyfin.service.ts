@@ -86,13 +86,14 @@ export class JellyfinService {
     });
 
     const file = response.data;
-    return await this.convertFileToBase64(file);
+    const blob = new Blob([file], { type: 'image/jpeg' });
+    return await this.convertFileToBase64(blob);
   }
 
-  private convertFileToBase64(file: File): Promise<string> {
+  private convertFileToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(blob);
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });

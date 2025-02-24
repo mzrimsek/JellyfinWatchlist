@@ -1,0 +1,8 @@
+.result-list {
+  display: flex;
+
+  .result-item {
+    display: flex;
+    flex-direction: column;
+  }
+}
