@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { MatCardModule } from '@angular/material/card';
 import { SearchResult } from '../../models';
 
 @Component({
   selector: 'app-search-result-list-item',
-  imports: [],
+  standalone: true,
+  imports: [MatCardModule],
   templateUrl: './result-list-item.component.html',
-  styleUrl: './result-list-item.component.scss',
+  styleUrls: ['./result-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultListItemComponent {

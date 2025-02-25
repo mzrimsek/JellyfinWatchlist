@@ -1,11 +1,15 @@
-@if (results.length === 0) {
-<p>No results found.</p>
-} @else {
-<div class="result-list">
-  @for (resultItem of results; track resultItem.id) {
-  <app-search-result-list-item
-    [item]="resultItem"
-  ></app-search-result-list-item>
-  }
-</div>
-}
+<mat-card>
+  <mat-card-content>
+    @if (results.length === 0) {
+    <p>No results found.</p>
+    } @else {
+    <div class="result-list">
+      @for (resultItem of results; track resultItem.id) {
+      <app-search-result-list-item
+        [item]="resultItem"
+      ></app-search-result-list-item>
+      }
+    </div>
+    }
+  </mat-card-content>
+</mat-card>

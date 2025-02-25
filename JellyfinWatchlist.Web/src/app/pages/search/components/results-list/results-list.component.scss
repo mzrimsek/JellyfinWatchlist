@@ -1,3 +1,7 @@
+@use "../../../../../variables.scss";
+
 .result-list {
   display: flex;
+  flex-wrap: wrap;
+  gap: variables.$base-spacing * 2;
 }
