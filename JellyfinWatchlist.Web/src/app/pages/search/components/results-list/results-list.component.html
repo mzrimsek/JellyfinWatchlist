@@ -4,11 +4,18 @@
     <p>No results found.</p>
     } @else {
     <div class="result-list">
-      @for (resultItem of results; track resultItem.id) {
-      <app-search-result-list-item
-        [item]="resultItem"
-      ></app-search-result-list-item>
-      }
+      <div class="list-header">
+        <p>{{ results.length }} results</p>
+      </div>
+      <div class="items">
+        @for (resultItem of results; track resultItem.id) {
+        <div class="item">
+          <app-search-result-list-item
+            [item]="resultItem"
+          ></app-search-result-list-item>
+        </div>
+        }
+      </div>
     </div>
     }
   </mat-card-content>
