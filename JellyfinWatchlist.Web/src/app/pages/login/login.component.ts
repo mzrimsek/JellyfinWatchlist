@@ -1,3 +1,5 @@
+import * as fromRoot from '../../reducers';
+
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -10,7 +12,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { JellyfinService } from '../../services/jellyfin.service';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -26,13 +30,14 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
-  instanceName: string | null = null;
+  instanceName$: Observable<string> | undefined;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private snackbar: MatSnackBar,
-    private jellyfinService: JellyfinService
+    private jellyfinService: JellyfinService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -40,9 +45,7 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
-    this.jellyfinService.getSystemInfo().then((systemInfo) => {
-      this.instanceName = systemInfo.ServerName ?? this.getInstanceUrl();
-    });
+    this.instanceName$ = this.store.select(fromRoot.selectJellyfinServerName());
   }
 
   async login(): Promise<void> {
