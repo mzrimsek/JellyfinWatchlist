@@ -43,10 +43,6 @@ export class JellyfinService {
     }
   }
 
-  public get isAuthenticated(): boolean {
-    return !!this.api.accessToken;
-  }
-
   public async logout(): Promise<void> {
     await this.api.logout();
   }

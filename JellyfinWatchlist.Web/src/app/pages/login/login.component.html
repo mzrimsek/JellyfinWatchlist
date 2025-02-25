@@ -3,7 +3,7 @@
   <app-login-form
     [group]="loginForm"
     [instanceUrl]="getInstanceUrl()"
-    [instanceName]="instanceName"
+    [instanceName]="instanceName$ | async"
     (login)="login()"
   ></app-login-form>
   }

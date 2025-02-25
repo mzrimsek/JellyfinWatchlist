@@ -1,5 +1,3 @@
-import * as fromRoot from '../../reducers';
-
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -16,6 +14,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
+import { selectJellyfinServerName } from '../../reducers';
 
 @Component({
   selector: 'app-login',
@@ -45,7 +44,7 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
-    this.instanceName$ = this.store.select(fromRoot.selectJellyfinServerName());
+    this.instanceName$ = this.store.select(selectJellyfinServerName);
   }
 
   async login(): Promise<void> {
