@@ -77,25 +77,38 @@ export class JellyfinService {
     return response.data;
   }
 
-  public async getItemPrimaryImage(id: string): Promise<string> {
+  public async getItemPrimaryImage(
+    itemId: string,
+    tag?: string
+  ): Promise<File> {
     const imageApi = getImageApi(this.api);
+
     const response = await imageApi.getItemImage({
-      itemId: id,
+      itemId,
       imageType: 'Primary',
-      format: 'Jpg',
+      format: 'Webp',
+      fillHeight: 960,
+      fillWidth: 640,
+      quality: 96,
+      tag,
     });
 
     const file = response.data;
-    const blob = new Blob([file], { type: 'image/jpeg' });
-    return await this.convertFileToBase64(blob);
+    return file;
   }
 
-  private convertFileToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
+  private getDataUrl(image: HTMLImageElement) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return '';
+    }
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+    ctx.drawImage(image, 0, 0);
+
+    return canvas.toDataURL('image/webp');
   }
 }

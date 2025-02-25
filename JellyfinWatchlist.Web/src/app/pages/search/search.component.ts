@@ -39,7 +39,8 @@ export class SearchComponent {
             return null;
           }
           const primaryImage = await this.jellyfinService.getItemPrimaryImage(
-            hint.Id
+            hint.Id,
+            hint?.PrimaryImageTag ?? undefined
           );
           return {
             id: hint.Id,
