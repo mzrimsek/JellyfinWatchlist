@@ -11,16 +11,14 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { ReactiveInputComponent } from '../../../../shared/components/form/reactive-input/reactive-input.component';
 
 @Component({
-  selector: 'app-login-form',
+  selector: 'app-search-form',
   imports: [
+    ReactiveInputComponent,
     CommonModule,
     ReactiveFormsModule,
-    ReactiveInputComponent,
-    MatInputModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
@@ -32,7 +30,5 @@ import { ReactiveInputComponent } from '../../../../shared/components/form/react
 export class FormComponent {
   @Input()
   group!: FormGroup;
-  @Input() instanceUrl = '';
-  @Input() instanceName: string | null = '';
-  @Output() login: EventEmitter<void> = new EventEmitter<void>();
+  @Output() search: EventEmitter<void> = new EventEmitter<void>();
 }

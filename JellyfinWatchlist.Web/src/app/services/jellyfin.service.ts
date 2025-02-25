@@ -1,9 +1,17 @@
 import { Api, Jellyfin } from '@jellyfin/sdk';
+import {
+  PublicSystemInfo,
+  SearchHintResult,
+  UserDto,
+} from '@jellyfin/sdk/lib/generated-client/models';
 
 import { Injectable } from '@angular/core';
-import { UserDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { environment } from '../../environments/environment';
-import { getUserApi } from '../../../node_modules/@jellyfin/sdk/lib/utils/api/user-api';
+import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
+import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
+import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
+import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
+import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +29,7 @@ export class JellyfinService {
   });
   private api: Api;
   constructor() {
+    // TODO need to persist this so we don't have to login every time
     this.api = this.sdk.createApi(environment.jellyfin.baseUrl);
   }
 
@@ -48,5 +57,35 @@ export class JellyfinService {
     const userApi = getUserApi(this.api);
     const response = await userApi.getCurrentUser();
     return response.data;
+  }
+
+  public async getSystemInfo(): Promise<PublicSystemInfo> {
+    const systemApi = getSystemApi(this.api);
+    const response = await systemApi.getPublicSystemInfo();
+    return response.data;
+  }
+
+  public async search(query: string): Promise<SearchHintResult> {
+    const searchApi = getSearchApi(this.api);
+
+    const currentUser = await this.getCurrentUser();
+    const response = await searchApi.getSearchHints({
+      searchTerm: query,
+      userId: currentUser.Id,
+      includeItemTypes: ['Movie', 'Series'],
+    });
+    return response.data;
+  }
+
+  public getItemPrimaryImageUrl(
+    itemId: string,
+    tag?: string,
+    quality = 90,
+    fillHeight = 495,
+    fillWidth = 330
+  ): string {
+    // TODO: This is a hack to get the image url. We should use the SDK to get the image url
+    // someone enlighten me on how to properly convert the image I am getting back to a data url and I will fix this
+    return `${environment.jellyfin.baseUrl}/Items/${itemId}/Images/Primary?tag=${tag}&quality=${quality}&fillHeight=${fillHeight}&fillWidth=${fillWidth}`;
   }
 }

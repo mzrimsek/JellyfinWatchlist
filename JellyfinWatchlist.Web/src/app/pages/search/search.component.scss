@@ -1,0 +1,7 @@
+@use "../../../variables.scss";
+
+.search-page {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$base-spacing * 2;
+}

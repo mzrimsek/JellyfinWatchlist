@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { JellyfinService } from '../../services/jellyfin.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +26,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
+  instanceName: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -30,8 +37,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: [''],
-      password: [''],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+    });
+    this.jellyfinService.getSystemInfo().then((systemInfo) => {
+      this.instanceName = systemInfo.ServerName ?? this.getInstanceUrl();
     });
   }
 
@@ -47,5 +57,9 @@ export class LoginComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+  }
+
+  getInstanceUrl(): string {
+    return environment.jellyfin.baseUrl;
   }
 }
