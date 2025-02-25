@@ -7,8 +7,6 @@ import {
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
-import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
 import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
@@ -79,7 +77,7 @@ export class JellyfinService {
 
   public getItemPrimaryImageUrl(
     itemId: string,
-    tag?: string,
+    tag: string,
     quality = 90,
     fillHeight = 495,
     fillWidth = 330

@@ -35,12 +35,18 @@ export class SearchComponent {
     if (SearchHints) {
       const results = await Promise.all(
         SearchHints.map(async (hint) => {
-          if (!hint.Id) {
-            return null;
+          if (
+            !hint.Id ||
+            !hint.Name ||
+            !hint.Type ||
+            !hint.ProductionYear ||
+            !hint.PrimaryImageTag
+          ) {
+            throw new Error('Search Result is missing expected properties');
           }
           const primaryImageUrl = this.jellyfinService.getItemPrimaryImageUrl(
             hint.Id,
-            hint?.PrimaryImageTag ?? undefined
+            hint.PrimaryImageTag
           );
           return {
             id: hint.Id,
