@@ -3,10 +3,9 @@
 } @else {
 <div class="result-list">
   @for (resultItem of results; track resultItem.id) {
-  <div class="result-item">
-    <div>{{ resultItem.name }} ({{ resultItem.year }})</div>
-    <img src="{{ resultItem.primaryImageUrl }}" alt="{{ resultItem.name }}" />
-  </div>
+  <app-search-result-list-item
+    [item]="resultItem"
+  ></app-search-result-list-item>
   }
 </div>
 }

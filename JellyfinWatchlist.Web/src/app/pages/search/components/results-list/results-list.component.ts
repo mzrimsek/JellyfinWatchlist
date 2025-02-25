@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { ResultListItemComponent } from '../result-list-item/result-list-item.component';
 import { SearchResult } from '../../models';
 
 @Component({
   selector: 'app-search-results-list',
-  imports: [],
+  imports: [ResultListItemComponent],
   templateUrl: './results-list.component.html',
   styleUrl: './results-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
