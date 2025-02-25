@@ -77,38 +77,15 @@ export class JellyfinService {
     return response.data;
   }
 
-  public async getItemPrimaryImage(
+  public getItemPrimaryImageUrl(
     itemId: string,
-    tag?: string
-  ): Promise<File> {
-    const imageApi = getImageApi(this.api);
-
-    const response = await imageApi.getItemImage({
-      itemId,
-      imageType: 'Primary',
-      format: 'Webp',
-      fillHeight: 960,
-      fillWidth: 640,
-      quality: 96,
-      tag,
-    });
-
-    const file = response.data;
-    return file;
-  }
-
-  private getDataUrl(image: HTMLImageElement) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) {
-      return '';
-    }
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-    ctx.drawImage(image, 0, 0);
-
-    return canvas.toDataURL('image/webp');
+    tag?: string,
+    quality = 90,
+    fillHeight = 495,
+    fillWidth = 330
+  ): string {
+    // TODO: This is a hack to get the image url. We should use the SDK to get the image url
+    // someone enlighten me on how to properly convert the image I am getting back to a data url and I will fix this
+    return `${environment.jellyfin.baseUrl}/Items/${itemId}/Images/Primary?tag=${tag}&quality=${quality}&fillHeight=${fillHeight}&fillWidth=${fillWidth}`;
   }
 }

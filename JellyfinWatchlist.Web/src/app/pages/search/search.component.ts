@@ -38,7 +38,7 @@ export class SearchComponent {
           if (!hint.Id) {
             return null;
           }
-          const primaryImage = await this.jellyfinService.getItemPrimaryImage(
+          const primaryImageUrl = this.jellyfinService.getItemPrimaryImageUrl(
             hint.Id,
             hint?.PrimaryImageTag ?? undefined
           );
@@ -47,7 +47,7 @@ export class SearchComponent {
             name: hint.Name,
             mediaType: hint.Type,
             year: hint.ProductionYear,
-            primaryImage,
+            primaryImageUrl,
           };
         })
       );

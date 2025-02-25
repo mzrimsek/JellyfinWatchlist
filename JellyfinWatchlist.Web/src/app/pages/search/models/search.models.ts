@@ -3,5 +3,5 @@ export interface SearchResult {
   name: string;
   mediaType: string;
   year: number;
-  primaryImage: File;
+  primaryImageUrl: string;
 }
