@@ -16,6 +16,7 @@ import { SearchResult } from './models';
 export class SearchComponent {
   searchForm: FormGroup;
   searchResults: Array<SearchResult> = [];
+  private currentUserId: string | undefined;
 
   constructor(
     private jellyfinService: JellyfinService,
@@ -27,8 +28,11 @@ export class SearchComponent {
   }
 
   async search(): Promise<void> {
+    if (this.currentUserId) {
+    }
     const result = await this.jellyfinService.search(
-      this.searchForm.value.query
+      this.searchForm.value.query,
+      '' // todo pass in the current user id
     );
     const { SearchHints } = result;
 

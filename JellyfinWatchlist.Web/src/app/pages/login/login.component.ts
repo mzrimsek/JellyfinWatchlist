@@ -1,3 +1,5 @@
+import * as jellyfinActions from '../../actions/jellyfin.actions';
+
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -9,7 +11,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
-import { JellyfinService } from '../../services/jellyfin.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -35,7 +36,6 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private snackbar: MatSnackBar,
-    private jellyfinService: JellyfinService,
     private store: Store
   ) {}
 
@@ -48,17 +48,22 @@ export class LoginComponent implements OnInit {
   }
 
   async login(): Promise<void> {
-    const succeeded = await this.jellyfinService.login(
-      this.loginForm?.value.username,
-      this.loginForm?.value.password
+    this.store.dispatch(
+      jellyfinActions.login({
+        username: this.loginForm?.value.username,
+        password: this.loginForm?.value.password,
+      })
     );
-    if (!succeeded) {
-      this.snackbar.open('Login failed', 'Dismiss', {
-        duration: 3000,
-      });
-    } else {
-      this.router.navigate(['/']);
-    }
+
+    // move this to the effect handler
+    // we need a special on init handler to dispatch the system info load action
+    // if (!succeeded) {
+    //   this.snackbar.open('Login failed', 'Dismiss', {
+    //     duration: 3000,
+    //   });
+    // } else {
+    //   this.router.navigate(['/']);
+    // }
   }
 
   getInstanceUrl(): string {
