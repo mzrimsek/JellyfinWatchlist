@@ -7,30 +7,28 @@ import { catchError, exhaustMap, map, of } from 'rxjs';
 import { JellyfinService } from '../services/jellyfin.service';
 
 @Injectable()
-export class SystemInfoEffects {
+export class CurrentUserEffects {
   private actions$ = inject(Actions);
   private jellyfinService = inject(JellyfinService);
 
-  getSystemInfoActions$ = createEffect(() => {
+  getCurrentUserActions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(jellyfinActions.getSystemInfo),
+      ofType(jellyfinActions.getCurrentUser),
       exhaustMap(() =>
-        this.jellyfinService.getSystemInfo().pipe(
-          map((systemInfo) =>
-            jellyfinActions.getSystemInfoSucceeded({ systemInfo })
-          ),
-          catchError(() => of(jellyfinActions.getSystemInfoFailed()))
+        this.jellyfinService.getCurrentUser().pipe(
+          map((user) => jellyfinActions.getCurrentUserSucceeded({ user })),
+          catchError(() => of(jellyfinActions.getCurrentUserFailed()))
         )
       )
     );
   });
 
-  getSystemInfoFailedActions$ = createEffect(
+  getCurrentUserFailedActions$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(jellyfinActions.getSystemInfoFailed),
+        ofType(jellyfinActions.getCurrentUserFailed),
         map(() => {
-          console.log('Failed to get system info');
+          console.log('Failed to get current user');
         })
       );
     },

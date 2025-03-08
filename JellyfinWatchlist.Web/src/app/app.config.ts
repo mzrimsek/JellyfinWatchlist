@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { metaReducers, reducers } from './reducers';
 
+import { CurrentUserEffects } from './effects/current-user.effects';
 import { InitEffects } from './effects/init.effects';
 import { LoginEffects } from './effects/login.effects';
 import { SystemInfoEffects } from './effects/system-info.effects';
@@ -23,7 +24,12 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(reducers, { metaReducers }),
     provideRouterStore(),
-    provideEffects(InitEffects, LoginEffects, SystemInfoEffects),
+    provideEffects(
+      InitEffects,
+      LoginEffects,
+      SystemInfoEffects,
+      CurrentUserEffects
+    ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
