@@ -1,3 +1,5 @@
+import * as authActions from '../../actions/auth.actions';
+
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -5,13 +7,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
-import { JellyfinService } from '../../services/jellyfin.service';
-import { Router } from '@angular/router';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
+import { selectJellyfinServerName } from '../../reducers';
 
 @Component({
   selector: 'app-login',
@@ -26,37 +29,25 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
-  instanceName: string | null = null;
+  instanceName$: Observable<string> | undefined;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private snackbar: MatSnackBar,
-    private jellyfinService: JellyfinService
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
-    this.jellyfinService.getSystemInfo().then((systemInfo) => {
-      this.instanceName = systemInfo.ServerName ?? this.getInstanceUrl();
-    });
+    this.instanceName$ = this.store.select(selectJellyfinServerName);
   }
 
-  async login(): Promise<void> {
-    const succeeded = await this.jellyfinService.login(
-      this.loginForm?.value.username,
-      this.loginForm?.value.password
+  login(): void {
+    this.store.dispatch(
+      authActions.login({
+        username: this.loginForm?.value.username,
+        password: this.loginForm?.value.password,
+      })
     );
-    if (!succeeded) {
-      this.snackbar.open('Login failed', 'Dismiss', {
-        duration: 3000,
-      });
-    } else {
-      this.router.navigate(['/']);
-    }
   }
 
   getInstanceUrl(): string {

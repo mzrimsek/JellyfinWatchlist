@@ -1,63 +1,38 @@
+import * as searchActions from '../../actions/search.actions';
+
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
-import { JellyfinService } from '../../services/jellyfin.service';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { Observable } from 'rxjs';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { SearchResult } from './models';
+import { Store } from '@ngrx/store';
+import { selectSearchResults } from '../../reducers';
 
 @Component({
   selector: 'app-search',
-  imports: [LayoutComponent, FormComponent, ResultsListComponent],
+  imports: [LayoutComponent, FormComponent, ResultsListComponent, CommonModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent {
-  searchForm: FormGroup;
-  searchResults: Array<SearchResult> = [];
+export class SearchComponent implements OnInit {
+  searchForm: FormGroup | undefined;
+  searchResults$: Observable<SearchResult[]> | undefined;
 
-  constructor(
-    private jellyfinService: JellyfinService,
-    private fb: FormBuilder
-  ) {
+  constructor(private store: Store, private fb: FormBuilder) {}
+  ngOnInit(): void {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
     });
+    this.searchResults$ = this.store.select(selectSearchResults);
   }
 
-  async search(): Promise<void> {
-    const result = await this.jellyfinService.search(
-      this.searchForm.value.query
+  search(): void {
+    this.store.dispatch(
+      searchActions.search({ query: this.searchForm?.value.query })
     );
-    const { SearchHints } = result;
-
-    if (SearchHints) {
-      const results = await Promise.all(
-        SearchHints.map(async (hint) => {
-          if (!hint.Id) {
-            return null;
-          }
-          const primaryImageUrl = this.jellyfinService.getItemPrimaryImageUrl(
-            hint.Id,
-            hint?.PrimaryImageTag ?? undefined
-          );
-          return {
-            id: hint.Id,
-            name: hint.Name,
-            mediaType: hint.Type,
-            year: hint.ProductionYear,
-            primaryImageUrl,
-          };
-        })
-      );
-
-      this.searchResults = results.filter(
-        (result) => result !== null
-      ) as SearchResult[];
-      console.log(this.searchResults);
-    } else {
-      this.searchResults = [];
-    }
   }
 }

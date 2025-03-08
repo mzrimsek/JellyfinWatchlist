@@ -1,8 +1,10 @@
 <app-shared-layout>
+  @if(searchForm){
   <div class="search-page">
     <app-search-form [group]="searchForm" (search)="search()"></app-search-form>
     <app-search-results-list
-      [results]="searchResults"
+      [results]="(searchResults$ | async) ?? []"
     ></app-search-results-list>
   </div>
+  }
 </app-shared-layout>

@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
-import { JellyfinService } from '../../services/jellyfin.service';
+import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectCurrentUserName } from '../../reducers';
 
 @Component({
   selector: 'app-home',
-  imports: [LayoutComponent],
+  imports: [LayoutComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  username: string = '';
+  username$: Observable<string> | undefined;
 
-  constructor(private jellyfinService: JellyfinService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.jellyfinService.getCurrentUser().then((user) => {
-      this.username = user.Name ?? 'User';
-    });
+    this.username$ = this.store.select(selectCurrentUserName);
   }
 }
