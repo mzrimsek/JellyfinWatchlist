@@ -1,6 +1,9 @@
 @use "../../../../variables.scss";
 
 mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+
   a {
     margin-right: variables.$base-spacing;
   }
