@@ -1,7 +1,9 @@
 @if (item) {
 <mat-card class="result-list-item">
   <img mat-card-image src="{{ item.primaryImageUrl }}" alt="{{ item.name }}" />
-  <div>{{ item.name }} ({{ item.year }})</div>
-  <button (click)="selectItem()">{{ buttonText }}</button>
+  <div class="tagline">{{ item.name }} ({{ item.year }})</div>
+  <button mat-flat-button (click)="selectItem()">
+    {{ buttonText }}
+  </button>
 </mat-card>
 }

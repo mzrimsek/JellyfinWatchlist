@@ -6,13 +6,14 @@ import {
   Output,
 } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MediaItem } from '../../models';
 
 @Component({
   selector: 'app-shared-media-item',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [MatCardModule, MatButtonModule],
   templateUrl: './media-item.component.html',
   styleUrls: ['./media-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
