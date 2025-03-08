@@ -2,15 +2,15 @@ import * as searchActions from '../actions/search.actions';
 
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { SearchHintResult } from '@jellyfin/sdk/lib/generated-client/models';
+import { SearchResult } from '../pages/search/models';
 
 export interface State {
-  results: SearchHintResult | null;
+  results: Array<SearchResult>;
   loading: boolean;
 }
 
 export const initialState: State = {
-  results: null,
+  results: [],
   loading: false,
 };
 
@@ -27,7 +27,7 @@ export const searchReducer = createReducer(
   })),
   on(searchActions.searchFailed, (state) => ({
     ...state,
-    results: null,
+    results: [],
     loading: false,
   }))
 );

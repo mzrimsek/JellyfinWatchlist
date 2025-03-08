@@ -23,7 +23,35 @@ export class SearchEffects {
       concatLatestFrom((_action) => this.store.select(selectCurrentUserId)),
       exhaustMap(([action, currentUserId]) =>
         this.jellyfinService.search(action.query, currentUserId).pipe(
-          map((results) => searchActions.searchSucceeded({ results })),
+          map((results) => {
+            const mappedResults =
+              results.SearchHints?.map((result) => {
+                if (
+                  !result.Id ||
+                  !result.Name ||
+                  !result.Type ||
+                  !result.ProductionYear ||
+                  !result.PrimaryImageTag
+                ) {
+                  throw new Error(
+                    'Search Result is missing expected properties'
+                  );
+                }
+                const primaryImageUrl =
+                  this.jellyfinService.getItemPrimaryImageUrl(
+                    result.Id,
+                    result.PrimaryImageTag
+                  );
+                return {
+                  id: result.Id,
+                  name: result.Name,
+                  mediaType: result.Type,
+                  year: result.ProductionYear,
+                  primaryImageUrl,
+                };
+              }) ?? [];
+            return searchActions.searchSucceeded({ results: mappedResults });
+          }),
           catchError(() => of(searchActions.searchFailed()))
         )
       )

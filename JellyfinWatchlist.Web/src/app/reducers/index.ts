@@ -5,7 +5,11 @@ import {
   currentUserReducer,
   selectCurrentUser,
 } from './current-user.reducer';
-import { State as SearchState, searchReducer } from './search.reducer';
+import {
+  State as SearchState,
+  searchReducer,
+  selectSearchState,
+} from './search.reducer';
 import {
   State as SystemInfoState,
   selectPublicSystemInfo,
@@ -45,4 +49,10 @@ export const selectCurrentUserName = createSelector(
 export const selectCurrentUserId = createSelector(
   selectCurrentUser,
   (state) => state?.Id ?? ''
+);
+
+// Search Selectors
+export const selectSearchResults = createSelector(
+  selectSearchState,
+  (state) => state.results
 );
