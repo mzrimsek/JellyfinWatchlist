@@ -38,6 +38,6 @@ export class SearchComponent implements OnInit {
   }
 
   selectItem(item: MediaItem): void {
-    this.store.dispatch(WatchListActions.({ item }));
+    this.store.dispatch(WatchListActions.watchlistSelectItem({ item }));
   }
 }

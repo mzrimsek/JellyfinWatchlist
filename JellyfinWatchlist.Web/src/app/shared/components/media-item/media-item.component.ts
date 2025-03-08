@@ -20,4 +20,8 @@ import { MediaItem } from '../../models';
 export class MediaItemComponent {
   @Input() item: MediaItem | undefined;
   @Output() itemSelected = new EventEmitter<MediaItem>();
+
+  selectItem(): void {
+    this.itemSelected.emit(this.item);
+  }
 }

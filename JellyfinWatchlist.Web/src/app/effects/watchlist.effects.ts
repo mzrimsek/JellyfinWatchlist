@@ -5,7 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { State, selectWatchlistIds } from '../reducers';
 import { Store } from '@ngrx/store';
 import { concatLatestFrom } from '@ngrx/operators';
-import { exhaustMap } from 'rxjs';
+import { exhaustMap, of } from 'rxjs';
 
 @Injectable()
 export class WatchlistEffects {
@@ -22,10 +22,10 @@ export class WatchlistEffects {
         const itemContainedInWatchlist = stringifiedWatchlistIds.includes(
           item.id
         );
-        if (itemContainedInWatchlist) {
-          return WatchlistActions.watchlistAddItem({ item });
+        if (!itemContainedInWatchlist) {
+          return of(WatchlistActions.watchlistAddItem({ item }));
         }
-        return WatchlistActions.watchlistRemoveItem({ item });
+        return of(WatchlistActions.watchlistRemoveItem({ item }));
       })
     );
   });

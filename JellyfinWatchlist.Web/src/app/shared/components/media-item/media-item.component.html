@@ -2,5 +2,6 @@
 <mat-card class="result-list-item">
   <img mat-card-image src="{{ item.primaryImageUrl }}" alt="{{ item.name }}" />
   <div>{{ item.name }} ({{ item.year }})</div>
+  <button (click)="selectItem()">Select</button>
 </mat-card>
 }
