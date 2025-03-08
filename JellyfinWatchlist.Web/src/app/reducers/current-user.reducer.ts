@@ -29,6 +29,10 @@ export const currentUserReducer = createReducer(
     ...state,
     currentUser: null,
     loading: false,
+  })),
+  on(CurrentUserActions.clearCurrentUser, (state) => ({
+    ...state,
+    currentUser: null,
   }))
 );
 

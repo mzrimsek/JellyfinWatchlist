@@ -14,7 +14,7 @@ import { map } from 'rxjs';
 export class InitEffects {
   private actions$ = inject(Actions);
 
-  initActions$ = createEffect(() => {
+  getSystemInfo$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROOT_EFFECTS_INIT),
       map(() => systemInfoActions.getSystemInfo())

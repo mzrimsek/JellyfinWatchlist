@@ -11,7 +11,7 @@ export class CurrentUserEffects {
   private actions$ = inject(Actions);
   private jellyfinService = inject(JellyfinService);
 
-  getCurrentUserActions$ = createEffect(() => {
+  getCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(currentUserActions.getCurrentUser),
       exhaustMap(() =>
@@ -23,7 +23,7 @@ export class CurrentUserEffects {
     );
   });
 
-  getCurrentUserFailedActions$ = createEffect(
+  getCurrentUserFailed$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(currentUserActions.getCurrentUserFailed),

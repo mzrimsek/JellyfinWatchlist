@@ -1,5 +1,6 @@
 import * as authActions from '../actions/auth.actions';
 import * as currentUserActions from '../actions/current-user.actions';
+import * as searchActions from '../actions/search.actions';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
@@ -16,7 +17,7 @@ export class LoginEffects {
   private router = inject(Router);
   private matSnackBar = inject(MatSnackBar);
 
-  loginActions$ = createEffect(() => {
+  login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(authActions.login),
       exhaustMap((action) =>
@@ -34,17 +35,26 @@ export class LoginEffects {
     );
   });
 
-  loginSucceededActions$ = createEffect(() => {
+  loginSucceededNavigate$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(authActions.loginSucceeded),
+        map(() => {
+          this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  loginSucceededGetCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(authActions.loginSucceeded),
-      map(() => {
-        this.router.navigate(['/']);
-        return currentUserActions.getCurrentUser();
-      })
+      map(() => currentUserActions.getCurrentUser())
     );
   });
 
-  loginFailedActions$ = createEffect(
+  loginFailed$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(authActions.loginFailed),
@@ -58,7 +68,7 @@ export class LoginEffects {
     { dispatch: false }
   );
 
-  logoutActions$ = createEffect(
+  logoutNavigate$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(authActions.logout),
@@ -73,4 +83,18 @@ export class LoginEffects {
     },
     { dispatch: false }
   );
+
+  logoutClearSearch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.logout),
+      map(() => searchActions.clearSearch())
+    );
+  });
+
+  logoutClearCurrentUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.logout),
+      map(() => currentUserActions.clearCurrentUser())
+    );
+  });
 }

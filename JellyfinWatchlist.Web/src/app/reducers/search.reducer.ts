@@ -29,6 +29,10 @@ export const searchReducer = createReducer(
     ...state,
     results: [],
     loading: false,
+  })),
+  on(searchActions.clearSearch, (state) => ({
+    ...state,
+    results: [],
   }))
 );
 

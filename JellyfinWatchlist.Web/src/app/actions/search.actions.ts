@@ -11,3 +11,4 @@ export const searchSucceeded = createAction(
   props<{ results: Array<SearchResult> }>()
 );
 export const searchFailed = createAction('[Search] Search Failed');
+export const clearSearch = createAction('[Search] Clear Search');
