@@ -33,17 +33,15 @@ export class LoginEffects {
     );
   });
 
-  loginSucceededActions$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(jellyfinActions.loginSucceeded),
-        map(() => {
-          this.router.navigate(['/']);
-        })
-      );
-    },
-    { dispatch: false }
-  );
+  loginSucceededActions$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(jellyfinActions.loginSucceeded),
+      map(() => {
+        this.router.navigate(['/']);
+        return jellyfinActions.getCurrentUser();
+      })
+    );
+  });
 
   loginFailedActions$ = createEffect(
     () => {
@@ -54,6 +52,22 @@ export class LoginEffects {
             duration: 3000,
           });
         })
+      );
+    },
+    { dispatch: false }
+  );
+
+  logoutActions$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(jellyfinActions.logout),
+        exhaustMap(() =>
+          this.jellyfinService.logout().pipe(
+            map(() => {
+              this.router.navigate(['/login']);
+            })
+          )
+        )
       );
     },
     { dispatch: false }
