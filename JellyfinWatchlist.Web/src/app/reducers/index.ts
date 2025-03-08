@@ -1,4 +1,9 @@
-import { ActionReducerMap, MetaReducer, createSelector } from '@ngrx/store';
+import {
+  ActionReducerMap,
+  MetaReducer,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 import { State as AuthState, authReducer } from './auth.reducer';
 import {
   State as CurrentUserState,
@@ -15,6 +20,14 @@ import {
   selectPublicSystemInfo,
   systemInfoReducer,
 } from './system-info.reducer';
+import {
+  State as WatchlistState,
+  selectAllWatchlist as _selectAllWatchlist,
+  selectWatchlistEntities as _selectWatchlistEntities,
+  selectWatchlistIds as _selectWatchlistIds,
+  selectWatchlistTotal as _selectWatchlistTotal,
+  watchlistReducer,
+} from './watchlist.reducer';
 
 import { environment } from '../../environments/environment';
 import { isDevMode } from '@angular/core';
@@ -24,6 +37,7 @@ export interface State {
   currentUser: CurrentUserState;
   systemInfo: SystemInfoState;
   search: SearchState;
+  watchlist: WatchlistState;
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -31,6 +45,7 @@ export const reducers: ActionReducerMap<State> = {
   currentUser: currentUserReducer,
   systemInfo: systemInfoReducer,
   search: searchReducer,
+  watchlist: watchlistReducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];
@@ -55,4 +70,28 @@ export const selectCurrentUserId = createSelector(
 export const selectSearchResults = createSelector(
   selectSearchState,
   (state) => state.results
+);
+
+// Watchlist Selectors
+export const selectWatchlistState =
+  createFeatureSelector<WatchlistState>('watchlist');
+
+export const selectWatchlistIds = createSelector(
+  selectWatchlistState,
+  _selectWatchlistIds
+);
+
+export const selectWatchlistEntities = createSelector(
+  selectWatchlistState,
+  _selectWatchlistEntities
+);
+
+export const selectAllWatchlist = createSelector(
+  selectWatchlistState,
+  _selectAllWatchlist
+);
+
+export const selectWatchlistTotal = createSelector(
+  selectWatchlistState,
+  _selectWatchlistTotal
 );

@@ -10,6 +10,7 @@ import { InitEffects } from './effects/init.effects';
 import { LoginEffects } from './effects/login.effects';
 import { SearchEffects } from './effects/search.effects';
 import { SystemInfoEffects } from './effects/system-info.effects';
+import { WatchlistEffects } from './effects/watchlist.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouter } from '@angular/router';
@@ -30,7 +31,8 @@ export const appConfig: ApplicationConfig = {
       LoginEffects,
       SystemInfoEffects,
       CurrentUserEffects,
-      SearchEffects
+      SearchEffects,
+      WatchlistEffects
     ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

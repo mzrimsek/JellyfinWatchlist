@@ -1,16 +1,16 @@
-import * as searchActions from '../../actions/search.actions';
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, map } from 'rxjs';
+import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
-import { Observable } from 'rxjs';
+import { MediaItem } from '../../shared/models';
 import { ResultsListComponent } from './components/results-list/results-list.component';
-import { SearchResult } from './models';
+import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
-import { selectSearchResults } from '../../reducers';
+import { WatchlistActions } from '../../actions/watchlist.actions';
 
 @Component({
   selector: 'app-search',
@@ -20,7 +20,8 @@ import { selectSearchResults } from '../../reducers';
 })
 export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
-  searchResults$: Observable<SearchResult[]> | undefined;
+  searchResults$: Observable<MediaItem[]> | undefined;
+  watchlistIds$: Observable<string[]> | undefined;
 
   constructor(private store: Store, private fb: FormBuilder) {}
   ngOnInit(): void {
@@ -28,11 +29,18 @@ export class SearchComponent implements OnInit {
       query: ['', [Validators.required]],
     });
     this.searchResults$ = this.store.select(selectSearchResults);
+    this.watchlistIds$ = this.store
+      .select(selectWatchlistIds)
+      .pipe(map((ids) => ids.map((id) => id.toString())));
   }
 
   search(): void {
     this.store.dispatch(
-      searchActions.search({ query: this.searchForm?.value.query })
+      SearchActions.search({ query: this.searchForm?.value.query })
     );
+  }
+
+  selectItem(item: MediaItem): void {
+    this.store.dispatch(WatchlistActions.selectItem({ item }));
   }
 }

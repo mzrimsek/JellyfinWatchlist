@@ -4,6 +4,8 @@
     <app-search-form [group]="searchForm" (search)="search()"></app-search-form>
     <app-search-results-list
       [results]="(searchResults$ | async) ?? []"
+      [watchlistIds]="(watchlistIds$ | async) ?? []"
+      (itemSelected)="selectItem($event)"
     ></app-search-results-list>
   </div>
   }

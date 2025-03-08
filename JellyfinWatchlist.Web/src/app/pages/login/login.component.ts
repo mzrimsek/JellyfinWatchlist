@@ -1,5 +1,3 @@
-import * as authActions from '../../actions/auth.actions';
-
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -8,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { AuthActions } from '../../actions/auth.actions';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -43,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     this.store.dispatch(
-      authActions.login({
+      AuthActions.login({
         username: this.loginForm?.value.username,
         password: this.loginForm?.value.password,
       })

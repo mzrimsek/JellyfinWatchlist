@@ -1,11 +1,10 @@
-import * as searchActions from '../actions/search.actions';
-
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { SearchResult } from '../pages/search/models';
+import { MediaItem } from '../shared/models';
+import { SearchActions } from '../actions/search.actions';
 
 export interface State {
-  results: Array<SearchResult>;
+  results: Array<MediaItem>;
   loading: boolean;
 }
 
@@ -16,21 +15,21 @@ export const initialState: State = {
 
 export const searchReducer = createReducer(
   initialState,
-  on(searchActions.search, (state) => ({
+  on(SearchActions.search, (state) => ({
     ...state,
     loading: true,
   })),
-  on(searchActions.searchSucceeded, (state, { results }) => ({
+  on(SearchActions.searchSucceeded, (state, { results }) => ({
     ...state,
     results,
     loading: false,
   })),
-  on(searchActions.searchFailed, (state) => ({
+  on(SearchActions.searchFailed, (state) => ({
     ...state,
     results: [],
     loading: false,
   })),
-  on(searchActions.clearSearch, (state) => ({
+  on(SearchActions.clear, (state) => ({
     ...state,
     results: [],
   }))

@@ -1,8 +1,7 @@
-import * as SystemInfoActions from '../actions/system-info.actions';
-
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
+import { SystemInfoActions } from '../actions/system-info.actions';
 
 export interface State {
   publicSystemInfo: PublicSystemInfo | null;
@@ -16,16 +15,16 @@ const initialState: State = {
 
 export const systemInfoReducer = createReducer(
   initialState,
-  on(SystemInfoActions.getSystemInfo, (state) => ({
+  on(SystemInfoActions.get, (state) => ({
     ...state,
     loading: true,
   })),
-  on(SystemInfoActions.getSystemInfoSucceeded, (state, { systemInfo }) => ({
+  on(SystemInfoActions.getSucceeded, (state, { systemInfo }) => ({
     ...state,
     publicSystemInfo: systemInfo,
     loading: false,
   })),
-  on(SystemInfoActions.getSystemInfoFailed, (state) => ({
+  on(SystemInfoActions.getFailed, (state) => ({
     ...state,
     publicSystemInfo: null,
     loading: false,

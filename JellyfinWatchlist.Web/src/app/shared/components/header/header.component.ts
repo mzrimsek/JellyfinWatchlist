@@ -1,5 +1,4 @@
-import * as authActions from '../../../actions/auth.actions';
-
+import { AuthActions } from '../../../actions/auth.actions';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +16,6 @@ export class HeaderComponent {
   constructor(private store: Store) {}
 
   logout() {
-    this.store.dispatch(authActions.logout());
+    this.store.dispatch(AuthActions.logout());
   }
 }
