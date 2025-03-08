@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, map } from 'rxjs';
+import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 import { MediaItem } from '../../shared/models';
-import { Observable } from 'rxjs';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
-import { selectSearchResults } from '../../reducers';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +21,7 @@ import { selectSearchResults } from '../../reducers';
 export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
   searchResults$: Observable<MediaItem[]> | undefined;
+  watchlistIds$: Observable<string[]> | undefined;
 
   constructor(private store: Store, private fb: FormBuilder) {}
   ngOnInit(): void {
@@ -28,6 +29,9 @@ export class SearchComponent implements OnInit {
       query: ['', [Validators.required]],
     });
     this.searchResults$ = this.store.select(selectSearchResults);
+    this.watchlistIds$ = this.store
+      .select(selectWatchlistIds)
+      .pipe(map((ids) => ids.map((id) => id.toString())));
   }
 
   search(): void {

@@ -8,10 +8,11 @@
         <p>{{ results.length }} results</p>
       </div>
       <div class="items">
-        @for (resultItem of results; track resultItem.id) {
+        @for (mediaItem of results; track mediaItem.id) {
         <div class="item">
           <app-shared-media-item
-            [item]="resultItem"
+            [item]="mediaItem"
+            [isPartOfWatchlist]="itemIsPartOfWatchlist(mediaItem)"
             (itemSelected)="itemSelected.emit($event)"
           ></app-shared-media-item>
         </div>

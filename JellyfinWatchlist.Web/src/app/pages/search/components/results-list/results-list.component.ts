@@ -19,5 +19,10 @@ import { MediaItemComponent } from '../../../../shared/components/media-item/med
 })
 export class ResultsListComponent {
   @Input() results: Array<MediaItem> = [];
+  @Input() watchlistIds: Array<string> = [];
   @Output() itemSelected = new EventEmitter<MediaItem>();
+
+  itemIsPartOfWatchlist(item: MediaItem): boolean {
+    return this.watchlistIds.includes(item.id);
+  }
 }

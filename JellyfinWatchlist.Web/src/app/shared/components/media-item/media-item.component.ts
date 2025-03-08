@@ -19,9 +19,16 @@ import { MediaItem } from '../../models';
 })
 export class MediaItemComponent {
   @Input() item: MediaItem | undefined;
+  @Input() isPartOfWatchlist = false;
   @Output() itemSelected = new EventEmitter<MediaItem>();
 
   selectItem(): void {
     this.itemSelected.emit(this.item);
+  }
+
+  get buttonText(): string {
+    return this.isPartOfWatchlist
+      ? 'Remove from Watchlist'
+      : 'Add to Watchlist';
   }
 }
