@@ -1,9 +1,8 @@
-import * as WatchlistActions from '../actions/watchlist.actions';
-
 import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 
 import { MediaItem } from '../shared/models';
+import { WatchlistActions } from '../actions/watchlist.actions';
 
 export interface State extends EntityState<MediaItem> {}
 
@@ -26,13 +25,13 @@ export const initialState: State = adapter.getInitialState();
 
 export const watchlistReducer = createReducer(
   initialState,
-  on(WatchlistActions.watchlistAddItem, (state, { item }) =>
+  on(WatchlistActions.addItem, (state, { item }) =>
     adapter.addOne(item, state)
   ),
-  on(WatchlistActions.watchlistRemoveItem, (state, { item }) =>
+  on(WatchlistActions.removeItem, (state, { item }) =>
     adapter.removeOne(item.id, state)
   ),
-  on(WatchlistActions.watchlistClear, (state) => adapter.removeAll(state))
+  on(WatchlistActions.clear, (state) => adapter.removeAll(state))
 );
 
 export const { selectIds, selectEntities, selectAll, selectTotal } =

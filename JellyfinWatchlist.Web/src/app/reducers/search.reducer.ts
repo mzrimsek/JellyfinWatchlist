@@ -1,8 +1,7 @@
-import * as SearchActions from '../actions/search.actions';
-
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { MediaItem } from '../shared/models';
+import { SearchActions } from '../actions/search.actions';
 
 export interface State {
   results: Array<MediaItem>;
@@ -30,7 +29,7 @@ export const searchReducer = createReducer(
     results: [],
     loading: false,
   })),
-  on(SearchActions.clearSearch, (state) => ({
+  on(SearchActions.clear, (state) => ({
     ...state,
     results: [],
   }))

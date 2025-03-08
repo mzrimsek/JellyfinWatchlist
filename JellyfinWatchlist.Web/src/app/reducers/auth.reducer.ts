@@ -1,6 +1,6 @@
-import * as LoginActions from '../actions/auth.actions';
-
 import { createFeature, createReducer, on } from '@ngrx/store';
+
+import { AuthActions } from '../actions/auth.actions';
 
 export interface State {
   isAuthenticated: boolean;
@@ -14,21 +14,21 @@ const initialState: State = {
 
 export const authReducer = createReducer(
   initialState,
-  on(LoginActions.login, (state) => ({
+  on(AuthActions.login, (state) => ({
     ...state,
     loading: true,
   })),
-  on(LoginActions.loginSucceeded, (state) => ({
+  on(AuthActions.loginSucceeded, (state) => ({
     ...state,
     isAuthenticated: true,
     loading: false,
   })),
-  on(LoginActions.loginFailed, (state) => ({
+  on(AuthActions.loginFailed, (state) => ({
     ...state,
     isAuthenticated: false,
     loading: false,
   })),
-  on(LoginActions.logout, (state) => ({
+  on(AuthActions.logout, (state) => ({
     ...state,
     isAuthenticated: false,
   }))

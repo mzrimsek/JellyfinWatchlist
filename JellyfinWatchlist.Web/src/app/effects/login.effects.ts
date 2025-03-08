@@ -1,14 +1,13 @@
-import * as AuthActions from '../actions/auth.actions';
-import * as CurrentUserActions from '../actions/current-user.actions';
-import * as SearchActions from '../actions/search.actions';
-
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
 import { catchError, exhaustMap, map, of } from 'rxjs';
 
+import { AuthActions } from '../actions/auth.actions';
+import { CurrentUserActions } from '../actions/current-user.actions';
 import { JellyfinService } from '../services/jellyfin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SearchActions } from '../actions/search.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -50,7 +49,7 @@ export class LoginEffects {
   loginSucceededGetCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.loginSucceeded),
-      map(() => CurrentUserActions.getCurrentUser())
+      map(() => CurrentUserActions.get())
     );
   });
 
@@ -87,14 +86,14 @@ export class LoginEffects {
   logoutClearSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => SearchActions.clearSearch())
+      map(() => SearchActions.clear())
     );
   });
 
   logoutClearCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => CurrentUserActions.clearCurrentUser())
+      map(() => CurrentUserActions.clear())
     );
   });
 }

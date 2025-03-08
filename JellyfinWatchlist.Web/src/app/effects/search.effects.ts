@@ -1,4 +1,4 @@
-import * as SearchActions from '../actions/search.actions';
+import { SearchActions } from '../actions/search.actions';
 import { State, selectCurrentUserId } from '../reducers';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -20,9 +20,9 @@ export class SearchEffects {
   searchActions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(SearchActions.search),
-      concatLatestFrom((_action) => this.store.select(selectCurrentUserId)),
-      exhaustMap(([action, currentUserId]) =>
-        this.jellyfinService.search(action.query, currentUserId).pipe(
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      exhaustMap(([action, currentUserId]) => {
+        return this.jellyfinService.search(action.query, currentUserId).pipe(
           map((results) => {
             const mappedResults =
               results.SearchHints?.map((result) => {
@@ -53,8 +53,8 @@ export class SearchEffects {
             return SearchActions.searchSucceeded({ results: mappedResults });
           }),
           catchError(() => of(SearchActions.searchFailed()))
-        )
-      )
+        );
+      })
     );
   });
 

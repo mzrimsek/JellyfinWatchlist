@@ -1,5 +1,4 @@
-import * as AuthActions from '../../../actions/auth.actions';
-
+import { AuthActions } from '../../../actions/auth.actions';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';

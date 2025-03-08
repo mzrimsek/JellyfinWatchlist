@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import * as WatchlistActions from '../actions/watchlist.actions';
+import { WatchlistActions } from '../actions/watchlist.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { State, selectWatchlistIds } from '../reducers';
 import { Store } from '@ngrx/store';
@@ -14,8 +14,8 @@ export class WatchlistEffects {
 
   itemSelected$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(WatchlistActions.watchlistSelectItem),
-      concatLatestFrom((_action) => this.store$.select(selectWatchlistIds)),
+      ofType(WatchlistActions.selectItem),
+      concatLatestFrom(() => this.store$.select(selectWatchlistIds)),
       exhaustMap(([action, watchlistIds]) => {
         const { item } = action;
         const stringifiedWatchlistIds = watchlistIds.map((id) => id.toString());
@@ -23,9 +23,9 @@ export class WatchlistEffects {
           item.id
         );
         if (!itemContainedInWatchlist) {
-          return of(WatchlistActions.watchlistAddItem({ item }));
+          return of(WatchlistActions.addItem({ item }));
         }
-        return of(WatchlistActions.watchlistRemoveItem({ item }));
+        return of(WatchlistActions.removeItem({ item }));
       })
     );
   });

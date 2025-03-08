@@ -1,7 +1,6 @@
-import * as CurrentUserActions from '../actions/current-user.actions';
-
 import { createFeature, createReducer, on } from '@ngrx/store';
 
+import { CurrentUserActions } from '../actions/current-user.actions';
 import { UserDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 export interface State {
@@ -16,21 +15,21 @@ const initialState: State = {
 
 export const currentUserReducer = createReducer(
   initialState,
-  on(CurrentUserActions.getCurrentUser, (state) => ({
+  on(CurrentUserActions.get, (state) => ({
     ...state,
     loading: true,
   })),
-  on(CurrentUserActions.getCurrentUserSucceeded, (state, { user }) => ({
+  on(CurrentUserActions.getSucceeded, (state, { user }) => ({
     ...state,
     user,
     loading: false,
   })),
-  on(CurrentUserActions.getCurrentUserFailed, (state) => ({
+  on(CurrentUserActions.getFailed, (state) => ({
     ...state,
     user: null,
     loading: false,
   })),
-  on(CurrentUserActions.clearCurrentUser, (state) => ({
+  on(CurrentUserActions.clear, (state) => ({
     ...state,
     user: null,
   }))

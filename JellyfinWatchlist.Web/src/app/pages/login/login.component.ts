@@ -1,5 +1,3 @@
-import * as AuthActions from '../../actions/auth.actions';
-
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -8,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { AuthActions } from '../../actions/auth.actions';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
