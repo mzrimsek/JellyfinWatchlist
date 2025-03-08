@@ -5,6 +5,7 @@ import {
   currentUserReducer,
   selectCurrentUser,
 } from './current-user.reducer';
+import { State as SearchState, searchReducer } from './search.reducer';
 import {
   State as SystemInfoState,
   selectPublicSystemInfo,
@@ -18,21 +19,30 @@ export interface State {
   auth: AuthState;
   currentUser: CurrentUserState;
   systemInfo: SystemInfoState;
+  search: SearchState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   auth: authReducer,
   currentUser: currentUserReducer,
   systemInfo: systemInfoReducer,
+  search: searchReducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];
 
+// System Info Selectors
 export const selectJellyfinServerName = createSelector(
   selectPublicSystemInfo,
   (state) => state?.ServerName ?? environment.jellyfin.baseUrl
 );
+
+// Current User Selectors
 export const selectCurrentUserName = createSelector(
   selectCurrentUser,
   (state) => state?.Name ?? 'User'
+);
+export const selectCurrentUserId = createSelector(
+  selectCurrentUser,
+  (state) => state?.Id ?? ''
 );

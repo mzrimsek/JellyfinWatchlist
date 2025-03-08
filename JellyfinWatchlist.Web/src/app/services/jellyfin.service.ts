@@ -60,18 +60,16 @@ export class JellyfinService {
     );
   }
 
-  public async search(
-    query: string,
-    userId: string
-  ): Promise<SearchHintResult> {
+  public search(query: string, userId: string): Observable<SearchHintResult> {
     const searchApi = getSearchApi(this.api);
 
-    const response = await searchApi.getSearchHints({
-      searchTerm: query,
-      userId,
-      includeItemTypes: ['Movie', 'Series'],
-    });
-    return response.data;
+    return toObservable(
+      searchApi.getSearchHints({
+        searchTerm: query,
+        userId,
+        includeItemTypes: ['Movie', 'Series'],
+      })
+    ).pipe(map((response) => response.data));
   }
 
   public getItemPrimaryImageUrl(

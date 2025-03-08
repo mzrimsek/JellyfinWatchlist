@@ -8,6 +8,7 @@ import { metaReducers, reducers } from './reducers';
 import { CurrentUserEffects } from './effects/current-user.effects';
 import { InitEffects } from './effects/init.effects';
 import { LoginEffects } from './effects/login.effects';
+import { SearchEffects } from './effects/search.effects';
 import { SystemInfoEffects } from './effects/system-info.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
@@ -28,7 +29,8 @@ export const appConfig: ApplicationConfig = {
       InitEffects,
       LoginEffects,
       SystemInfoEffects,
-      CurrentUserEffects
+      CurrentUserEffects,
+      SearchEffects
     ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
