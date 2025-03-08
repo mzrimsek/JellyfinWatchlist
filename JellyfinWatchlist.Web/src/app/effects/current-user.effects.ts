@@ -1,4 +1,4 @@
-import * as currentUserActions from '../actions/current-user.actions';
+import * as CurrentUserActions from '../actions/current-user.actions';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
@@ -13,11 +13,11 @@ export class CurrentUserEffects {
 
   getCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(currentUserActions.getCurrentUser),
+      ofType(CurrentUserActions.getCurrentUser),
       exhaustMap(() =>
         this.jellyfinService.getCurrentUser().pipe(
-          map((user) => currentUserActions.getCurrentUserSucceeded({ user })),
-          catchError(() => of(currentUserActions.getCurrentUserFailed()))
+          map((user) => CurrentUserActions.getCurrentUserSucceeded({ user })),
+          catchError(() => of(CurrentUserActions.getCurrentUserFailed()))
         )
       )
     );
@@ -26,7 +26,7 @@ export class CurrentUserEffects {
   getCurrentUserFailed$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(currentUserActions.getCurrentUserFailed),
+        ofType(CurrentUserActions.getCurrentUserFailed),
         map(() => {
           console.log('Failed to get current user');
         })

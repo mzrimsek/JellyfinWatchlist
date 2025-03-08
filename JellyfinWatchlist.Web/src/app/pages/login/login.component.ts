@@ -1,4 +1,4 @@
-import * as authActions from '../../actions/auth.actions';
+import * as AuthActions from '../../actions/auth.actions';
 
 import { Component, OnInit } from '@angular/core';
 import {
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     this.store.dispatch(
-      authActions.login({
+      AuthActions.login({
         username: this.loginForm?.value.username,
         password: this.loginForm?.value.password,
       })

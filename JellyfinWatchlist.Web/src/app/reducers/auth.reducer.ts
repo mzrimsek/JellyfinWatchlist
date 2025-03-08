@@ -1,4 +1,4 @@
-import * as loginActions from '../actions/auth.actions';
+import * as LoginActions from '../actions/auth.actions';
 
 import { createFeature, createReducer, on } from '@ngrx/store';
 
@@ -14,21 +14,21 @@ const initialState: State = {
 
 export const authReducer = createReducer(
   initialState,
-  on(loginActions.login, (state) => ({
+  on(LoginActions.login, (state) => ({
     ...state,
     loading: true,
   })),
-  on(loginActions.loginSucceeded, (state) => ({
+  on(LoginActions.loginSucceeded, (state) => ({
     ...state,
     isAuthenticated: true,
     loading: false,
   })),
-  on(loginActions.loginFailed, (state) => ({
+  on(LoginActions.loginFailed, (state) => ({
     ...state,
     isAuthenticated: false,
     loading: false,
   })),
-  on(loginActions.logout, (state) => ({
+  on(LoginActions.logout, (state) => ({
     ...state,
     isAuthenticated: false,
   }))

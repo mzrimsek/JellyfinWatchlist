@@ -1,4 +1,4 @@
-import * as searchActions from '../actions/search.actions';
+import * as SearchActions from '../actions/search.actions';
 import { State, selectCurrentUserId } from '../reducers';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -19,7 +19,7 @@ export class SearchEffects {
 
   searchActions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(searchActions.search),
+      ofType(SearchActions.search),
       concatLatestFrom((_action) => this.store.select(selectCurrentUserId)),
       exhaustMap(([action, currentUserId]) =>
         this.jellyfinService.search(action.query, currentUserId).pipe(
@@ -50,9 +50,9 @@ export class SearchEffects {
                   primaryImageUrl,
                 };
               }) ?? [];
-            return searchActions.searchSucceeded({ results: mappedResults });
+            return SearchActions.searchSucceeded({ results: mappedResults });
           }),
-          catchError(() => of(searchActions.searchFailed()))
+          catchError(() => of(SearchActions.searchFailed()))
         )
       )
     );
@@ -61,7 +61,7 @@ export class SearchEffects {
   searchFailedActions$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(searchActions.searchFailed),
+        ofType(SearchActions.searchFailed),
         map(() => {
           this.matSnackBar.open('Search failed', 'Dismiss', {
             duration: 3000,

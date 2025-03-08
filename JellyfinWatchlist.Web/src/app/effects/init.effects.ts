@@ -1,4 +1,4 @@
-import * as systemInfoActions from '../actions/system-info.actions';
+import * as SystemInfoActions from '../actions/system-info.actions';
 
 import {
   Actions,
@@ -17,7 +17,7 @@ export class InitEffects {
   getSystemInfo$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROOT_EFFECTS_INIT),
-      map(() => systemInfoActions.getSystemInfo())
+      map(() => SystemInfoActions.getSystemInfo())
     );
   });
 }

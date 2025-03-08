@@ -1,7 +1,9 @@
-import * as searchActions from '../../actions/search.actions';
+import * as SearchActions from '../../actions/search.actions';
+import * as WatchListActions from '../../actions/watchlist.actions';
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
@@ -10,7 +12,6 @@ import { MediaItem } from '../../shared/models';
 import { Observable } from 'rxjs';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { Store } from '@ngrx/store';
-import { selectSearchResults } from '../../reducers';
 
 @Component({
   selector: 'app-search',
@@ -32,7 +33,11 @@ export class SearchComponent implements OnInit {
 
   search(): void {
     this.store.dispatch(
-      searchActions.search({ query: this.searchForm?.value.query })
+      SearchActions.search({ query: this.searchForm?.value.query })
     );
+  }
+
+  selectItem(item: MediaItem): void {
+    this.store.dispatch(WatchListActions.({ item }));
   }
 }

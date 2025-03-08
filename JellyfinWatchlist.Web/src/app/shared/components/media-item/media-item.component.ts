@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MediaItem } from '../../models';
@@ -13,4 +19,5 @@ import { MediaItem } from '../../models';
 })
 export class MediaItemComponent {
   @Input() item: MediaItem | undefined;
+  @Output() itemSelected = new EventEmitter<MediaItem>();
 }

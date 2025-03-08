@@ -1,4 +1,4 @@
-import * as searchActions from '../actions/search.actions';
+import * as SearchActions from '../actions/search.actions';
 
 import { createFeature, createReducer, on } from '@ngrx/store';
 
@@ -16,21 +16,21 @@ export const initialState: State = {
 
 export const searchReducer = createReducer(
   initialState,
-  on(searchActions.search, (state) => ({
+  on(SearchActions.search, (state) => ({
     ...state,
     loading: true,
   })),
-  on(searchActions.searchSucceeded, (state, { results }) => ({
+  on(SearchActions.searchSucceeded, (state, { results }) => ({
     ...state,
     results,
     loading: false,
   })),
-  on(searchActions.searchFailed, (state) => ({
+  on(SearchActions.searchFailed, (state) => ({
     ...state,
     results: [],
     loading: false,
   })),
-  on(searchActions.clearSearch, (state) => ({
+  on(SearchActions.clearSearch, (state) => ({
     ...state,
     results: [],
   }))
