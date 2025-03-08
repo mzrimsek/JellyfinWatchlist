@@ -3,7 +3,7 @@ import { State as AuthState, authReducer } from './auth.reducer';
 import {
   State as CurrentUserState,
   currentUserReducer,
-  selectCurrentUser,
+  selectUser,
 } from './current-user.reducer';
 import {
   State as SearchState,
@@ -43,11 +43,11 @@ export const selectJellyfinServerName = createSelector(
 
 // Current User Selectors
 export const selectCurrentUserName = createSelector(
-  selectCurrentUser,
+  selectUser,
   (state) => state?.Name ?? 'User'
 );
 export const selectCurrentUserId = createSelector(
-  selectCurrentUser,
+  selectUser,
   (state) => state?.Id ?? ''
 );
 
