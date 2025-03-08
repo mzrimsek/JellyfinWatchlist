@@ -7,12 +7,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
 import { selectJellyfinServerName } from '../../reducers';
@@ -32,12 +31,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
   instanceName$: Observable<string> | undefined;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private snackbar: MatSnackBar,
-    private store: Store
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -47,23 +41,13 @@ export class LoginComponent implements OnInit {
     this.instanceName$ = this.store.select(selectJellyfinServerName);
   }
 
-  async login(): Promise<void> {
+  login(): void {
     this.store.dispatch(
       jellyfinActions.login({
         username: this.loginForm?.value.username,
         password: this.loginForm?.value.password,
       })
     );
-
-    // move this to the effect handler
-    // we need a special on init handler to dispatch the system info load action
-    // if (!succeeded) {
-    //   this.snackbar.open('Login failed', 'Dismiss', {
-    //     duration: 3000,
-    //   });
-    // } else {
-    //   this.router.navigate(['/']);
-    // }
   }
 
   getInstanceUrl(): string {
