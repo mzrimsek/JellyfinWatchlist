@@ -1,4 +1,4 @@
-import * as jellyfinActions from '../actions/jellyfin.actions';
+import * as systemInfoActions from '../actions/system-info.actions';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
@@ -13,13 +13,13 @@ export class SystemInfoEffects {
 
   getSystemInfoActions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(jellyfinActions.getSystemInfo),
+      ofType(systemInfoActions.getSystemInfo),
       exhaustMap(() =>
         this.jellyfinService.getSystemInfo().pipe(
           map((systemInfo) =>
-            jellyfinActions.getSystemInfoSucceeded({ systemInfo })
+            systemInfoActions.getSystemInfoSucceeded({ systemInfo })
           ),
-          catchError(() => of(jellyfinActions.getSystemInfoFailed()))
+          catchError(() => of(systemInfoActions.getSystemInfoFailed()))
         )
       )
     );
@@ -28,7 +28,7 @@ export class SystemInfoEffects {
   getSystemInfoFailedActions$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(jellyfinActions.getSystemInfoFailed),
+        ofType(systemInfoActions.getSystemInfoFailed),
         map(() => {
           console.log('Failed to get system info');
         })

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectJellyfinUserName } from '../../reducers';
+import { selectCurrentUserName } from '../../reducers';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +18,6 @@ export class HomeComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.username$ = this.store.select(selectJellyfinUserName);
+    this.username$ = this.store.select(selectCurrentUserName);
   }
 }

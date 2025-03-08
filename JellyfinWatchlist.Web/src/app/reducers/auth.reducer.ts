@@ -39,5 +39,10 @@ const authFeature = createFeature({
   reducer: authReducer,
 });
 
-export const { name, reducer, selectIsAuthenticated, selectLoading } =
-  authFeature;
+export const {
+  name,
+  reducer,
+  selectAuthState,
+  selectIsAuthenticated,
+  selectLoading,
+} = authFeature;

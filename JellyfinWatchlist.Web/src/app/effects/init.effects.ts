@@ -1,4 +1,4 @@
-import * as jellyfinActions from '../actions/jellyfin.actions';
+import * as systemInfoActions from '../actions/system-info.actions';
 
 import {
   Actions,
@@ -17,7 +17,7 @@ export class InitEffects {
   initActions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROOT_EFFECTS_INIT),
-      map(() => jellyfinActions.getSystemInfo())
+      map(() => systemInfoActions.getSystemInfo())
     );
   });
 }

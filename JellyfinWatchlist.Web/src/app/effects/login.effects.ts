@@ -1,5 +1,5 @@
 import * as authActions from '../actions/auth.actions';
-import * as jellyfinActions from '../actions/jellyfin.actions';
+import * as currentUserActions from '../actions/current-user.actions';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
@@ -39,7 +39,7 @@ export class LoginEffects {
       ofType(authActions.loginSucceeded),
       map(() => {
         this.router.navigate(['/']);
-        return jellyfinActions.getCurrentUser();
+        return currentUserActions.getCurrentUser();
       })
     );
   });
