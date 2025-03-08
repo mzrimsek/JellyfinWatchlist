@@ -6,9 +6,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { MediaItem } from '../../shared/models';
 import { Observable } from 'rxjs';
 import { ResultsListComponent } from './components/results-list/results-list.component';
-import { SearchResult } from './models';
 import { Store } from '@ngrx/store';
 import { selectSearchResults } from '../../reducers';
 
@@ -20,7 +20,7 @@ import { selectSearchResults } from '../../reducers';
 })
 export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
-  searchResults$: Observable<SearchResult[]> | undefined;
+  searchResults$: Observable<MediaItem[]> | undefined;
 
   constructor(private store: Store, private fb: FormBuilder) {}
   ngOnInit(): void {

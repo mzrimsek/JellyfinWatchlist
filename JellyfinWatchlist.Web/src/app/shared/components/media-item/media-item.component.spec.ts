@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultListItemComponent } from './result-list-item.component';
+import { ResultListItemComponent } from './media-item.component';
 
 describe('ResultListItemComponent', () => {
   let component: ResultListItemComponent;
@@ -8,9 +8,8 @@ describe('ResultListItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResultListItemComponent]
-    })
-    .compileComponents();
+      imports: [ResultListItemComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ResultListItemComponent);
     component = fixture.componentInstance;

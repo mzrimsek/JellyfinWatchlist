@@ -2,10 +2,10 @@ import * as searchActions from '../actions/search.actions';
 
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { SearchResult } from '../pages/search/models';
+import { MediaItem } from '../shared/models';
 
 export interface State {
-  results: Array<SearchResult>;
+  results: Array<MediaItem>;
   loading: boolean;
 }
 

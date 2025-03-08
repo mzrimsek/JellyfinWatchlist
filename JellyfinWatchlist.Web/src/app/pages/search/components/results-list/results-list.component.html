@@ -10,9 +10,7 @@
       <div class="items">
         @for (resultItem of results; track resultItem.id) {
         <div class="item">
-          <app-search-result-list-item
-            [item]="resultItem"
-          ></app-search-result-list-item>
+          <app-shared-media-item [item]="resultItem"></app-shared-media-item>
         </div>
         }
       </div>
