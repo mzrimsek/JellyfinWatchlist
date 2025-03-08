@@ -1,4 +1,5 @@
 import { ActionReducerMap, MetaReducer, createSelector } from '@ngrx/store';
+import { State as AuthState, authReducer } from './auth.reducer';
 import {
   State as JellyfinState,
   jellyfinReducer,
@@ -11,10 +12,12 @@ import { isDevMode } from '@angular/core';
 
 export interface State {
   jellyfin: JellyfinState;
+  auth: AuthState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   jellyfin: jellyfinReducer,
+  auth: authReducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];

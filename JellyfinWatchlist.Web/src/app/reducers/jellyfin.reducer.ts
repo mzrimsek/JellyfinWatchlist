@@ -7,14 +7,12 @@ import {
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 export interface State {
-  isAuthenticated: boolean;
   publicSystemInfo: PublicSystemInfo | null;
   currentUser: UserDto | null;
   loading: boolean;
 }
 
 const initialState: State = {
-  isAuthenticated: false,
   publicSystemInfo: null,
   currentUser: null,
   loading: false,
@@ -22,24 +20,6 @@ const initialState: State = {
 
 export const jellyfinReducer = createReducer(
   initialState,
-  on(JellyfinActions.login, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(JellyfinActions.loginSucceeded, (state) => ({
-    ...state,
-    isAuthenticated: true,
-    loading: false,
-  })),
-  on(JellyfinActions.loginFailed, (state) => ({
-    ...state,
-    isAuthenticated: false,
-    loading: false,
-  })),
-  on(JellyfinActions.logout, (state) => ({
-    ...state,
-    isAuthenticated: false,
-  })),
   on(JellyfinActions.getSystemInfo, (state) => ({
     ...state,
     loading: true,
@@ -79,7 +59,6 @@ export const {
   name,
   reducer,
   selectJellyfinState,
-  selectIsAuthenticated,
   selectPublicSystemInfo,
   selectCurrentUser,
   selectLoading,

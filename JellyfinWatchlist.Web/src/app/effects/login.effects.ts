@@ -1,3 +1,4 @@
+import * as authActions from '../actions/auth.actions';
 import * as jellyfinActions from '../actions/jellyfin.actions';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -17,17 +18,17 @@ export class LoginEffects {
 
   loginActions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(jellyfinActions.login),
+      ofType(authActions.login),
       exhaustMap((action) =>
         this.jellyfinService.login(action.username, action.password).pipe(
           map((success) => {
             if (success) {
-              return jellyfinActions.loginSucceeded();
+              return authActions.loginSucceeded();
             } else {
-              return jellyfinActions.loginFailed();
+              return authActions.loginFailed();
             }
           }),
-          catchError(() => of(jellyfinActions.loginFailed()))
+          catchError(() => of(authActions.loginFailed()))
         )
       )
     );
@@ -35,7 +36,7 @@ export class LoginEffects {
 
   loginSucceededActions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(jellyfinActions.loginSucceeded),
+      ofType(authActions.loginSucceeded),
       map(() => {
         this.router.navigate(['/']);
         return jellyfinActions.getCurrentUser();
@@ -46,7 +47,7 @@ export class LoginEffects {
   loginFailedActions$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(jellyfinActions.loginFailed),
+        ofType(authActions.loginFailed),
         map(() => {
           this.matSnackBar.open('Login failed', 'Dismiss', {
             duration: 3000,
@@ -60,7 +61,7 @@ export class LoginEffects {
   logoutActions$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(jellyfinActions.logout),
+        ofType(authActions.logout),
         exhaustMap(() =>
           this.jellyfinService.logout().pipe(
             map(() => {

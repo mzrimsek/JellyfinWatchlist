@@ -2,7 +2,7 @@ import { CanActivateFn, Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { inject } from '@angular/core';
-import { selectIsAuthenticated } from '../reducers/jellyfin.reducer';
+import { selectIsAuthenticated } from '../reducers/auth.reducer';
 import { tap } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
