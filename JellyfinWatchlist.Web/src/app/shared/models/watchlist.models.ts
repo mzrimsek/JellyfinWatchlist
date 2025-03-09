@@ -1,4 +1,4 @@
-export interface MediaItem {
+export interface WatchlistItem {
   id: string;
   name: string;
   mediaType: string;

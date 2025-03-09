@@ -1,13 +1,13 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { MediaItem } from '../shared/models';
+import { WatchlistItem } from '../shared/models';
 
 export const WatchlistActions = createActionGroup({
   source: 'Watchlist',
   events: {
-    SelectItem: props<{ item: MediaItem }>(),
-    AddItem: props<{ item: MediaItem }>(),
-    RemoveItem: props<{ item: MediaItem }>(),
+    SelectItem: props<{ item: WatchlistItem }>(),
+    AddItem: props<{ item: WatchlistItem }>(),
+    RemoveItem: props<{ item: WatchlistItem }>(),
     Clear: emptyProps(),
   },
 });

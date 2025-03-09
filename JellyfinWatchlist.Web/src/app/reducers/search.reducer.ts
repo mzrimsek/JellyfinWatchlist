@@ -1,10 +1,10 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { MediaItem } from '../shared/models';
 import { SearchActions } from '../actions/search.actions';
+import { WatchlistItem } from '../shared/models';
 
 export interface State {
-  results: Array<MediaItem>;
+  results: Array<WatchlistItem>;
   loading: boolean;
 }
 

@@ -1,1 +1,1 @@
-export * from './search.models';
+export * from './watchlist.models';
