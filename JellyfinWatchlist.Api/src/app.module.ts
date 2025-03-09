@@ -19,7 +19,7 @@ import { WatchlistItem } from './entities';
         CONFIG_PATH: Joi.string().required(),
       }),
       validationOptions: {
-        allowUnknown: false,
+        allowUnknown: true,
         abortEarly: true,
       },
       isGlobal: true,
