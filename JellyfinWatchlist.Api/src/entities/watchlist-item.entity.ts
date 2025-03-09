@@ -19,4 +19,7 @@ export class WatchlistItem {
 
   @Column()
   jellyfinUserId: string;
+
+  @Column()
+  addedOn: Date;
 }
