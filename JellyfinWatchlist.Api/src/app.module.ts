@@ -1,12 +1,11 @@
 import * as Joi from 'joi';
 import * as path from 'path';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WatchlistController } from './watchlist/watchlist.controller';
 import { WatchlistItem } from './entities';
 
 @Module({
@@ -30,7 +29,6 @@ import { WatchlistItem } from './entities';
       entities: [WatchlistItem],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [WatchlistController],
 })
 export class AppModule {}
