@@ -16,4 +16,7 @@ export class WatchlistItem {
 
   @Column()
   primaryImageUrl: string;
+
+  @Column()
+  jellyfinUserId: string;
 }
