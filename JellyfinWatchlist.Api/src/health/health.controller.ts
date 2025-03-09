@@ -26,7 +26,6 @@ export class HealthController {
 
     let checks: Array<HealthIndicatorFunction> = [
       () => this.http.pingCheck('google', 'https://google.com'),
-      () => this.http.pingCheck('jellyfin', 'https://jellyfin.org'),
       () => this.db.pingCheck('database'),
     ];
 

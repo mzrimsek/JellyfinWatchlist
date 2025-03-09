@@ -5,8 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WatchlistController } from './watchlist/watchlist.controller';
 import { WatchlistItem } from './entities';
+import { WatchlistModule } from './watchlist/watchlist.module';
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { WatchlistItem } from './entities';
       database: path.join(process.env.CONFIG_PATH || '', 'db.sql'),
       entities: [WatchlistItem],
     }),
+    WatchlistModule,
   ],
-  controllers: [WatchlistController],
 })
 export class AppModule {}
