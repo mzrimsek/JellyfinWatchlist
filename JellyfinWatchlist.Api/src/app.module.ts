@@ -27,6 +27,9 @@ import { WatchlistModule } from './watchlist/watchlist.module';
       type: 'sqlite',
       database: path.join(process.env.CONFIG_PATH || '', 'db.sql'),
       entities: [WatchlistItem],
+      migrations: [path.join(__dirname, 'migrations', '*.js')],
+      synchronize: false,
+      migrationsRun: true, // Automatically runs migrations on startup
     }),
     WatchlistModule,
   ],
