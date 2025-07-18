@@ -1,32 +1,42 @@
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { SearchComponent } from './search.component';
-import { Store } from '@ngrx/store';
-import { mockProvider } from '@ngneat/spectator';
-import { of } from 'rxjs';
+import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { FormComponent } from './components/form/form.component';
+import { ResultsListComponent } from './components/results-list/results-list.component';
 
 describe('SearchComponent', () => {
   let spectator: Spectator<SearchComponent>;
-  let component: SearchComponent;
 
   const createComponent = createComponentFactory({
     component: SearchComponent,
+    imports: [LayoutComponent, FormComponent, ResultsListComponent],
     providers: [
+      FormBuilder,
       mockProvider(Store, {
         select: jasmine.createSpy('select').and.returnValue(of([])),
         dispatch: jasmine.createSpy('dispatch'),
       }),
+      mockProvider(ActivatedRoute, {
+        params: of({}),
+        queryParams: of({}),
+        snapshot: { params: {}, queryParams: {} },
+      }),
     ],
+    shallow: true,
     detectChanges: false,
   });
 
   beforeEach(() => {
     spectator = createComponent();
-    component = spectator.component;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 
   it('should select search results from store', () => {

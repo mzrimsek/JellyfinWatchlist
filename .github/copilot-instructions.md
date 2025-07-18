@@ -129,12 +129,16 @@ const createService = createServiceFactory({
   generation rather than complex async operations
 - **Spectator Import Fix**: ALWAYS import from `@ngneat/spectator` only (not
   `@ngneat/spectator/jest`) to avoid Jest/Karma compatibility issues. The
-  project uses Karma with Jasmine, not Jest, so jest-specific imports will
-  cause module resolution errors.
+  project uses Karma with Jasmine, not Jest, so jest-specific imports will cause
+  module resolution errors.
 
 ```typescript
 // ✅ Correct import for Karma/Jasmine setup
-import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
+import {
+  createComponentFactory,
+  Spectator,
+  mockProvider,
+} from '@ngneat/spectator';
 
 // ❌ Avoid this - causes Jest module resolution errors in Karma
 import { mockProvider } from '@ngneat/spectator/jest';
@@ -166,7 +170,7 @@ export class WatchlistController {
   @Post(':userId')          // Add item to user's watchlist
   @Delete(':userId/:itemId') // Remove item from user's watchlist
 }
-````
+```
 
 ### NgRx State Structure
 
