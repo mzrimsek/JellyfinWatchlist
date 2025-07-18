@@ -103,7 +103,8 @@ const createComponent = createComponentFactory({
       dispatch: jasmine.createSpy('dispatch'),
     }),
   ],
-  detectChanges: false, // Manual control
+  detectChanges: false, // Manual control for better test setup
+  shallow: true, // Use for components with complex child components
 });
 
 // Service testing with Spectator
@@ -114,6 +115,30 @@ const createService = createServiceFactory({
   ],
 });
 ```
+
+### Testing Best Practices (Web)
+
+- **Spectator Setup**: Always use `detectChanges: false` for manual control
+- **Mock Child Components**: Use `shallow: true` or `mocks: [ChildComponent]` to
+  isolate component under test
+- **Store Mocking**: Use `mockProvider(Store)` with jasmine spies for NgRx
+- **Input Properties**: Use `spectator.setInput()` or component props to set
+  inputs
+- **Material Components**: Import `NoopAnimationsModule` to avoid timing issues
+- **Complex SDK Mocking**: For Jellyfin SDK, focus on testable methods like URL
+  generation rather than complex async operations
+- **Jest Compatibility Issue**: Run individual test files with
+  `ng test --include="**/filename.spec.ts"` to avoid Spectator/Jest module
+  resolution conflicts when running full test suite mockProvider(Store, {
+  select: jasmine.createSpy('select').and.returnValue(of('mockData')), dispatch:
+  jasmine.createSpy('dispatch'), }), ], detectChanges: false, // Manual control
+  });
+
+// Service testing with Spectator const createService = createServiceFactory({
+service: JellyfinService, providers: [ /* mock providers for dependencies */ ],
+});
+
+````
 
 ## Project-Specific Patterns
 
@@ -141,7 +166,7 @@ export class WatchlistController {
   @Post(':userId')          // Add item to user's watchlist
   @Delete(':userId/:itemId') // Remove item from user's watchlist
 }
-```
+````
 
 ### NgRx State Structure
 
@@ -173,7 +198,12 @@ export class WatchlistController {
 
 - **API**: Complete with comprehensive test suite (75 tests passing)
 - **Web**: Core functionality implemented, testing framework established
-- **Testing**: LoginComponent and JellyfinService tests started with Spectator
+- **Testing Progress**:
+  - ✅ LoginComponent (9 tests) - Complete with form validation, action dispatch
+  - ✅ LoginFormComponent (17 tests) - Complete with template integration
+  - ✅ ReactiveInputComponent (10 tests) - Complete with accessibility
+  - ✅ JellyfinService (4 tests) - Basic tests for URL generation and
+    initialization
 - **Architecture**: Full NgRx state management with effects and selectors
 
 ## Integration Points

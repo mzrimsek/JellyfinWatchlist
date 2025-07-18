@@ -12,16 +12,14 @@ testing utilities for NgRx reducers and effects.
 
 #### **Page Components** (`src/app/pages/`)
 
-- [ ] **LoginComponent** ✅ Started
-
-  - Form validation (username/password required)
-  - Login action dispatch on form submission
-  - Instance name display from store
-  - Navigation after successful login
-  - Error handling for failed login
+- [x] **LoginComponent** ✅ Complete
+  - Form validation (username/password required) ✅
+  - Login action dispatch on form submission ✅
+  - Instance name display from store ✅
+  - Error handling scenarios ✅
+  - Form state management ✅
 
 - [ ] **HomeComponent**
-
   - Watchlist display from store
   - User greeting with current user name
   - Empty state when no watchlist items
@@ -36,42 +34,38 @@ testing utilities for NgRx reducers and effects.
 #### **Shared Components** (`src/app/shared/components/`)
 
 - [ ] **HeaderComponent**
-
   - User name display
   - Logout functionality
   - Navigation links
   - Responsive behavior
 
 - [ ] **LayoutComponent**
-
   - Routing outlet functionality
   - Header integration
   - Authentication state handling
 
 - [ ] **MediaItemComponent**
-
   - Media item display (title, year, image)
   - Add/Remove from watchlist actions
   - Different states (in watchlist vs. not)
   - Media type display
 
-- [ ] **ReactiveInputComponent**
-  - Form control integration
-  - Validation error display
-  - Input types (text, password)
-  - Accessibility attributes
+- [x] **ReactiveInputComponent** ✅ Complete
+  - Form control integration ✅
+  - Validation error display ✅
+  - Input types (text, password) ✅
+  - Accessibility attributes ✅
 
 #### **Form Components** (`src/app/pages/*/components/form/`)
 
-- [ ] **LoginFormComponent**
-
-  - Form group input handling
-  - Submit event emission
-  - Loading state display
-  - Instance URL/name display
+- [x] **LoginFormComponent** ✅ Complete
+  - Form group input handling ✅
+  - Submit event emission ✅
+  - Loading state display ✅
+  - Instance URL/name display ✅
+  - Form validation states ✅
 
 - [ ] **SearchFormComponent**
-
   - Search query input
   - Submit event emission
   - Form validation
@@ -84,15 +78,17 @@ testing utilities for NgRx reducers and effects.
 
 ### 2. Service Tests (Using Spectator)
 
-#### **JellyfinService** (`src/app/services/`) ✅ Started
+#### **JellyfinService** (`src/app/services/`) ✅ Partially Complete
 
-- [ ] **Authentication Methods**
-
+- [x] **Service Creation** ✅
+- [x] **Image URL Generation** ✅
+- [x] **SDK Integration** ✅
+- [ ] **Authentication Methods** (Complex SDK mocking required)
   - `login()` - success/failure scenarios
   - `logout()` - session cleanup
   - SDK configuration
 
-- [ ] **API Methods**
+- [ ] **API Methods** (Complex SDK mocking required)
   - `getSystemInfo()` - system information retrieval
   - `getCurrentUser()` - user data retrieval
   - `search()` - media search functionality
@@ -104,27 +100,23 @@ testing utilities for NgRx reducers and effects.
 #### **Reducers** (`src/app/reducers/`)
 
 - [ ] **AuthReducer**
-
   - `login` action - loading state
   - `loginSucceeded` - authenticated state
   - `loginFailed` - error state
   - `logout` - reset state
 
 - [ ] **CurrentUserReducer**
-
   - `loadCurrentUser` - loading state
   - `loadCurrentUserSucceeded` - user data storage
   - `loadCurrentUserFailed` - error handling
 
 - [ ] **SearchReducer**
-
   - `search` - loading state
   - `searchSucceeded` - results storage
   - `searchFailed` - error handling
   - `clearSearch` - state reset
 
 - [ ] **WatchlistReducer** (EntityAdapter)
-
   - `loadWatchlist` - loading state
   - `loadWatchlistSucceeded` - entities population
   - `addToWatchlist` - entity addition
@@ -145,19 +137,16 @@ testing utilities for NgRx reducers and effects.
 #### **Effects** (`src/app/effects/`) (Standard Angular Testing)
 
 - [ ] **LoginEffects**
-
   - `login$` - service call and action dispatch
   - `loginSucceededNavigate$` - routing after success
   - `loginSucceededGetCurrentUser$` - user data loading
   - `loginFailedShowError$` - error message display
 
 - [ ] **CurrentUserEffects**
-
   - `loadCurrentUser$` - service integration
   - Error handling scenarios
 
 - [ ] **SearchEffects**
-
   - `search$` - service call and result handling
   - Debouncing and error handling
 
@@ -181,13 +170,11 @@ testing utilities for NgRx reducers and effects.
 #### **Feature Workflows**
 
 - [ ] **Login Flow**
-
   - Complete login process
   - State updates across multiple reducers
   - Navigation and user data loading
 
 - [ ] **Search and Add to Watchlist**
-
   - Search execution
   - Results display
   - Add to watchlist with API integration
@@ -202,13 +189,11 @@ testing utilities for NgRx reducers and effects.
 ### **Spectator Test Helpers**
 
 - [ ] **MockProviders Setup**
-
   - Store mocking with initial state
   - Service mocking (JellyfinService)
   - Router and ActivatedRoute mocks
 
 - [ ] **Custom Matchers**
-
   - NgRx action dispatching assertions
   - Component state assertions
   - Form validation helpers
