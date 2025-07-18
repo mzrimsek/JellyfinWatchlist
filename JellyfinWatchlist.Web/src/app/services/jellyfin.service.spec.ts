@@ -1,13 +1,18 @@
-import { TestBed } from '@angular/core/testing';
-
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { JellyfinService } from './jellyfin.service';
 
 describe('JellyfinService', () => {
+  let spectator: SpectatorService<JellyfinService>;
   let service: JellyfinService;
 
+  const createService = createServiceFactory({
+    service: JellyfinService,
+    providers: [],
+  });
+
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(JellyfinService);
+    spectator = createService();
+    service = spectator.service;
   });
 
   it('should be created', () => {
