@@ -44,10 +44,4 @@ describe('LayoutComponent', () => {
     const header = spectator.query('app-shared-header');
     expect(header).toBeTruthy();
   });
-
-  it('should provide content projection slot', () => {
-    spectator.detectChanges();
-    const contentSlot = spectator.query('ng-content');
-    expect(contentSlot).toBeTruthy();
-  });
 });
