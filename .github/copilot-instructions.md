@@ -127,18 +127,18 @@ const createService = createServiceFactory({
 - **Material Components**: Import `NoopAnimationsModule` to avoid timing issues
 - **Complex SDK Mocking**: For Jellyfin SDK, focus on testable methods like URL
   generation rather than complex async operations
-- **Jest Compatibility Issue**: Run individual test files with
-  `ng test --include="**/filename.spec.ts"` to avoid Spectator/Jest module
-  resolution conflicts when running full test suite mockProvider(Store, {
-  select: jasmine.createSpy('select').and.returnValue(of('mockData')), dispatch:
-  jasmine.createSpy('dispatch'), }), ], detectChanges: false, // Manual control
-  });
+- **Spectator Import Fix**: ALWAYS import from `@ngneat/spectator` only (not
+  `@ngneat/spectator/jest`) to avoid Jest/Karma compatibility issues. The
+  project uses Karma with Jasmine, not Jest, so jest-specific imports will
+  cause module resolution errors.
 
-// Service testing with Spectator const createService = createServiceFactory({
-service: JellyfinService, providers: [ /* mock providers for dependencies */ ],
-});
+```typescript
+// ✅ Correct import for Karma/Jasmine setup
+import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
 
-````
+// ❌ Avoid this - causes Jest module resolution errors in Karma
+import { mockProvider } from '@ngneat/spectator/jest';
+```
 
 ## Project-Specific Patterns
 

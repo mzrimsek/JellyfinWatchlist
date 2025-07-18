@@ -1,8 +1,9 @@
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { mockProvider } from '@ngneat/spectator/jest';
-import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+
 import { SearchComponent } from './search.component';
+import { Store } from '@ngrx/store';
+import { mockProvider } from '@ngneat/spectator';
+import { of } from 'rxjs';
 
 describe('SearchComponent', () => {
   let spectator: Spectator<SearchComponent>;
