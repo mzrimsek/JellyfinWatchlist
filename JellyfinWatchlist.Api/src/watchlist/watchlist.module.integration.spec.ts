@@ -3,10 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WatchlistModule } from './watchlist.module';
 import { WatchlistController } from './watchlist.controller';
 import { WatchlistService } from './watchlist.service';
-import { 
-  IntegrationTestHelpers, 
-  INTEGRATION_TEST_CONSTANTS 
-} from '../test-utils/test-helpers';
+import { IntegrationTestHelpers, INTEGRATION_TEST_CONSTANTS } from '../test-utils/test-helpers';
 import { getTestDatabaseConfig } from '../test-utils/test-database.config';
 import { AddWatchlistItem } from './models';
 import { NotFoundException } from '@nestjs/common';
@@ -18,10 +15,7 @@ describe('WatchlistModule (Integration)', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(getTestDatabaseConfig()),
-        WatchlistModule,
-      ],
+      imports: [TypeOrmModule.forRoot(getTestDatabaseConfig()), WatchlistModule],
     }).compile();
 
     controller = module.get<WatchlistController>(WatchlistController);
@@ -53,7 +47,7 @@ describe('WatchlistModule (Integration)', () => {
   describe('Full CRUD Workflow Integration', () => {
     it('should complete a full watchlist lifecycle', async () => {
       const userId = INTEGRATION_TEST_CONSTANTS.USER_ID;
-      
+
       // 1. Initially empty
       let userWatchlist = await controller.getByUserId(userId);
       expect(userWatchlist).toHaveLength(0);
@@ -81,10 +75,10 @@ describe('WatchlistModule (Integration)', () => {
       // 3. Verify items were added
       userWatchlist = await controller.getByUserId(userId);
       expect(userWatchlist).toHaveLength(2);
-      
-      const movieItem = userWatchlist.find(item => item.id === 'movie-1');
-      const seriesItem = userWatchlist.find(item => item.id === 'series-1');
-      
+
+      const movieItem = userWatchlist.find((item) => item.id === 'movie-1');
+      const seriesItem = userWatchlist.find((item) => item.id === 'series-1');
+
       expect(movieItem).toBeDefined();
       expect(seriesItem).toBeDefined();
       expect(movieItem!.jellyfinUserId).toBe(userId);
@@ -101,8 +95,7 @@ describe('WatchlistModule (Integration)', () => {
       expect(userWatchlist[0].id).toBe('series-1');
 
       // 6. Try to delete non-existent item
-      await expect(controller.delete(userId, 'non-existent'))
-        .rejects.toThrow(NotFoundException);
+      await expect(controller.delete(userId, 'non-existent')).rejects.toThrow(NotFoundException);
 
       // 7. Final state verification
       userWatchlist = await controller.getByUserId(userId);
@@ -111,7 +104,7 @@ describe('WatchlistModule (Integration)', () => {
 
     it('should handle concurrent user operations without interference', async () => {
       const [user1, user2] = INTEGRATION_TEST_CONSTANTS.MULTIPLE_USERS;
-      
+
       // Add items for both users concurrently
       const user1Items: AddWatchlistItem[] = [
         {
@@ -142,8 +135,8 @@ describe('WatchlistModule (Integration)', () => {
 
       // Add items concurrently
       await Promise.all([
-        ...user1Items.map(item => controller.add(user1, item)),
-        ...user2Items.map(item => controller.add(user2, item)),
+        ...user1Items.map((item) => controller.add(user1, item)),
+        ...user2Items.map((item) => controller.add(user2, item)),
       ]);
 
       // Verify each user sees only their items
@@ -154,12 +147,12 @@ describe('WatchlistModule (Integration)', () => {
       expect(user2Watchlist).toHaveLength(1);
 
       // Verify data isolation
-      user1Watchlist.forEach(item => {
+      user1Watchlist.forEach((item) => {
         expect(item.jellyfinUserId).toBe(user1);
         expect(item.id).toContain('user1');
       });
 
-      user2Watchlist.forEach(item => {
+      user2Watchlist.forEach((item) => {
         expect(item.jellyfinUserId).toBe(user2);
         expect(item.id).toContain('user2');
       });
@@ -212,15 +205,16 @@ describe('WatchlistModule (Integration)', () => {
         name: 'Movie with "Quotes" and Special Characters: @#$%^&*()',
         mediaType: 'Movie',
         year: 1900, // Very old year
-        primaryImageUrl: 'https://very-long-domain-name-for-testing.example.com/very/long/path/to/image/file/with/very/long/filename.jpg',
+        primaryImageUrl:
+          'https://very-long-domain-name-for-testing.example.com/very/long/path/to/image/file/with/very/long/filename.jpg',
       };
 
       await controller.add(userId, edgeCaseItem);
       const retrievedItems = await controller.getByUserId(userId);
-      
+
       expect(retrievedItems).toHaveLength(1);
       const savedItem = retrievedItems[0];
-      
+
       expect(savedItem.id).toBe(edgeCaseItem.id);
       expect(savedItem.name).toBe(edgeCaseItem.name);
       expect(savedItem.year).toBe(1900);
@@ -231,7 +225,7 @@ describe('WatchlistModule (Integration)', () => {
   describe('Error Handling Integration', () => {
     it('should handle service errors propagated through controller', async () => {
       const userId = INTEGRATION_TEST_CONSTANTS.USER_ID;
-      
+
       // Mock the service to throw an error
       const originalAdd = service.add;
       service.add = jest.fn().mockRejectedValue(new Error('Database constraint violation'));
@@ -244,14 +238,16 @@ describe('WatchlistModule (Integration)', () => {
         primaryImageUrl: 'https://example.com/error.jpg',
       };
 
-      await expect(controller.add(userId, addItemDto))
-        .rejects.toThrow('Database constraint violation');
+      await expect(controller.add(userId, addItemDto)).rejects.toThrow(
+        'Database constraint violation',
+      );
 
       // Restore original method
       service.add = originalAdd;
-    });    it('should maintain data integrity when operations fail', async () => {
+    });
+    it('should maintain data integrity when operations fail', async () => {
       const userId = INTEGRATION_TEST_CONSTANTS.USER_ID;
-      
+
       // Add a valid item first
       const validItem: AddWatchlistItem = {
         id: 'integrity-test-item',
@@ -262,7 +258,7 @@ describe('WatchlistModule (Integration)', () => {
       };
 
       await controller.add(userId, validItem);
-      
+
       // Verify item was added
       let watchlist = await controller.getByUserId(userId);
       expect(watchlist).toHaveLength(1);
@@ -277,7 +273,7 @@ describe('WatchlistModule (Integration)', () => {
 
       // Verify data integrity regardless of whether error occurred
       watchlist = await controller.getByUserId(userId);
-      
+
       if (errorOccurred) {
         // Ideal case: error prevented duplicate
         expect(watchlist).toHaveLength(1);
@@ -285,7 +281,7 @@ describe('WatchlistModule (Integration)', () => {
       } else {
         // SQLite allowed it - verify the final state is still consistent
         expect(watchlist.length).toBeGreaterThan(0);
-        expect(watchlist.every(item => item.jellyfinUserId === userId)).toBe(true);
+        expect(watchlist.every((item) => item.jellyfinUserId === userId)).toBe(true);
       }
     });
   });
@@ -294,7 +290,7 @@ describe('WatchlistModule (Integration)', () => {
     it('should handle bulk operations efficiently', async () => {
       const userId = INTEGRATION_TEST_CONSTANTS.USER_ID;
       const bulkSize = 20;
-      
+
       const bulkItems: AddWatchlistItem[] = Array.from({ length: bulkSize }, (_, index) => ({
         id: `bulk-item-${index}`,
         name: `Bulk Movie ${index}`,
@@ -305,7 +301,7 @@ describe('WatchlistModule (Integration)', () => {
 
       // Add items in bulk
       const startTime = Date.now();
-      await Promise.all(bulkItems.map(item => controller.add(userId, item)));
+      await Promise.all(bulkItems.map((item) => controller.add(userId, item)));
       const addTime = Date.now() - startTime;
 
       // Retrieve all items
@@ -319,8 +315,8 @@ describe('WatchlistModule (Integration)', () => {
       expect(retrieveTime).toBeLessThan(500); // Should complete within 500ms
 
       // Verify all items are correctly stored
-      const retrievedIds = retrievedItems.map(item => item.id).sort();
-      const expectedIds = bulkItems.map(item => item.id).sort();
+      const retrievedIds = retrievedItems.map((item) => item.id).sort();
+      const expectedIds = bulkItems.map((item) => item.id).sort();
       expect(retrievedIds).toEqual(expectedIds);
     });
   });

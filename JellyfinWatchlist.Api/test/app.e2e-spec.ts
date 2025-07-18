@@ -15,7 +15,7 @@ describe('Jellyfin Watchlist API (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     watchlistRepository = moduleFixture.get<Repository<WatchlistItem>>(
       getRepositoryToken(WatchlistItem),
     );
@@ -71,7 +71,8 @@ describe('Jellyfin Watchlist API (e2e)', () => {
             expect(res.body).toHaveProperty('addedOn');
             expect(new Date(res.body.addedOn)).toBeInstanceOf(Date);
           });
-      });      it('should return 500 for invalid request body', () => {
+      });
+      it('should return 500 for invalid request body', () => {
         const invalidItem = {
           name: 'Test Movie',
           // Missing required fields
@@ -81,7 +82,8 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           .post(`/watchlist/${testUserId}`)
           .send(invalidItem)
           .expect(500); // Without validation, this causes DB constraint error
-      });      it('should handle duplicate items gracefully', async () => {
+      });
+      it('should handle duplicate items gracefully', async () => {
         // Add item first time
         await request(app.getHttpServer())
           .post(`/watchlist/${testUserId}`)
@@ -135,11 +137,11 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           .expect((res) => {
             expect(Array.isArray(res.body)).toBe(true);
             expect(res.body).toHaveLength(2);
-            
+
             const itemIds = res.body.map((item: any) => item.id);
             expect(itemIds).toContain(testItem.id);
             expect(itemIds).toContain(secondItem.id);
-            
+
             res.body.forEach((item: any) => {
               expect(item).toHaveProperty('jellyfinUserId', testUserId);
               expect(item).toHaveProperty('addedOn');
@@ -152,10 +154,7 @@ describe('Jellyfin Watchlist API (e2e)', () => {
         const user2 = 'user-2';
 
         // Add item for user 1
-        await request(app.getHttpServer())
-          .post(`/watchlist/${user1}`)
-          .send(testItem)
-          .expect(201);
+        await request(app.getHttpServer()).post(`/watchlist/${user1}`).send(testItem).expect(201);
 
         // Add different item for user 2
         const user2Item = {
@@ -164,10 +163,7 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           name: 'User 2 Movie',
         };
 
-        await request(app.getHttpServer())
-          .post(`/watchlist/${user2}`)
-          .send(user2Item)
-          .expect(201);
+        await request(app.getHttpServer()).post(`/watchlist/${user2}`).send(user2Item).expect(201);
 
         // Check user 1 only sees their item
         const user1Response = await request(app.getHttpServer())
@@ -219,7 +215,7 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           });
       });
 
-      it('should return 404 when trying to delete another user\'s item', async () => {
+      it("should return 404 when trying to delete another user's item", async () => {
         const otherUserId = 'other-user-456';
 
         // Try to delete with wrong user ID
@@ -251,7 +247,8 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           .send('invalid-json')
           .set('Content-Type', 'application/json')
           .expect(400);
-      });      it('should handle missing required JSON fields', () => {
+      });
+      it('should handle missing required JSON fields', () => {
         return request(app.getHttpServer())
           .post(`/watchlist/${testUserId}`)
           .send({}) // Empty object
@@ -260,20 +257,19 @@ describe('Jellyfin Watchlist API (e2e)', () => {
 
       it('should handle very long user IDs', () => {
         const longUserId = 'a'.repeat(1000);
-        
-        return request(app.getHttpServer())
-          .get(`/watchlist/${longUserId}`)
-          .expect(200); // Should still work, just be empty
+
+        return request(app.getHttpServer()).get(`/watchlist/${longUserId}`).expect(200); // Should still work, just be empty
       });
 
       it('should handle special characters in user IDs', () => {
         const specialUserId = 'user@123!#$%^&*()';
-        
+
         return request(app.getHttpServer())
           .get(`/watchlist/${encodeURIComponent(specialUserId)}`)
           .expect(200);
       });
-    });    describe('Performance and Load', () => {
+    });
+    describe('Performance and Load', () => {
       it('should handle multiple concurrent requests', async () => {
         const promises: Promise<any>[] = [];
         const numRequests = 10;
@@ -287,10 +283,7 @@ describe('Jellyfin Watchlist API (e2e)', () => {
           };
 
           promises.push(
-            request(app.getHttpServer())
-              .post(`/watchlist/${testUserId}`)
-              .send(item)
-              .expect(201)
+            request(app.getHttpServer()).post(`/watchlist/${testUserId}`).send(item).expect(201),
           );
         }
 
@@ -317,18 +310,14 @@ describe('Jellyfin Watchlist API (e2e)', () => {
             name: `Large Item ${i}`,
           };
 
-          promises.push(
-            request(app.getHttpServer())
-              .post(`/watchlist/${testUserId}`)
-              .send(item)
-          );
+          promises.push(request(app.getHttpServer()).post(`/watchlist/${testUserId}`).send(item));
         }
 
         await Promise.all(promises);
 
         // Measure response time for GET request
         const startTime = Date.now();
-        
+
         const response = await request(app.getHttpServer())
           .get(`/watchlist/${testUserId}`)
           .expect(200);
@@ -339,7 +328,8 @@ describe('Jellyfin Watchlist API (e2e)', () => {
         expect(response.body).toHaveLength(numItems);
         expect(responseTime).toBeLessThan(5000); // Should respond within 5 seconds
       });
-    });    describe('Data Validation', () => {
+    });
+    describe('Data Validation', () => {
       it('should return 500 for missing required fields in POST request', () => {
         const incompleteItem = {
           name: 'Test Movie',

@@ -23,7 +23,10 @@ export class SearchComponent implements OnInit {
   searchResults$: Observable<WatchlistItem[]> | undefined;
   watchlistIds$: Observable<string[]> | undefined;
 
-  constructor(private store: Store, private fb: FormBuilder) {}
+  constructor(
+    private store: Store,
+    private fb: FormBuilder,
+  ) {}
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
@@ -35,9 +38,7 @@ export class SearchComponent implements OnInit {
   }
 
   search(): void {
-    this.store.dispatch(
-      SearchActions.search({ query: this.searchForm?.value.query })
-    );
+    this.store.dispatch(SearchActions.search({ query: this.searchForm?.value.query }));
   }
 
   selectItem(item: WatchlistItem): void {

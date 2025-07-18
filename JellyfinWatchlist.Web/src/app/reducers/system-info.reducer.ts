@@ -28,7 +28,7 @@ export const systemInfoReducer = createReducer(
     ...state,
     publicSystemInfo: null,
     loading: false,
-  }))
+  })),
 );
 
 const systemInfoFeature = createFeature({
@@ -36,10 +36,5 @@ const systemInfoFeature = createFeature({
   reducer: systemInfoReducer,
 });
 
-export const {
-  name,
-  reducer,
-  selectSystemInfoState,
-  selectPublicSystemInfo,
-  selectLoading,
-} = systemInfoFeature;
+export const { name, reducer, selectSystemInfoState, selectPublicSystemInfo, selectLoading } =
+  systemInfoFeature;

@@ -6,17 +6,8 @@
       <a [href]="instanceUrl" target="_blank">{{ instanceName }}</a>
     </mat-card-subtitle>
     <mat-card-content>
-      <app-shared-reactive-input
-        controlName="username"
-        placeholder="Username"
-        [group]="group"
-      ></app-shared-reactive-input>
-      <app-shared-reactive-input
-        controlName="password"
-        placeholder="Password"
-        [group]="group"
-        type="password"
-      ></app-shared-reactive-input>
+      <app-shared-reactive-input controlName="username" placeholder="Username" [group]="group"></app-shared-reactive-input>
+      <app-shared-reactive-input controlName="password" placeholder="Password" [group]="group" type="password"></app-shared-reactive-input>
     </mat-card-content>
     <mat-card-actions>
       <button mat-fab extended type="submit" [disabled]="group.invalid">

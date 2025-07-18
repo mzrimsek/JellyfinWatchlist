@@ -32,7 +32,7 @@ export const currentUserReducer = createReducer(
   on(CurrentUserActions.clear, (state) => ({
     ...state,
     user: null,
-  }))
+  })),
 );
 
 const currentUserFeature = createFeature({
@@ -40,10 +40,5 @@ const currentUserFeature = createFeature({
   reducer: currentUserReducer,
 });
 
-export const {
-  name,
-  reducer,
-  selectCurrentUserState,
-  selectUser,
-  selectLoading,
-} = currentUserFeature;
+export const { name, reducer, selectCurrentUserState, selectUser, selectLoading } =
+  currentUserFeature;

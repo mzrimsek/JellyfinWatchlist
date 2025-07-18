@@ -1,9 +1,4 @@
-import {
-  Actions,
-  ROOT_EFFECTS_INIT,
-  createEffect,
-  ofType,
-} from '@ngrx/effects';
+import { Actions, ROOT_EFFECTS_INIT, createEffect, ofType } from '@ngrx/effects';
 import { Injectable, inject } from '@angular/core';
 
 import { SystemInfoActions } from '../actions/system-info.actions';
@@ -16,7 +11,7 @@ export class InitEffects {
   getSystemInfo$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROOT_EFFECTS_INIT),
-      map(() => SystemInfoActions.get())
+      map(() => SystemInfoActions.get()),
     );
   });
 }

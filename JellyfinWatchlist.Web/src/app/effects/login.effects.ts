@@ -28,9 +28,9 @@ export class LoginEffects {
               return AuthActions.loginFailed();
             }
           }),
-          catchError(() => of(AuthActions.loginFailed()))
-        )
-      )
+          catchError(() => of(AuthActions.loginFailed())),
+        ),
+      ),
     );
   });
 
@@ -40,16 +40,16 @@ export class LoginEffects {
         ofType(AuthActions.loginSucceeded),
         map(() => {
           this.router.navigate(['/']);
-        })
+        }),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   loginSucceededGetCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.loginSucceeded),
-      map(() => CurrentUserActions.get())
+      map(() => CurrentUserActions.get()),
     );
   });
 
@@ -61,10 +61,10 @@ export class LoginEffects {
           this.matSnackBar.open('Login failed', 'Dismiss', {
             duration: 3000,
           });
-        })
+        }),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   logoutNavigate$ = createEffect(
@@ -75,25 +75,25 @@ export class LoginEffects {
           this.jellyfinService.logout().pipe(
             map(() => {
               this.router.navigate(['/login']);
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   logoutClearSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => SearchActions.clear())
+      map(() => SearchActions.clear()),
     );
   });
 
   logoutClearCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => CurrentUserActions.clear())
+      map(() => CurrentUserActions.clear()),
     );
   });
 }

@@ -16,10 +16,7 @@ export class WatchlistService {
     });
   }
 
-  getItemForUser(
-    userId: string,
-    itemId: string,
-  ): Promise<WatchlistItem | null> {
+  getItemForUser(userId: string, itemId: string): Promise<WatchlistItem | null> {
     return this.watchlistRepository.findOne({
       where: {
         jellyfinUserId: userId,

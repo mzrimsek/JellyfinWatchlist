@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -28,8 +22,6 @@ export class MediaItemComponent {
   }
 
   get buttonText(): string {
-    return this.isPartOfWatchlist
-      ? 'Remove from Watchlist'
-      : 'Add to Watchlist';
+    return this.isPartOfWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist';
   }
 }

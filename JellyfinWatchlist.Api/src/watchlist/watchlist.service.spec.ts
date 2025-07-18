@@ -1,4 +1,8 @@
-import { TEST_CONSTANTS, WatchlistItemFactory, createMockRepository } from '../test-utils/test-helpers';
+import {
+  TEST_CONSTANTS,
+  WatchlistItemFactory,
+  createMockRepository,
+} from '../test-utils/test-helpers';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { Repository } from 'typeorm';
@@ -77,9 +81,9 @@ describe('WatchlistService', () => {
       // Arrange
       const userId = TEST_CONSTANTS.USER_ID;
       const itemId = TEST_CONSTANTS.ITEM_ID;
-      const expectedItem = WatchlistItemFactory.create({ 
-        id: itemId, 
-        jellyfinUserId: userId 
+      const expectedItem = WatchlistItemFactory.create({
+        id: itemId,
+        jellyfinUserId: userId,
       });
       repository.findOne.mockResolvedValue(expectedItem);
 

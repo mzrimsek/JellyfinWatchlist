@@ -8,9 +8,8 @@ describe('ReactiveInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveInputComponent]
-    })
-    .compileComponents();
+      imports: [ReactiveInputComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ReactiveInputComponent);
     component = fixture.componentInstance;

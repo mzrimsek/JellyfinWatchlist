@@ -21,8 +21,7 @@ export class HealthController {
   @Get()
   @HealthCheck()
   check() {
-    const jellyfinInstance =
-      this.configService.get<string>('JELLYFIN_INSTANCE');
+    const jellyfinInstance = this.configService.get<string>('JELLYFIN_INSTANCE');
 
     let checks: Array<HealthIndicatorFunction> = [
       () => this.http.pingCheck('google', 'https://google.com'),
@@ -30,10 +29,7 @@ export class HealthController {
     ];
 
     if (jellyfinInstance) {
-      checks = [
-        ...checks,
-        () => this.http.pingCheck('jellyfin instance', jellyfinInstance),
-      ];
+      checks = [...checks, () => this.http.pingCheck('jellyfin instance', jellyfinInstance)];
     }
 
     return this.health.check(checks);

@@ -32,7 +32,7 @@ export const searchReducer = createReducer(
   on(SearchActions.clear, (state) => ({
     ...state,
     results: [],
-  }))
+  })),
 );
 
 const searchFeature = createFeature({
@@ -40,10 +40,4 @@ const searchFeature = createFeature({
   reducer: searchReducer,
 });
 
-export const {
-  name,
-  reducer,
-  selectSearchState,
-  selectResults,
-  selectLoading,
-} = searchFeature;
+export const { name, reducer, selectSearchState, selectResults, selectLoading } = searchFeature;

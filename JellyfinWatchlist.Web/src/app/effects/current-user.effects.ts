@@ -16,9 +16,9 @@ export class CurrentUserEffects {
       exhaustMap(() =>
         this.jellyfinService.getCurrentUser().pipe(
           map((user) => CurrentUserActions.getSucceeded({ user })),
-          catchError(() => of(CurrentUserActions.getFailed()))
-        )
-      )
+          catchError(() => of(CurrentUserActions.getFailed())),
+        ),
+      ),
     );
   });
 
@@ -28,9 +28,9 @@ export class CurrentUserEffects {
         ofType(CurrentUserActions.getFailed),
         map(() => {
           console.log('Failed to get current user');
-        })
+        }),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 }

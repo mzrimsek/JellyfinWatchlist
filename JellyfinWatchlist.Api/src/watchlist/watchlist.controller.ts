@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { WatchlistService } from './watchlist.service';
 import { AddWatchlistItem } from './models';
 import { WatchlistItem } from '../entities/watchlist-item.entity';
@@ -31,14 +23,8 @@ export class WatchlistController {
   }
 
   @Delete(':userId/:itemId')
-  async delete(
-    @Param('userId') userId: string,
-    @Param('itemId') itemId: string,
-  ) {
-    const existingItem = await this.watchlistService.getItemForUser(
-      userId,
-      itemId,
-    );
+  async delete(@Param('userId') userId: string, @Param('itemId') itemId: string) {
+    const existingItem = await this.watchlistService.getItemForUser(userId, itemId);
     if (!existingItem) {
       throw new NotFoundException('Item not found');
     }

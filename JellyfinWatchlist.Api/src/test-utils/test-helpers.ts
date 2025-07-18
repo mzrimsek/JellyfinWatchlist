@@ -1,7 +1,7 @@
-import { WatchlistItem } from '../entities/watchlist-item.entity';
-import { TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TestingModule } from '@nestjs/testing';
+import { WatchlistItem } from '../entities/watchlist-item.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 /**
  * Test data factory for creating WatchlistItem test fixtures
@@ -27,7 +27,7 @@ export class WatchlistItemFactory {
         id: `test-item-${index + 1}`,
         name: `Test Movie ${index + 1}`,
         ...overrides,
-      })
+      }),
     );
   }
 }
@@ -60,9 +60,7 @@ export class IntegrationTestHelpers {
    * Clear all data from the test database
    */
   static async clearDatabase(module: TestingModule): Promise<void> {
-    const watchlistRepo = module.get<Repository<WatchlistItem>>(
-      getRepositoryToken(WatchlistItem)
-    );
+    const watchlistRepo = module.get<Repository<WatchlistItem>>(getRepositoryToken(WatchlistItem));
     await watchlistRepo.clear();
   }
 
@@ -71,11 +69,9 @@ export class IntegrationTestHelpers {
    */
   static async seedDatabase(
     module: TestingModule,
-    items: WatchlistItem[]
+    items: WatchlistItem[],
   ): Promise<WatchlistItem[]> {
-    const watchlistRepo = module.get<Repository<WatchlistItem>>(
-      getRepositoryToken(WatchlistItem)
-    );
+    const watchlistRepo = module.get<Repository<WatchlistItem>>(getRepositoryToken(WatchlistItem));
     return watchlistRepo.save(items);
   }
 
@@ -83,9 +79,7 @@ export class IntegrationTestHelpers {
    * Get repository instance for direct database testing
    */
   static getRepository(module: TestingModule): Repository<WatchlistItem> {
-    return module.get<Repository<WatchlistItem>>(
-      getRepositoryToken(WatchlistItem)
-    );
+    return module.get<Repository<WatchlistItem>>(getRepositoryToken(WatchlistItem));
   }
 }
 

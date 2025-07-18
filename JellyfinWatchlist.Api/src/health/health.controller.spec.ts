@@ -1,4 +1,9 @@
-import { HealthCheckService, HealthCheckStatus, HttpHealthIndicator, TypeOrmHealthIndicator } from '@nestjs/terminus';
+import {
+  HealthCheckService,
+  HealthCheckStatus,
+  HttpHealthIndicator,
+  TypeOrmHealthIndicator,
+} from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ConfigService } from '@nestjs/config';
@@ -65,15 +70,15 @@ describe('HealthController', () => {
     it('should be defined', () => {
       expect(controller).toBeDefined();
     });
-    
+
     it('should perform health checks without Jellyfin when not configured', async () => {
       // Arrange
       configService.get.mockReturnValue(undefined);
-      const expectedResult = { 
-        status: 'ok' as HealthCheckStatus, 
-        info: {}, 
-        error: {}, 
-        details: {} 
+      const expectedResult = {
+        status: 'ok' as HealthCheckStatus,
+        info: {},
+        error: {},
+        details: {},
       };
       healthCheckService.check.mockResolvedValue(expectedResult);
 
@@ -88,16 +93,16 @@ describe('HealthController', () => {
         expect.any(Function), // Database ping check
       ]);
     });
-    
+
     it('should perform health checks with Jellyfin when configured', async () => {
       // Arrange
       const jellyfinInstance = 'https://jellyfin.example.com';
       configService.get.mockReturnValue(jellyfinInstance);
-      const expectedResult = { 
-        status: 'ok' as HealthCheckStatus, 
-        info: {}, 
-        error: {}, 
-        details: {} 
+      const expectedResult = {
+        status: 'ok' as HealthCheckStatus,
+        info: {},
+        error: {},
+        details: {},
       };
       healthCheckService.check.mockResolvedValue(expectedResult);
 

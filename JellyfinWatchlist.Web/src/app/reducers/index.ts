@@ -1,20 +1,7 @@
-import {
-  ActionReducerMap,
-  MetaReducer,
-  createFeatureSelector,
-  createSelector,
-} from '@ngrx/store';
+import { ActionReducerMap, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
 import { State as AuthState, authReducer } from './auth.reducer';
-import {
-  State as CurrentUserState,
-  currentUserReducer,
-  selectUser,
-} from './current-user.reducer';
-import {
-  State as SearchState,
-  searchReducer,
-  selectSearchState,
-} from './search.reducer';
+import { State as CurrentUserState, currentUserReducer, selectUser } from './current-user.reducer';
+import { State as SearchState, searchReducer, selectSearchState } from './search.reducer';
 import {
   State as SystemInfoState,
   selectPublicSystemInfo,
@@ -53,45 +40,26 @@ export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];
 // System Info Selectors
 export const selectJellyfinServerName = createSelector(
   selectPublicSystemInfo,
-  (state) => state?.ServerName ?? environment.jellyfin.baseUrl
+  (state) => state?.ServerName ?? environment.jellyfin.baseUrl,
 );
 
 // Current User Selectors
-export const selectCurrentUserName = createSelector(
-  selectUser,
-  (state) => state?.Name ?? 'User'
-);
-export const selectCurrentUserId = createSelector(
-  selectUser,
-  (state) => state?.Id ?? ''
-);
+export const selectCurrentUserName = createSelector(selectUser, (state) => state?.Name ?? 'User');
+export const selectCurrentUserId = createSelector(selectUser, (state) => state?.Id ?? '');
 
 // Search Selectors
-export const selectSearchResults = createSelector(
-  selectSearchState,
-  (state) => state.results
-);
+export const selectSearchResults = createSelector(selectSearchState, (state) => state.results);
 
 // Watchlist Selectors
-export const selectWatchlistState =
-  createFeatureSelector<WatchlistState>('watchlist');
+export const selectWatchlistState = createFeatureSelector<WatchlistState>('watchlist');
 
-export const selectWatchlistIds = createSelector(
-  selectWatchlistState,
-  _selectWatchlistIds
-);
+export const selectWatchlistIds = createSelector(selectWatchlistState, _selectWatchlistIds);
 
 export const selectWatchlistEntities = createSelector(
   selectWatchlistState,
-  _selectWatchlistEntities
+  _selectWatchlistEntities,
 );
 
-export const selectAllWatchlist = createSelector(
-  selectWatchlistState,
-  _selectAllWatchlist
-);
+export const selectAllWatchlist = createSelector(selectWatchlistState, _selectAllWatchlist);
 
-export const selectWatchlistTotal = createSelector(
-  selectWatchlistState,
-  _selectWatchlistTotal
-);
+export const selectWatchlistTotal = createSelector(selectWatchlistState, _selectWatchlistTotal);

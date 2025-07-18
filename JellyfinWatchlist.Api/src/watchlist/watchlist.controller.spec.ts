@@ -88,13 +88,13 @@ describe('WatchlistController', () => {
         year: 2023,
         primaryImageUrl: 'https://example.com/image.jpg',
       };
-      
+
       const expectedWatchlistItem: WatchlistItem = {
         ...addItemDto,
         jellyfinUserId: userId,
         addedOn: expect.any(Date),
       };
-      
+
       service.add.mockResolvedValue(expectedWatchlistItem);
 
       // Act
@@ -118,10 +118,10 @@ describe('WatchlistController', () => {
       };
 
       const beforeTimestamp = new Date();
-      
+
       // Act
       await controller.add(userId, addItemDto);
-      
+
       const afterTimestamp = new Date();
 
       // Assert
@@ -176,7 +176,9 @@ describe('WatchlistController', () => {
       service.add.mockRejectedValue(error);
 
       // Act & Assert
-      await expect(controller.add(userId, addItemDto)).rejects.toThrow('Database constraint violation');
+      await expect(controller.add(userId, addItemDto)).rejects.toThrow(
+        'Database constraint violation',
+      );
       expect(service.add).toHaveBeenCalled();
     });
   });
@@ -186,11 +188,11 @@ describe('WatchlistController', () => {
       // Arrange
       const userId = TEST_CONSTANTS.USER_ID;
       const itemId = TEST_CONSTANTS.ITEM_ID;
-      const existingItem = WatchlistItemFactory.create({ 
-        id: itemId, 
-        jellyfinUserId: userId 
+      const existingItem = WatchlistItemFactory.create({
+        id: itemId,
+        jellyfinUserId: userId,
       });
-      
+
       service.getItemForUser.mockResolvedValue(existingItem);
       service.delete.mockResolvedValue();
 
@@ -214,7 +216,7 @@ describe('WatchlistController', () => {
       // Act & Assert
       await expect(controller.delete(userId, itemId)).rejects.toThrow(NotFoundException);
       await expect(controller.delete(userId, itemId)).rejects.toThrow('Item not found');
-      
+
       expect(service.getItemForUser).toHaveBeenCalledWith(userId, itemId);
       expect(service.delete).not.toHaveBeenCalled();
     });
@@ -227,7 +229,7 @@ describe('WatchlistController', () => {
 
       // Act & Assert
       await expect(controller.delete(userId, itemId)).rejects.toThrow(NotFoundException);
-      
+
       expect(service.getItemForUser).toHaveBeenCalledWith(userId, itemId);
       expect(service.delete).not.toHaveBeenCalled();
     });
@@ -241,7 +243,7 @@ describe('WatchlistController', () => {
 
       // Act & Assert
       await expect(controller.delete(userId, itemId)).rejects.toThrow('Database connection error');
-      
+
       expect(service.getItemForUser).toHaveBeenCalledWith(userId, itemId);
       expect(service.delete).not.toHaveBeenCalled();
     });
@@ -250,18 +252,18 @@ describe('WatchlistController', () => {
       // Arrange
       const userId = TEST_CONSTANTS.USER_ID;
       const itemId = TEST_CONSTANTS.ITEM_ID;
-      const existingItem = WatchlistItemFactory.create({ 
-        id: itemId, 
-        jellyfinUserId: userId 
+      const existingItem = WatchlistItemFactory.create({
+        id: itemId,
+        jellyfinUserId: userId,
       });
-      
+
       service.getItemForUser.mockResolvedValue(existingItem);
       const deleteError = new Error('Delete operation failed');
       service.delete.mockRejectedValue(deleteError);
 
       // Act & Assert
       await expect(controller.delete(userId, itemId)).rejects.toThrow('Delete operation failed');
-      
+
       expect(service.getItemForUser).toHaveBeenCalledWith(userId, itemId);
       expect(service.delete).toHaveBeenCalledWith(userId, itemId);
     });

@@ -16,9 +16,9 @@ export class SystemInfoEffects {
       exhaustMap(() =>
         this.jellyfinService.getSystemInfo().pipe(
           map((systemInfo) => SystemInfoActions.getSucceeded({ systemInfo })),
-          catchError(() => of(SystemInfoActions.getFailed()))
-        )
-      )
+          catchError(() => of(SystemInfoActions.getFailed())),
+        ),
+      ),
     );
   });
 
@@ -28,9 +28,9 @@ export class SystemInfoEffects {
         ofType(SystemInfoActions.getFailed),
         map(() => {
           console.log('Failed to get system info');
-        })
+        }),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 }

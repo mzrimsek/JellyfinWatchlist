@@ -19,14 +19,12 @@ export class WatchlistEffects {
       exhaustMap(([action, watchlistIds]) => {
         const { item } = action;
         const stringifiedWatchlistIds = watchlistIds.map((id) => id.toString());
-        const itemContainedInWatchlist = stringifiedWatchlistIds.includes(
-          item.id
-        );
+        const itemContainedInWatchlist = stringifiedWatchlistIds.includes(item.id);
         if (!itemContainedInWatchlist) {
           return of(WatchlistActions.addItem({ item }));
         }
         return of(WatchlistActions.removeItem({ item }));
-      })
+      }),
     );
   });
 }
