@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { WatchlistService } from './watchlist.service';
 import { AddWatchlistItem } from './models';
-import { WatchlistItem } from 'src/entities';
+import { WatchlistItem } from '../entities/watchlist-item.entity';
 
 @Controller('watchlist')
 export class WatchlistController {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { WatchlistItem } from 'src/entities';
+import { WatchlistItem } from '../entities/watchlist-item.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
