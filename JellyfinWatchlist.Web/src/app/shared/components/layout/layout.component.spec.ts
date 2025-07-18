@@ -1,11 +1,10 @@
-import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
-import { Store } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 
+import { ActivatedRoute } from '@angular/router';
 import { LayoutComponent } from './layout.component';
-import { HeaderComponent } from '../header/header.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 
 describe('LayoutComponent', () => {
   let spectator: Spectator<LayoutComponent>;
