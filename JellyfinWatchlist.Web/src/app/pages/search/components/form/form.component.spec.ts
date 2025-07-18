@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveInputComponent } from '../../../../shared/components/form/reactive-input/reactive-input.component';
 
-describe('SearchFormComponent', () => {
+describe('FormComponent (Search)', () => {
   let spectator: Spectator<FormComponent>;
   let component: FormComponent;
 
