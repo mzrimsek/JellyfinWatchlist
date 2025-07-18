@@ -17,6 +17,27 @@
   "requirePragma": false,
   "overrides": [
     {
+      "files": "*.html",
+      "options": {
+        "printWidth": 120,
+        "htmlWhitespaceSensitivity": "ignore"
+      }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "printWidth": 120,
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.css",
+      "options": {
+        "printWidth": 120,
+        "singleQuote": false
+      }
+    },
+    {
       "files": "*.json",
       "options": {
         "printWidth": 120,
