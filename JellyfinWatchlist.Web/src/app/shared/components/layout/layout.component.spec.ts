@@ -1,22 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { LayoutComponent } from './layout.component';
 
 describe('LayoutComponent', () => {
+  let spectator: Spectator<LayoutComponent>;
   let component: LayoutComponent;
-  let fixture: ComponentFixture<LayoutComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LayoutComponent],
-    }).compileComponents();
+  const createComponent = createComponentFactory({
+    component: LayoutComponent,
+    detectChanges: false,
+  });
 
-    fixture = TestBed.createComponent(LayoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should render layout structure', () => {
+    spectator.detectChanges();
+    expect(spectator.element).toBeTruthy();
   });
 });

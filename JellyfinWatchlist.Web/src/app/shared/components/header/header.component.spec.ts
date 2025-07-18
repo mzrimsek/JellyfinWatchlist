@@ -1,22 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
+  let spectator: Spectator<HeaderComponent>;
   let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
-    }).compileComponents();
+  const createComponent = createComponentFactory({
+    component: HeaderComponent,
+    detectChanges: false,
+  });
 
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should render header content', () => {
+    spectator.detectChanges();
+    expect(spectator.element).toBeTruthy();
   });
 });

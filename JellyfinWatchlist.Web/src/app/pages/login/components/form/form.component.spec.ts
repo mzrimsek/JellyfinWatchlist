@@ -1,22 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { FormComponent } from './form.component';
 
 describe('FormComponent', () => {
+  let spectator: Spectator<FormComponent>;
   let component: FormComponent;
-  let fixture: ComponentFixture<FormComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormComponent],
-    }).compileComponents();
+  const createComponent = createComponentFactory({
+    component: FormComponent,
+    imports: [ReactiveFormsModule],
+    detectChanges: false,
+  });
 
-    fixture = TestBed.createComponent(FormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    spectator = createComponent();
+    component = spectator.component;
+    
+    // Create a mock form group
+    const fb = new FormBuilder();
+    component.group = fb.group({
+      baseUrl: [''],
+      username: [''],
+      password: ['']
+    });
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should accept form group input', () => {
+    spectator.detectChanges();
+    expect(component.group).toBeDefined();
+    expect(component.group.get('baseUrl')).toBeTruthy();
+    expect(component.group.get('username')).toBeTruthy();
+    expect(component.group.get('password')).toBeTruthy();
   });
 });
