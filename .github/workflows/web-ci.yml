@@ -134,7 +134,7 @@ jobs:
         run: npm ci
 
       - name: Check TypeScript compilation
-        run: npm run build -- --dry-run
+        run: npx tsc --noEmit
 
       - name: Check formatting
         run: npm run format:check
