@@ -39,7 +39,6 @@ testing utilities for NgRx reducers and effects.
   - Component creation ✅
   - Layout structure rendering ✅
   - Header component integration ✅
-  - Content projection slot (1 test failing) ⚠️
 
 - [x] **MediaItemComponent** ✅ Complete (3 tests)
   - Component creation ✅
@@ -51,8 +50,6 @@ testing utilities for NgRx reducers and effects.
   - Validation error display ✅
   - Input types (text, password) ✅
   - Accessibility attributes ✅
-
-#### **Form Components** (`src/app/pages/*/components/form/`)
 
 #### **Form Components** (`src/app/pages/*/components/form/`)
 
