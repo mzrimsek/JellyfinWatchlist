@@ -4,7 +4,10 @@ import { HealthModule } from '../src/health/health.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WatchlistModule } from '../src/watchlist/watchlist.module';
-import { getTestDatabaseConfig } from '../src/test-utils';
+import { getTestDatabaseConfig, setupTestEnvironment } from '../src/test-utils';
+
+// Ensure test environment is configured
+setupTestEnvironment();
 
 /**
  * Test-specific AppModule for E2E tests
