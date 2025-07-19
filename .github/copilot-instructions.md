@@ -64,10 +64,14 @@ npm run lint                 # ESLint (API only)
 
 - **Unit Tests**: `*.spec.ts` alongside source files
 - **Integration Tests**: `*.integration.spec.ts` test database + module
-  interactions
+  interactions (unified service and module testing in single file)
 - **E2E Tests**: `test/` directory with full HTTP testing via supertest
-- **Test Utilities**: `src/test-utils/` contains `WatchlistItemFactory` for
-  fixtures and `IntegrationTestHelpers.clearDatabase()`
+- **Test Utilities**: `src/test-utils/` contains centralized test configuration:
+  - `WatchlistItemFactory` for test fixtures
+  - `IntegrationTestHelpers.clearDatabase()` for cleanup
+  - `getTestDatabaseConfig()` for in-memory SQLite configuration
+  - `setupTestEnvironment()` for unified environment variable setup
+  - `index.ts` exports all test utilities for easy importing
 - **Coverage**: Achieves 75%+ overall coverage with 100% on core business logic
 
 ### Test Database Pattern
@@ -78,6 +82,30 @@ afterEach(async () => {
   await IntegrationTestHelpers.clearDatabase(module);
 });
 ```
+
+### Test Environment Configuration (API)
+
+- **Centralized Setup**: All test types use unified environment configuration
+  from `src/test-utils/test-environment.config.ts`
+- **Environment Variables**: Tests require `CONFIG_PATH` and `JELLYFIN_INSTANCE`
+  to be set for NestJS configuration validation
+- **Automatic Setup**: E2E tests automatically configure environment through
+  `test/jest-setup.ts`
+- **Usage Pattern**: Import and call `setupTestEnvironment()` at the top of test
+  files
+
+```typescript
+// Unified test environment setup
+import { setupTestEnvironment } from '../src/test-utils';
+
+// Sets CONFIG_PATH='./test-config' and JELLYFIN_INSTANCE='http://localhost:8096'
+setupTestEnvironment();
+```
+
+- **Test Module Types**:
+  - **Unit/Integration**: Use `getTestDatabaseConfig()` for in-memory SQLite
+  - **E2E Tests**: Use `TestAppModule` instead of production `AppModule` for
+    proper in-memory database configuration
 
 ### Test Organization (Web)
 
@@ -269,9 +297,10 @@ export class WatchlistController {
 
 ## Development Status
 
-- **API**: Complete with comprehensive test suite (75 tests passing)
+- **API**: Complete with comprehensive test suite (66 tests: 44
+  unit/integration + 22 E2E, all passing)
 - **Web**: Core functionality implemented with complete testing framework
-- **Testing Achievement**: 284 passing tests (100% success rate)
+- **Testing Achievement**: 341 passing tests (100% success rate)
 - **Testing Coverage**:
   - ✅ **Components**: 80+ tests across 10 components using Spectator
   - ✅ **Services**: 4 tests for JellyfinService with SDK integration

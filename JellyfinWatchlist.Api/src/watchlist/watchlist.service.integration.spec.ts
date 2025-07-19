@@ -1,13 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { NotFoundException } from '@nestjs/common';
 import { WatchlistService } from './watchlist.service';
+import { WatchlistController } from './watchlist.controller';
+import { WatchlistModule } from './watchlist.module';
 import { WatchlistItem } from '../entities/watchlist-item.entity';
+import { AddWatchlistItem } from './models';
 import {
   WatchlistItemFactory,
   IntegrationTestHelpers,
   INTEGRATION_TEST_CONSTANTS,
-} from '../test-utils/test-helpers';
-import { getTestDatabaseConfig } from '../test-utils/test-database.config';
+  getTestDatabaseConfig,
+  setupTestEnvironment,
+} from '../test-utils';
+
+// Set up test environment
+setupTestEnvironment();
 
 describe('WatchlistService (Integration)', () => {
   let service: WatchlistService;
@@ -298,6 +306,129 @@ describe('WatchlistService (Integration)', () => {
       expect(retrievedItem).not.toBeNull();
       expect(retrievedItem!.name).toBe('测试电影 🎬 Película de Prueba');
       expect(retrievedItem!.id).toBe('unicode-test-item-ñáéíóú');
+    });
+  });
+
+  describe('Module Integration (Controller + Service)', () => {
+    let controller: WatchlistController;
+    let moduleTestInstance: TestingModule;
+
+    beforeEach(async () => {
+      moduleTestInstance = await Test.createTestingModule({
+        imports: [TypeOrmModule.forRoot(getTestDatabaseConfig()), WatchlistModule],
+      }).compile();
+
+      controller = moduleTestInstance.get<WatchlistController>(WatchlistController);
+      service = moduleTestInstance.get<WatchlistService>(WatchlistService);
+    });
+
+    afterEach(async () => {
+      await IntegrationTestHelpers.clearDatabase(moduleTestInstance);
+    });
+
+    afterAll(async () => {
+      await moduleTestInstance.close();
+    });
+
+    it('should initialize all module dependencies correctly', () => {
+      expect(controller).toBeDefined();
+      expect(service).toBeDefined();
+      expect(controller).toBeInstanceOf(WatchlistController);
+      expect(service).toBeInstanceOf(WatchlistService);
+    });
+
+    it('should inject dependencies properly', () => {
+      // Verify that the controller has the service injected
+      expect((controller as any).watchlistService).toBeDefined();
+    });
+
+    it('should complete a full watchlist lifecycle through controller', async () => {
+      const userId = INTEGRATION_TEST_CONSTANTS.USER_ID;
+
+      // 1. Initially empty
+      let userWatchlist = await controller.getByUserId(userId);
+      expect(userWatchlist).toHaveLength(0);
+
+      // 2. Add multiple items
+      const item1: AddWatchlistItem = {
+        id: 'movie-1',
+        name: 'Test Movie 1',
+        mediaType: 'Movie',
+        year: 2023,
+        primaryImageUrl: 'https://example.com/movie1.jpg',
+      };
+
+      const item2: AddWatchlistItem = {
+        id: 'series-1',
+        name: 'Test Series 1',
+        mediaType: 'Series',
+        year: 2024,
+        primaryImageUrl: 'https://example.com/series1.jpg',
+      };
+
+      await controller.add(userId, item1);
+      await controller.add(userId, item2);
+
+      // 3. Verify items were added
+      userWatchlist = await controller.getByUserId(userId);
+      expect(userWatchlist).toHaveLength(2);
+
+      const movieItem = userWatchlist.find((item) => item.id === 'movie-1');
+      const seriesItem = userWatchlist.find((item) => item.id === 'series-1');
+
+      expect(movieItem).toBeDefined();
+      expect(seriesItem).toBeDefined();
+      expect(movieItem!.jellyfinUserId).toBe(userId);
+      expect(seriesItem!.jellyfinUserId).toBe(userId);
+      expect(movieItem!.addedOn).toBeInstanceOf(Date);
+      expect(seriesItem!.addedOn).toBeInstanceOf(Date);
+
+      // 4. Delete one item
+      await controller.delete(userId, 'movie-1');
+
+      // 5. Verify deletion
+      userWatchlist = await controller.getByUserId(userId);
+      expect(userWatchlist).toHaveLength(1);
+      expect(userWatchlist[0].id).toBe('series-1');
+
+      // 6. Try to delete non-existent item
+      await expect(controller.delete(userId, 'non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should handle controller-level user isolation', async () => {
+      const [user1, user2] = INTEGRATION_TEST_CONSTANTS.MULTIPLE_USERS;
+
+      const user1Item: AddWatchlistItem = {
+        id: 'user1-movie',
+        name: 'User 1 Movie',
+        mediaType: 'Movie',
+        year: 2023,
+        primaryImageUrl: 'https://example.com/user1.jpg',
+      };
+
+      const user2Item: AddWatchlistItem = {
+        id: 'user2-series',
+        name: 'User 2 Series',
+        mediaType: 'Series',
+        year: 2024,
+        primaryImageUrl: 'https://example.com/user2.jpg',
+      };
+
+      // Add items for different users
+      await controller.add(user1, user1Item);
+      await controller.add(user2, user2Item);
+
+      // Verify isolation
+      const user1Watchlist = await controller.getByUserId(user1);
+      const user2Watchlist = await controller.getByUserId(user2);
+
+      expect(user1Watchlist).toHaveLength(1);
+      expect(user2Watchlist).toHaveLength(1);
+      expect(user1Watchlist[0].id).toBe('user1-movie');
+      expect(user2Watchlist[0].id).toBe('user2-series');
+
+      // User 1 cannot delete user 2's items
+      await expect(controller.delete(user1, 'user2-series')).rejects.toThrow(NotFoundException);
     });
   });
 });
