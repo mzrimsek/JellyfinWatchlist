@@ -46,7 +46,7 @@ describe('WatchlistReducer', () => {
 
   describe('addItem action', () => {
     it('should add item to empty watchlist', () => {
-      const action = WatchlistActions.addItem({ item: mockItem1 });
+      const action = WatchlistActions.addItemSucceeded({ item: mockItem1 });
       const result = watchlistReducer(initialState, action);
 
       expect(result.ids).toEqual(['movie1']);
@@ -55,7 +55,7 @@ describe('WatchlistReducer', () => {
 
     it('should add item to existing watchlist', () => {
       const stateWithOneItem = adapter.addOne(mockItem1, initialState);
-      const action = WatchlistActions.addItem({ item: mockItem2 });
+      const action = WatchlistActions.addItemSucceeded({ item: mockItem2 });
       const result = watchlistReducer(stateWithOneItem, action);
 
       expect(result.ids).toContain('movie1');
@@ -68,9 +68,18 @@ describe('WatchlistReducer', () => {
       let currentState = initialState;
 
       // Add items in non-alphabetical order
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem1 })); // B Movie
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem3 })); // C Album
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem2 })); // A Series
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem1 }),
+      ); // B Movie
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem3 }),
+      ); // C Album
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem2 }),
+      ); // A Series
 
       // Should be sorted alphabetically: A Series, B Movie, C Album
       expect(currentState.ids).toEqual(['series1', 'movie1', 'album1']);
@@ -78,7 +87,7 @@ describe('WatchlistReducer', () => {
 
     it('should not add duplicate items', () => {
       const stateWithOneItem = adapter.addOne(mockItem1, initialState);
-      const action = WatchlistActions.addItem({ item: mockItem1 });
+      const action = WatchlistActions.addItemSucceeded({ item: mockItem1 });
       const result = watchlistReducer(stateWithOneItem, action);
 
       // Should still only have one item
@@ -94,7 +103,7 @@ describe('WatchlistReducer', () => {
         name: 'Updated Movie',
         year: 2025,
       };
-      const action = WatchlistActions.addItem({ item: updatedItem });
+      const action = WatchlistActions.addItemSucceeded({ item: updatedItem });
       const result = watchlistReducer(stateWithOneItem, action);
 
       expect(result.ids.length).toBe(1);
@@ -106,7 +115,7 @@ describe('WatchlistReducer', () => {
   describe('removeItem action', () => {
     it('should remove item from watchlist', () => {
       const stateWithOneItem = adapter.addOne(mockItem1, initialState);
-      const action = WatchlistActions.removeItem({ item: mockItem1 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem1.id });
       const result = watchlistReducer(stateWithOneItem, action);
 
       expect(result.ids).toEqual([]);
@@ -118,7 +127,7 @@ describe('WatchlistReducer', () => {
       stateWithMultipleItems = adapter.addOne(mockItem2, stateWithMultipleItems);
       stateWithMultipleItems = adapter.addOne(mockItem3, stateWithMultipleItems);
 
-      const action = WatchlistActions.removeItem({ item: mockItem2 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem2.id });
       const result = watchlistReducer(stateWithMultipleItems, action);
 
       expect(result.ids).toContain('movie1');
@@ -131,7 +140,7 @@ describe('WatchlistReducer', () => {
 
     it('should handle removing non-existent item', () => {
       const stateWithOneItem = adapter.addOne(mockItem1, initialState);
-      const action = WatchlistActions.removeItem({ item: mockItem2 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem2.id });
       const result = watchlistReducer(stateWithOneItem, action);
 
       // State should remain unchanged
@@ -140,7 +149,7 @@ describe('WatchlistReducer', () => {
     });
 
     it('should handle removing from empty watchlist', () => {
-      const action = WatchlistActions.removeItem({ item: mockItem1 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem1.id });
       const result = watchlistReducer(initialState, action);
 
       expect(result).toEqual(initialState);
@@ -152,7 +161,7 @@ describe('WatchlistReducer', () => {
       stateWithMultipleItems = adapter.addOne(mockItem3, stateWithMultipleItems); // C Album
 
       // Remove middle item (B Movie)
-      const action = WatchlistActions.removeItem({ item: mockItem1 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem1.id });
       const result = watchlistReducer(stateWithMultipleItems, action);
 
       // Should maintain alphabetical order: A Series, C Album
@@ -192,7 +201,7 @@ describe('WatchlistReducer', () => {
 
   describe('entity adapter behavior', () => {
     it('should use correct selectId function', () => {
-      const action = WatchlistActions.addItem({ item: mockItem1 });
+      const action = WatchlistActions.addItemSucceeded({ item: mockItem1 });
       const result = watchlistReducer(initialState, action);
 
       expect(result.ids[0]).toBe(mockItem1.id);
@@ -203,9 +212,18 @@ describe('WatchlistReducer', () => {
       let currentState = initialState;
 
       // Add items in reverse alphabetical order
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem3 })); // C Album
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem1 })); // B Movie
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem2 })); // A Series
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem3 }),
+      ); // C Album
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem1 }),
+      ); // B Movie
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem2 }),
+      ); // A Series
 
       // Verify alphabetical sorting
       const sortedIds = currentState.ids as string[];
@@ -237,11 +255,11 @@ describe('WatchlistReducer', () => {
       let currentState = initialState;
       currentState = watchlistReducer(
         currentState,
-        WatchlistActions.addItem({ item: upperCaseItem }),
+        WatchlistActions.addItemSucceeded({ item: upperCaseItem }),
       );
       currentState = watchlistReducer(
         currentState,
-        WatchlistActions.addItem({ item: lowerCaseItem }),
+        WatchlistActions.addItemSucceeded({ item: lowerCaseItem }),
       );
 
       const sortedIds = currentState.ids as string[];
@@ -253,7 +271,7 @@ describe('WatchlistReducer', () => {
   describe('state immutability', () => {
     it('should not mutate original state on addItem', () => {
       const originalState = { ...initialState };
-      const action = WatchlistActions.addItem({ item: mockItem1 });
+      const action = WatchlistActions.addItemSucceeded({ item: mockItem1 });
       const result = watchlistReducer(initialState, action);
 
       expect(initialState).toEqual(originalState);
@@ -263,7 +281,7 @@ describe('WatchlistReducer', () => {
     it('should not mutate original state on removeItem', () => {
       const stateWithItem = adapter.addOne(mockItem1, initialState);
       const originalState = { ...stateWithItem };
-      const action = WatchlistActions.removeItem({ item: mockItem1 });
+      const action = WatchlistActions.removeItemSucceeded({ itemId: mockItem1.id });
       const result = watchlistReducer(stateWithItem, action);
 
       expect(stateWithItem).toEqual(originalState);
@@ -286,21 +304,33 @@ describe('WatchlistReducer', () => {
       let currentState = initialState;
 
       // Add multiple items
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem1 }));
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem2 }));
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem3 }));
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem1 }),
+      );
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem2 }),
+      );
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem3 }),
+      );
       expect(currentState.ids.length).toBe(3);
 
       // Remove one
       currentState = watchlistReducer(
         currentState,
-        WatchlistActions.removeItem({ item: mockItem2 }),
+        WatchlistActions.removeItemSucceeded({ itemId: mockItem2.id }),
       );
       expect(currentState.ids.length).toBe(2);
       expect(currentState.ids).not.toContain('series1');
 
       // Add it back
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: mockItem2 }));
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: mockItem2 }),
+      );
       expect(currentState.ids.length).toBe(3);
       expect(currentState.ids).toContain('series1');
 
@@ -331,8 +361,14 @@ describe('WatchlistReducer', () => {
       };
 
       let currentState = initialState;
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: item1 }));
-      currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item: item2 }));
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: item1 }),
+      );
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.addItemSucceeded({ item: item2 }),
+      );
 
       expect(currentState.ids.length).toBe(2);
       expect(currentState.ids).toContain('item1');
@@ -354,7 +390,7 @@ describe('WatchlistReducer', () => {
 
       let currentState = initialState;
       manyItems.forEach((item) => {
-        currentState = watchlistReducer(currentState, WatchlistActions.addItem({ item }));
+        currentState = watchlistReducer(currentState, WatchlistActions.addItemSucceeded({ item }));
       });
 
       expect(currentState.ids.length).toBe(1000);
@@ -364,6 +400,207 @@ describe('WatchlistReducer', () => {
       const sortedNames = sortedIds.map((id) => currentState.entities[id]?.name);
       const expectedSortedNames = manyItems.map((item) => item.name).sort();
       expect(sortedNames).toEqual(expectedSortedNames);
+    });
+  });
+
+  describe('loadWatchlist action', () => {
+    it('should set loading to true', () => {
+      const action = WatchlistActions.loadWatchlist();
+      const result = watchlistReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        loading: true,
+      });
+    });
+
+    it('should set loading to true from populated state', () => {
+      const populatedState = {
+        ...initialState,
+        entities: { [mockItem1.id]: mockItem1 },
+        ids: [mockItem1.id],
+        loading: false,
+      };
+
+      const action = WatchlistActions.loadWatchlist();
+      const result = watchlistReducer(populatedState, action);
+
+      expect(result).toEqual({
+        ...populatedState,
+        loading: true,
+      });
+    });
+
+    it('should not mutate state', () => {
+      const originalState = { ...initialState };
+      const action = WatchlistActions.loadWatchlist();
+      const result = watchlistReducer(initialState, action);
+
+      expect(initialState).toEqual(originalState);
+      expect(result).not.toBe(initialState);
+    });
+  });
+
+  describe('loadWatchlistSucceeded action', () => {
+    it('should set all items and set loading to false', () => {
+      const items = [mockItem1, mockItem2];
+      const action = WatchlistActions.loadWatchlistSucceeded({ items });
+      const result = watchlistReducer(initialState, action);
+
+      expect(result.loading).toBe(false);
+      expect(result.ids.length).toBe(2);
+      expect(result.entities[mockItem1.id]).toEqual(mockItem1);
+      expect(result.entities[mockItem2.id]).toEqual(mockItem2);
+    });
+
+    it('should replace existing items with loaded items', () => {
+      const existingState = {
+        ...initialState,
+        entities: { [mockItem3.id]: mockItem3 },
+        ids: [mockItem3.id],
+        loading: true,
+      };
+
+      const newItems = [mockItem1, mockItem2];
+      const action = WatchlistActions.loadWatchlistSucceeded({ items: newItems });
+      const result = watchlistReducer(existingState, action);
+
+      expect(result.loading).toBe(false);
+      expect(result.ids.length).toBe(2);
+      expect(result.entities[mockItem1.id]).toEqual(mockItem1);
+      expect(result.entities[mockItem2.id]).toEqual(mockItem2);
+      expect(result.entities[mockItem3.id]).toBeUndefined();
+    });
+
+    it('should handle empty items array', () => {
+      const populatedState = {
+        ...initialState,
+        entities: { [mockItem1.id]: mockItem1 },
+        ids: [mockItem1.id],
+        loading: true,
+      };
+
+      const action = WatchlistActions.loadWatchlistSucceeded({ items: [] });
+      const result = watchlistReducer(populatedState, action);
+
+      expect(result.loading).toBe(false);
+      expect(result.ids.length).toBe(0);
+      expect(Object.keys(result.entities).length).toBe(0);
+    });
+
+    it('should maintain alphabetical sorting for loaded items', () => {
+      const items = [mockItem3, mockItem1, mockItem2]; // Unordered
+      const action = WatchlistActions.loadWatchlistSucceeded({ items });
+      const result = watchlistReducer(initialState, action);
+
+      const sortedIds = result.ids as string[];
+      const sortedNames = sortedIds.map((id) => result.entities[id]?.name);
+      expect(sortedNames).toEqual(['A Series', 'B Movie', 'C Album']);
+    });
+
+    it('should not mutate state', () => {
+      const loadingState = { ...initialState, loading: true };
+      const originalState = { ...loadingState };
+      const items = [mockItem1];
+      const action = WatchlistActions.loadWatchlistSucceeded({ items });
+      const result = watchlistReducer(loadingState, action);
+
+      expect(loadingState).toEqual(originalState);
+      expect(result).not.toBe(loadingState);
+    });
+  });
+
+  describe('loadWatchlistFailed action', () => {
+    it('should set loading to false', () => {
+      const loadingState = { ...initialState, loading: true };
+      const action = WatchlistActions.loadWatchlistFailed({ error: 'Network error' });
+      const result = watchlistReducer(loadingState, action);
+
+      expect(result.loading).toBe(false);
+      expect(result.entities).toEqual(loadingState.entities);
+      expect(result.ids).toEqual(loadingState.ids);
+    });
+
+    it('should preserve existing items on failure', () => {
+      const populatedState = {
+        ...initialState,
+        entities: { [mockItem1.id]: mockItem1, [mockItem2.id]: mockItem2 },
+        ids: [mockItem1.id, mockItem2.id],
+        loading: true,
+      };
+
+      const action = WatchlistActions.loadWatchlistFailed({ error: 'API error' });
+      const result = watchlistReducer(populatedState, action);
+
+      expect(result.loading).toBe(false);
+      expect(result.entities).toEqual(populatedState.entities);
+      expect(result.ids).toEqual(populatedState.ids);
+    });
+
+    it('should not mutate state', () => {
+      const loadingState = { ...initialState, loading: true };
+      const originalState = { ...loadingState };
+      const action = WatchlistActions.loadWatchlistFailed({ error: 'Test error' });
+      const result = watchlistReducer(loadingState, action);
+
+      expect(loadingState).toEqual(originalState);
+      expect(result).not.toBe(loadingState);
+    });
+  });
+
+  describe('loading state management', () => {
+    it('should handle load/success cycle', () => {
+      let currentState = initialState;
+
+      // Start loading
+      currentState = watchlistReducer(currentState, WatchlistActions.loadWatchlist());
+      expect(currentState.loading).toBe(true);
+
+      // Success
+      const items = [mockItem1, mockItem2];
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.loadWatchlistSucceeded({ items }),
+      );
+      expect(currentState.loading).toBe(false);
+      expect(currentState.ids.length).toBe(2);
+    });
+
+    it('should handle load/failure cycle', () => {
+      let currentState = initialState;
+
+      // Start loading
+      currentState = watchlistReducer(currentState, WatchlistActions.loadWatchlist());
+      expect(currentState.loading).toBe(true);
+
+      // Failure
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.loadWatchlistFailed({ error: 'Failed to load' }),
+      );
+      expect(currentState.loading).toBe(false);
+      expect(currentState.ids.length).toBe(0);
+    });
+
+    it('should handle multiple load requests', () => {
+      let currentState = initialState;
+
+      // First load
+      currentState = watchlistReducer(currentState, WatchlistActions.loadWatchlist());
+      expect(currentState.loading).toBe(true);
+
+      // Second load while first is in progress
+      currentState = watchlistReducer(currentState, WatchlistActions.loadWatchlist());
+      expect(currentState.loading).toBe(true);
+
+      // Success should work normally
+      const items = [mockItem1];
+      currentState = watchlistReducer(
+        currentState,
+        WatchlistActions.loadWatchlistSucceeded({ items }),
+      );
+      expect(currentState.loading).toBe(false);
+      expect(currentState.ids.length).toBe(1);
     });
   });
 });

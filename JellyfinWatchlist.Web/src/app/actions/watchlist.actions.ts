@@ -7,7 +7,14 @@ export const WatchlistActions = createActionGroup({
   events: {
     SelectItem: props<{ item: WatchlistItem }>(),
     AddItem: props<{ item: WatchlistItem }>(),
-    RemoveItem: props<{ item: WatchlistItem }>(),
+    AddItemSucceeded: props<{ item: WatchlistItem }>(),
+    AddItemFailed: props<{ error: string }>(),
+    RemoveItem: props<{ itemId: string }>(),
+    RemoveItemSucceeded: props<{ itemId: string }>(),
+    RemoveItemFailed: props<{ error: string }>(),
     Clear: emptyProps(),
+    LoadWatchlist: emptyProps(),
+    LoadWatchlistSucceeded: props<{ items: WatchlistItem[] }>(),
+    LoadWatchlistFailed: props<{ error: string }>(),
   },
 });

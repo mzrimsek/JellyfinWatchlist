@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistEffects } from './watchlist.effects';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 
 // Mock data
@@ -38,6 +39,7 @@ describe('WatchlistEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         WatchlistEffects,
+        provideHttpClientTesting(),
         provideMockActions(() => actions$),
         { provide: Store, useValue: storeSpy },
       ],
@@ -65,7 +67,7 @@ describe('WatchlistEffects', () => {
 
     it('should return WatchlistActions.removeItem when item is already in watchlist', (done) => {
       const action = WatchlistActions.selectItem({ item: mockItem });
-      const expectedAction = WatchlistActions.removeItem({ item: mockItem });
+      const expectedAction = WatchlistActions.removeItem({ itemId: mockItem.id });
       const existingWatchlistIds = ['movie123', 'series456']; // mockItem.id included
 
       actions$ = of(action);
@@ -95,7 +97,7 @@ describe('WatchlistEffects', () => {
     it('should convert number IDs to strings for comparison', (done) => {
       const numericIdItem = { ...mockItem, id: '123' };
       const action = WatchlistActions.selectItem({ item: numericIdItem });
-      const expectedAction = WatchlistActions.removeItem({ item: numericIdItem });
+      const expectedAction = WatchlistActions.removeItem({ itemId: numericIdItem.id });
       const numericWatchlistIds = [123, 456]; // Numbers in watchlist
 
       actions$ = of(action);
@@ -194,7 +196,7 @@ describe('WatchlistEffects', () => {
       store.select.and.returnValue(of(fullWatchlist));
 
       effects.itemSelected$.subscribe((result) => {
-        expect(result).toEqual(WatchlistActions.removeItem({ item: existingItem }));
+        expect(result).toEqual(WatchlistActions.removeItem({ itemId: existingItem.id }));
         done();
       });
     });
@@ -239,7 +241,7 @@ describe('WatchlistEffects', () => {
         store.select.and.returnValue(of(watchlistWithItem));
 
         effects.itemSelected$.subscribe((toggleResult) => {
-          expect(toggleResult).toEqual(WatchlistActions.removeItem({ item: mockItem }));
+          expect(toggleResult).toEqual(WatchlistActions.removeItem({ itemId: mockItem.id }));
           done();
         });
       });

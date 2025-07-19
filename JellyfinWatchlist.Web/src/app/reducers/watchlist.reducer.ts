@@ -4,7 +4,9 @@ import { createReducer, on } from '@ngrx/store';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistItem } from '../shared/models';
 
-export interface State extends EntityState<WatchlistItem> {}
+export interface State extends EntityState<WatchlistItem> {
+  loading: boolean;
+}
 
 export function selectMediaItemId(item: WatchlistItem): string {
   return item.id;
@@ -19,13 +21,28 @@ export const adapter: EntityAdapter<WatchlistItem> = createEntityAdapter<Watchli
   sortComparer: sortByName,
 });
 
-export const initialState: State = adapter.getInitialState();
+export const initialState: State = adapter.getInitialState({
+  loading: false,
+});
 
 export const watchlistReducer = createReducer(
   initialState,
-  on(WatchlistActions.addItem, (state, { item }) => adapter.addOne(item, state)),
-  on(WatchlistActions.removeItem, (state, { item }) => adapter.removeOne(item.id, state)),
+  on(WatchlistActions.addItem, (state) => ({ ...state, loading: true })),
+  on(WatchlistActions.addItemSucceeded, (state, { item }) => {
+    return adapter.addOne(item, { ...state, loading: false });
+  }),
+  on(WatchlistActions.addItemFailed, (state) => ({ ...state, loading: false })),
+  on(WatchlistActions.removeItem, (state) => ({ ...state, loading: true })),
+  on(WatchlistActions.removeItemSucceeded, (state, { itemId }) => {
+    return adapter.removeOne(itemId, { ...state, loading: false });
+  }),
+  on(WatchlistActions.removeItemFailed, (state) => ({ ...state, loading: false })),
   on(WatchlistActions.clear, (state) => adapter.removeAll(state)),
+  on(WatchlistActions.loadWatchlist, (state) => ({ ...state, loading: true })),
+  on(WatchlistActions.loadWatchlistSucceeded, (state, { items }) => {
+    return adapter.setAll(items, { ...state, loading: false });
+  }),
+  on(WatchlistActions.loadWatchlistFailed, (state) => ({ ...state, loading: false })),
 );
 
 export const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelectors();
