@@ -1,0 +1,14 @@
+# Global owners
+* @mzrimsek
+
+# API specific
+JellyfinWatchlist.Api/ @mzrimsek
+*.ts @mzrimsek
+
+# Web specific
+JellyfinWatchlist.Web/ @mzrimsek
+*.component.ts @mzrimsek
+*.spec.ts @mzrimsek
+
+# Workflows
+.github/workflows/ @mzrimsek
