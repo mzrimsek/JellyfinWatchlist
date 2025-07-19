@@ -5,6 +5,10 @@ describe('AppModule (Integration)', () => {
   let module: TestingModule;
 
   beforeAll(async () => {
+    // Set required environment variables for CI/test environment
+    process.env.CONFIG_PATH = process.env.CONFIG_PATH || './test-config';
+    process.env.JELLYFIN_INSTANCE = process.env.JELLYFIN_INSTANCE || 'http://localhost:8096';
+
     try {
       // Test that the AppModule can bootstrap successfully
       module = await Test.createTestingModule({
