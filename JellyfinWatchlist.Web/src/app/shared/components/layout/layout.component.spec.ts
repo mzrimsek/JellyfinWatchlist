@@ -1,23 +1,47 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 
+import { ActivatedRoute } from '@angular/router';
 import { LayoutComponent } from './layout.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 
 describe('LayoutComponent', () => {
-  let component: LayoutComponent;
-  let fixture: ComponentFixture<LayoutComponent>;
+  let spectator: Spectator<LayoutComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LayoutComponent]
-    })
-    .compileComponents();
+  const createComponent = createComponentFactory({
+    component: LayoutComponent,
+    imports: [NoopAnimationsModule],
+    providers: [
+      mockProvider(Store, {
+        dispatch: jasmine.createSpy('dispatch'),
+      }),
+      mockProvider(ActivatedRoute, {
+        params: of({}),
+        queryParams: of({}),
+        snapshot: { params: {}, queryParams: {} },
+      }),
+    ],
+    shallow: true, // This will mock the HeaderComponent automatically
+    detectChanges: false,
+  });
 
-    fixture = TestBed.createComponent(LayoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
+  });
+
+  it('should render layout structure', () => {
+    spectator.detectChanges();
+    expect(spectator.element).toBeTruthy();
+  });
+
+  it('should include header component', () => {
+    spectator.detectChanges();
+    const header = spectator.query('app-shared-header');
+    expect(header).toBeTruthy();
   });
 });

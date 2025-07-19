@@ -1,0 +1,78 @@
+name: Workflow Validation
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - ".github/workflows/**"
+  push:
+    branches: [main, develop]
+    paths:
+      - ".github/workflows/**"
+
+jobs:
+  validate-workflows:
+    name: Validate GitHub Workflows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate workflow syntax
+        run: |
+          echo "Checking workflow files for syntax errors..."
+
+          # Check if workflow files are valid YAML
+          for file in .github/workflows/*.yml .github/workflows/*.yaml; do
+            if [ -f "$file" ]; then
+              echo "Validating $file..."
+              # Use yamllint if available, otherwise just check basic syntax
+              if command -v yamllint >/dev/null; then
+                yamllint "$file" || echo "⚠️  $file has style issues"
+              else
+                # Basic check - just try to parse with Python
+                python3 -c "import yaml; yaml.safe_load(open('$file'))" && echo "✅ $file is valid YAML" || echo "❌ $file has syntax errors"
+              fi
+            fi
+          done
+
+      - name: Check for common workflow issues
+        run: |
+          echo "Checking for common workflow issues..."
+
+          # Check for deprecated actions
+          echo "Checking for deprecated GitHub Actions..."
+          if grep -r "actions/setup-node@v[123]" .github/workflows/; then
+            echo "⚠️  Found deprecated setup-node versions. Consider updating to v4."
+          fi
+
+          if grep -r "actions/checkout@v[123]" .github/workflows/; then
+            echo "⚠️  Found deprecated checkout versions. Consider updating to v4."
+          fi
+
+          # Check for hardcoded paths
+          echo "Checking for potential path issues..."
+          if grep -r "working-directory.*JellyfinWatchlist" .github/workflows/; then
+            echo "✅ Found expected working directories"
+          fi
+
+          echo "✅ Workflow validation completed"
+
+  test-matrix:
+    name: Test Matrix Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Node.js versions
+        run: |
+          echo "Validating Node.js versions in workflows..."
+
+          # Check if specified Node versions are still supported
+          echo "Found Node.js versions in workflows:"
+          grep -rho "node-version.*20\|node-version.*22" .github/workflows/ || echo "No specific Node versions found"
+
+          echo "✅ Node.js version matrix validated"

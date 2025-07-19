@@ -1,14 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
-import { MediaItem } from '../../../../shared/models';
 import { MediaItemComponent } from '../../../../shared/components/media-item/media-item.component';
+import { WatchlistItem } from '../../../../shared/models';
 
 @Component({
   selector: 'app-search-results-list',
@@ -18,11 +12,11 @@ import { MediaItemComponent } from '../../../../shared/components/media-item/med
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultsListComponent {
-  @Input() results: Array<MediaItem> = [];
+  @Input() results: Array<WatchlistItem> = [];
   @Input() watchlistIds: Array<string> = [];
-  @Output() itemSelected = new EventEmitter<MediaItem>();
+  @Output() itemSelected = new EventEmitter<WatchlistItem>();
 
-  itemIsPartOfWatchlist(item: MediaItem): boolean {
+  itemIsPartOfWatchlist(item: WatchlistItem): boolean {
     return this.watchlistIds.includes(item.id);
   }
 }

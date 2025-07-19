@@ -34,11 +34,9 @@ export class JellyfinService {
   }
 
   public login(username: string, password: string): Observable<boolean> {
-    return toObservable(
-      this.api.authenticateUserByName(username, password)
-    ).pipe(
+    return toObservable(this.api.authenticateUserByName(username, password)).pipe(
       map((response) => response.status === 200 && !!response.data.AccessToken),
-      catchError(() => of(false))
+      catchError(() => of(false)),
     );
   }
 
@@ -48,16 +46,12 @@ export class JellyfinService {
 
   public getCurrentUser(): Observable<UserDto> {
     const userApi = getUserApi(this.api);
-    return toObservable(userApi.getCurrentUser()).pipe(
-      map((response) => response.data)
-    );
+    return toObservable(userApi.getCurrentUser()).pipe(map((response) => response.data));
   }
 
   public getSystemInfo(): Observable<PublicSystemInfo> {
     const systemApi = getSystemApi(this.api);
-    return toObservable(systemApi.getPublicSystemInfo()).pipe(
-      map((response) => response.data)
-    );
+    return toObservable(systemApi.getPublicSystemInfo()).pipe(map((response) => response.data));
   }
 
   public search(query: string, userId: string): Observable<SearchHintResult> {
@@ -68,7 +62,7 @@ export class JellyfinService {
         searchTerm: query,
         userId,
         includeItemTypes: ['Movie', 'Series'],
-      })
+      }),
     ).pipe(map((response) => response.data));
   }
 
@@ -77,7 +71,7 @@ export class JellyfinService {
     tag: string,
     quality = 90,
     fillHeight = 495,
-    fillWidth = 330
+    fillWidth = 330,
   ): string {
     // TODO: This is a hack to get the image url. We should use the SDK to get the image url
     // someone enlighten me on how to properly convert the image I am getting back to a data url and I will fix this

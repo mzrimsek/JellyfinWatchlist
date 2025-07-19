@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+.angular/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env*
+
+# Lock files (uncomment if you want to format them)
+# package-lock.json
+# yarn.lock
+
+# Generated files
+*.d.ts.map
+*.js.map
+
+# Documentation
+docs/
+
+# Database files
+*.sqlite
+*.db

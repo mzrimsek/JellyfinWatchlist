@@ -1,8 +1,4 @@
-import {
-  ApplicationConfig,
-  isDevMode,
-  provideZoneChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { metaReducers, reducers } from './reducers';
 
 import { CurrentUserEffects } from './effects/current-user.effects';
@@ -32,7 +28,7 @@ export const appConfig: ApplicationConfig = {
       SystemInfoEffects,
       CurrentUserEffects,
       SearchEffects,
-      WatchlistEffects
+      WatchlistEffects,
     ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AuthActions } from '../../actions/auth.actions';
 import { CommonModule } from '@angular/common';
@@ -17,12 +12,7 @@ import { selectJellyfinServerName } from '../../reducers';
 
 @Component({
   selector: 'app-login',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormComponent,
-    MatSnackBarModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FormComponent, MatSnackBarModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -30,7 +20,10 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
   instanceName$: Observable<string> | undefined;
 
-  constructor(private fb: FormBuilder, private store: Store) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -45,7 +38,7 @@ export class LoginComponent implements OnInit {
       AuthActions.login({
         username: this.loginForm?.value.username,
         password: this.loginForm?.value.password,
-      })
+      }),
     );
   }
 

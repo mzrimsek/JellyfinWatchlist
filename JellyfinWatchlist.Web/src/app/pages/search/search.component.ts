@@ -6,11 +6,11 @@ import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
-import { MediaItem } from '../../shared/models';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
+import { WatchlistItem } from '../../shared/models';
 
 @Component({
   selector: 'app-search',
@@ -20,10 +20,13 @@ import { WatchlistActions } from '../../actions/watchlist.actions';
 })
 export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
-  searchResults$: Observable<MediaItem[]> | undefined;
+  searchResults$: Observable<WatchlistItem[]> | undefined;
   watchlistIds$: Observable<string[]> | undefined;
 
-  constructor(private store: Store, private fb: FormBuilder) {}
+  constructor(
+    private store: Store,
+    private fb: FormBuilder,
+  ) {}
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
@@ -35,12 +38,10 @@ export class SearchComponent implements OnInit {
   }
 
   search(): void {
-    this.store.dispatch(
-      SearchActions.search({ query: this.searchForm?.value.query })
-    );
+    this.store.dispatch(SearchActions.search({ query: this.searchForm?.value.query }));
   }
 
-  selectItem(item: MediaItem): void {
+  selectItem(item: WatchlistItem): void {
     this.store.dispatch(WatchlistActions.selectItem({ item }));
   }
 }

@@ -33,15 +33,12 @@ export class SearchEffects {
                   !result.ProductionYear ||
                   !result.PrimaryImageTag
                 ) {
-                  throw new Error(
-                    'Search Result is missing expected properties'
-                  );
+                  throw new Error('Search Result is missing expected properties');
                 }
-                const primaryImageUrl =
-                  this.jellyfinService.getItemPrimaryImageUrl(
-                    result.Id,
-                    result.PrimaryImageTag
-                  );
+                const primaryImageUrl = this.jellyfinService.getItemPrimaryImageUrl(
+                  result.Id,
+                  result.PrimaryImageTag,
+                );
                 return {
                   id: result.Id,
                   name: result.Name,
@@ -52,9 +49,9 @@ export class SearchEffects {
               }) ?? [];
             return SearchActions.searchSucceeded({ results: mappedResults });
           }),
-          catchError(() => of(SearchActions.searchFailed()))
+          catchError(() => of(SearchActions.searchFailed())),
         );
-      })
+      }),
     );
   });
 
@@ -66,9 +63,9 @@ export class SearchEffects {
           this.matSnackBar.open('Search failed', 'Dismiss', {
             duration: 3000,
           });
-        })
+        }),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 }

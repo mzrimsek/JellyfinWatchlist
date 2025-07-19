@@ -1,0 +1,63 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "endOfLine": "lf",
+  "tabWidth": 2,
+  "semi": true,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "printWidth": 100,
+  "useTabs": false,
+  "bracketSameLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "printWidth": 120,
+        "htmlWhitespaceSensitivity": "ignore",
+        "bracketSameLine": true
+      }
+    },
+    {
+      "files": "*.component.html",
+      "options": {
+        "printWidth": 140,
+        "htmlWhitespaceSensitivity": "ignore"
+      }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "printWidth": 120,
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.css",
+      "options": {
+        "printWidth": 120,
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 120,
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always",
+        "printWidth": 80
+      }
+    }
+  ]
+}

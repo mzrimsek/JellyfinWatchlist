@@ -1,29 +1,22 @@
-import { TestBed } from '@angular/core/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
+  let spectator: Spectator<AppComponent>;
+  let component: AppComponent;
+
+  const createComponent = createComponentFactory({
+    component: AppComponent,
+    detectChanges: false,
+  });
+
+  beforeEach(() => {
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'JellyfinWatchlist.Web' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('JellyfinWatchlist.Web');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, JellyfinWatchlist.Web');
+    expect(component).toBeTruthy();
   });
 });

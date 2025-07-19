@@ -1,4 +1,4 @@
-export interface MediaItem {
+export class AddWatchlistItem {
   id: string;
   name: string;
   mediaType: string;

@@ -31,7 +31,7 @@ export const authReducer = createReducer(
   on(AuthActions.logout, (state) => ({
     ...state,
     isAuthenticated: false,
-  }))
+  })),
 );
 
 const authFeature = createFeature({
@@ -39,10 +39,4 @@ const authFeature = createFeature({
   reducer: authReducer,
 });
 
-export const {
-  name,
-  reducer,
-  selectAuthState,
-  selectIsAuthenticated,
-  selectLoading,
-} = authFeature;
+export const { name, reducer, selectAuthState, selectIsAuthenticated, selectLoading } = authFeature;

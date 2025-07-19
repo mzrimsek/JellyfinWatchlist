@@ -1,10 +1,10 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { MediaItem } from '../shared/models';
 import { SearchActions } from '../actions/search.actions';
+import { WatchlistItem } from '../shared/models';
 
 export interface State {
-  results: Array<MediaItem>;
+  results: Array<WatchlistItem>;
   loading: boolean;
 }
 
@@ -32,7 +32,7 @@ export const searchReducer = createReducer(
   on(SearchActions.clear, (state) => ({
     ...state,
     results: [],
-  }))
+  })),
 );
 
 const searchFeature = createFeature({
@@ -40,10 +40,4 @@ const searchFeature = createFeature({
   reducer: searchReducer,
 });
 
-export const {
-  name,
-  reducer,
-  selectSearchState,
-  selectResults,
-  selectLoading,
-} = searchFeature;
+export const { name, reducer, selectSearchState, selectResults, selectLoading } = searchFeature;

@@ -2,14 +2,20 @@
 
 # Compiled output
 /dist
+**/dist
 /tmp
 /out-tsc
 /bazel-out
+/build
 
 # Node
 */node_modules
 npm-debug.log
 yarn-error.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
 
 # IDEs and editors
 .idea/
@@ -26,7 +32,6 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
 # Miscellaneous
 */.angular/cache
@@ -36,7 +41,32 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+/.nyc_output
 
 # System files
 .DS_Store
 Thumbs.db
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# temp directory
+.temp
+.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+**/config
+**/test-config
+**/coverage
