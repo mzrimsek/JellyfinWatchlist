@@ -1,7 +1,8 @@
-import { watchlistReducer, State, initialState, adapter } from './watchlist.reducer';
+import { State, adapter, initialState, watchlistReducer } from './watchlist.reducer';
+
+import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistItem } from '../shared/models';
-import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 
 describe('WatchlistReducer', () => {
   const mockItem1: WatchlistItem = {
@@ -10,6 +11,8 @@ describe('WatchlistReducer', () => {
     mediaType: BaseItemKind.Movie,
     year: 2024,
     primaryImageUrl: 'http://jellyfin.local/movie1.jpg',
+    jellyfinUserId: 'user1',
+    addedOn: new Date(),
   };
 
   const mockItem2: WatchlistItem = {
@@ -18,6 +21,8 @@ describe('WatchlistReducer', () => {
     mediaType: BaseItemKind.Series,
     year: 2023,
     primaryImageUrl: 'http://jellyfin.local/series1.jpg',
+    jellyfinUserId: 'user1',
+    addedOn: new Date(),
   };
 
   const mockItem3: WatchlistItem = {
@@ -26,6 +31,8 @@ describe('WatchlistReducer', () => {
     mediaType: BaseItemKind.MusicAlbum,
     year: 2022,
     primaryImageUrl: 'http://jellyfin.local/album1.jpg',
+    jellyfinUserId: 'user1',
+    addedOn: new Date(),
   };
 
   describe('unknown action', () => {
@@ -213,6 +220,8 @@ describe('WatchlistReducer', () => {
         mediaType: BaseItemKind.Movie,
         year: 2024,
         primaryImageUrl: 'http://test.com/test.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       const upperCaseItem: WatchlistItem = {
@@ -221,6 +230,8 @@ describe('WatchlistReducer', () => {
         mediaType: BaseItemKind.Series,
         year: 2024,
         primaryImageUrl: 'http://test.com/test2.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       let currentState = initialState;
@@ -305,6 +316,8 @@ describe('WatchlistReducer', () => {
         mediaType: BaseItemKind.Movie,
         year: 2024,
         primaryImageUrl: 'http://test.com/1.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       const item2: WatchlistItem = {
@@ -313,6 +326,8 @@ describe('WatchlistReducer', () => {
         mediaType: BaseItemKind.Series,
         year: 2023,
         primaryImageUrl: 'http://test.com/2.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       let currentState = initialState;
@@ -333,6 +348,8 @@ describe('WatchlistReducer', () => {
         mediaType: BaseItemKind.Movie,
         year: 2020 + (i % 5),
         primaryImageUrl: `http://test.com/item${i}.jpg`,
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       }));
 
       let currentState = initialState;

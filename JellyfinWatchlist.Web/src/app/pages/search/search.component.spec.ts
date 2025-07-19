@@ -19,8 +19,24 @@ describe('SearchComponent', () => {
   let store: jasmine.SpyObj<Store>;
 
   const mockSearchResults: WatchlistItem[] = [
-    { id: '1', name: 'Test Movie', year: 2023, mediaType: 'Movie', primaryImageUrl: '' },
-    { id: '2', name: 'Test Show', year: 2022, mediaType: 'Series', primaryImageUrl: '' },
+    {
+      id: '1',
+      name: 'Test Movie',
+      year: 2023,
+      mediaType: 'Movie',
+      primaryImageUrl: '',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    },
+    {
+      id: '2',
+      name: 'Test Show',
+      year: 2022,
+      mediaType: 'Series',
+      primaryImageUrl: '',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    },
   ];
 
   const createComponent = createComponentFactory({
@@ -116,6 +132,8 @@ describe('SearchComponent', () => {
         year: 2023,
         mediaType: 'Movie',
         primaryImageUrl: '',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       component.selectItem(item);
@@ -162,6 +180,8 @@ describe('SearchComponent', () => {
         year: 2023,
         mediaType: 'Movie',
         primaryImageUrl: '',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       };
 
       resultsComponent!.itemSelected.emit(testItem);

@@ -11,9 +11,33 @@ describe('ResultsListComponent', () => {
   let component: ResultsListComponent;
 
   const mockResults: WatchlistItem[] = [
-    { id: '1', name: 'Movie 1', year: 2023, mediaType: 'Movie', primaryImageUrl: 'url1' },
-    { id: '2', name: 'Movie 2', year: 2022, mediaType: 'Series', primaryImageUrl: 'url2' },
-    { id: '3', name: 'Movie 3', year: 2021, mediaType: 'Movie', primaryImageUrl: 'url3' },
+    {
+      id: '1',
+      name: 'Movie 1',
+      year: 2023,
+      mediaType: 'Movie',
+      primaryImageUrl: 'url1',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    },
+    {
+      id: '2',
+      name: 'Movie 2',
+      year: 2022,
+      mediaType: 'Series',
+      primaryImageUrl: 'url2',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    },
+    {
+      id: '3',
+      name: 'Movie 3',
+      year: 2021,
+      mediaType: 'Movie',
+      primaryImageUrl: 'url3',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    },
   ];
 
   const createComponent = createComponentFactory({

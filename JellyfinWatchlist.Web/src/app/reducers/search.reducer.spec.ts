@@ -1,7 +1,8 @@
-import { searchReducer, State, initialState } from './search.reducer';
+import { State, initialState, searchReducer } from './search.reducer';
+
+import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 import { SearchActions } from '../actions/search.actions';
 import { WatchlistItem } from '../shared/models';
-import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 
 describe('SearchReducer', () => {
   const mockResults: WatchlistItem[] = [
@@ -11,6 +12,8 @@ describe('SearchReducer', () => {
       mediaType: BaseItemKind.Movie,
       year: 2024,
       primaryImageUrl: 'http://jellyfin.local/movie1.jpg',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
     },
     {
       id: 'series1',
@@ -18,6 +21,8 @@ describe('SearchReducer', () => {
       mediaType: BaseItemKind.Series,
       year: 2023,
       primaryImageUrl: 'http://jellyfin.local/series1.jpg',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
     },
   ];
 
@@ -93,6 +98,8 @@ describe('SearchReducer', () => {
           mediaType: BaseItemKind.MusicAlbum,
           year: 2022,
           primaryImageUrl: 'http://jellyfin.local/album1.jpg',
+          jellyfinUserId: 'user1',
+          addedOn: new Date(),
         },
       ];
       const existingResultsState: State = {
@@ -145,6 +152,8 @@ describe('SearchReducer', () => {
         mediaType: BaseItemKind.Movie,
         year: 2020 + (i % 5),
         primaryImageUrl: `http://jellyfin.local/item${i}.jpg`,
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
       }));
       const loadingState: State = {
         results: [],
