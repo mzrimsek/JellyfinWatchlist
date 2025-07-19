@@ -183,7 +183,7 @@ describe('WatchlistService (Integration)', () => {
           name: 'Should Fail',
         });
         duplicateAdded = true;
-      } catch (error) {
+      } catch {
         // This is expected behavior if constraints are enforced
         duplicateAdded = false;
       }
@@ -229,8 +229,6 @@ describe('WatchlistService (Integration)', () => {
     it('should handle database connection issues gracefully', async () => {
       // This test demonstrates error handling behavior
       // In a real application with connection pooling, this would be more meaningful
-
-      const repository = IntegrationTestHelpers.getRepository(module);
 
       // Mock a database error on the service level
       const originalGetAllForUser = service.getAllForUser;

@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as path from 'path';
+import * as fs from 'fs';
 import { WatchlistItem } from './entities';
 
 envLoad();
@@ -13,11 +14,11 @@ export const AppDataSource = new DataSource({
   synchronize: false,
 });
 
-function envLoad() {
+function envLoad(): void {
   // Simple .env loader for CLI context
-  const fs = require('fs');
   const dotenvPath = path.resolve(process.cwd(), '.env');
   if (fs.existsSync(dotenvPath)) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     require('dotenv').config({ path: dotenvPath });
   }
 }

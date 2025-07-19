@@ -12,8 +12,6 @@ import { HealthController } from './health.controller';
 describe('HealthController', () => {
   let controller: HealthController;
   let healthCheckService: jest.Mocked<HealthCheckService>;
-  let httpHealthIndicator: jest.Mocked<HttpHealthIndicator>;
-  let dbHealthIndicator: jest.Mocked<TypeOrmHealthIndicator>;
   let configService: jest.Mocked<ConfigService>;
 
   const mockHealthCheckService = {
@@ -57,8 +55,6 @@ describe('HealthController', () => {
 
     controller = module.get<HealthController>(HealthController);
     healthCheckService = module.get(HealthCheckService);
-    httpHealthIndicator = module.get(HttpHealthIndicator);
-    dbHealthIndicator = module.get(TypeOrmHealthIndicator);
     configService = module.get(ConfigService);
   });
 

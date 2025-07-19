@@ -128,6 +128,7 @@ describe('WatchlistController', () => {
       expect(service.add).toHaveBeenCalledWith({
         ...addItemDto,
         jellyfinUserId: userId,
+
         addedOn: expect.any(Date),
       });
 
@@ -158,6 +159,7 @@ describe('WatchlistController', () => {
         year: 2022,
         primaryImageUrl: 'https://custom.domain.com/image.png',
         jellyfinUserId: userId,
+
         addedOn: expect.any(Date),
       });
     });

@@ -10,8 +10,9 @@ describe('AppModule (Integration)', () => {
       module = await Test.createTestingModule({
         imports: [AppModule],
       }).compile();
-    } catch (error) {
-      console.log('AppModule bootstrap failed:', error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.log('AppModule bootstrap failed:', errorMessage);
       throw error;
     }
   });
@@ -32,7 +33,7 @@ describe('AppModule (Integration)', () => {
       try {
         const config = module.get('ConfigService');
         expect(config).toBeDefined();
-      } catch (error) {
+      } catch {
         // If ConfigService is not accessible directly, that's ok
         // The important thing is the module compiles
         expect(module).toBeDefined();

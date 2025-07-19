@@ -29,4 +29,4 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 }
-bootstrap();
+void bootstrap();

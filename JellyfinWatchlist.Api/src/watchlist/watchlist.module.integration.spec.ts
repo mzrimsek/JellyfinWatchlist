@@ -40,6 +40,7 @@ describe('WatchlistModule (Integration)', () => {
 
     it('should inject dependencies properly', () => {
       // Verify that the controller has the service injected
+
       expect((controller as any).watchlistService).toBeDefined();
     });
   });
@@ -267,7 +268,7 @@ describe('WatchlistModule (Integration)', () => {
       let errorOccurred = false;
       try {
         await controller.add(userId, validItem);
-      } catch (error) {
+      } catch {
         errorOccurred = true;
       }
 
