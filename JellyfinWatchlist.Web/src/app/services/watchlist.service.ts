@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class WatchlistService {
-  private controllerUrl = `${environment.jellyfin.baseUrl}/watchlist`;
+  private controllerUrl = `${environment.watchlist.baseUrl}/watchlist`;
   constructor(private readonly httpClient: HttpClient) {}
 
   getWatchlist(userId: string) {

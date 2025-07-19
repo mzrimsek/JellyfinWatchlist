@@ -4,4 +4,7 @@ export const environment: Environment = {
   jellyfin: {
     baseUrl: 'https://watch.zrimsek.com',
   },
+  watchlist: {
+    baseUrl: 'http://localhost:3000',
+  },
 };
