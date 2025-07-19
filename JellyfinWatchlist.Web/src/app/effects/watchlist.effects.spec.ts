@@ -5,7 +5,6 @@ import { TestBed } from '@angular/core/testing';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistEffects } from './watchlist.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { selectWatchlistIds } from '../reducers';
 
 // Mock data
 const mockItem = {
@@ -14,6 +13,8 @@ const mockItem = {
   mediaType: 'Movie' as any,
   year: 2024,
   primaryImageUrl: 'http://jellyfin.local/image.jpg',
+  jellyfinUserId: 'user-123',
+  addedOn: new Date('2024-01-01'),
 };
 
 const mockItem2 = {
@@ -22,6 +23,8 @@ const mockItem2 = {
   mediaType: 'Series' as any,
   year: 2023,
   primaryImageUrl: 'http://jellyfin.local/series.jpg',
+  jellyfinUserId: 'user-456',
+  addedOn: new Date('2024-01-02'),
 };
 
 describe('WatchlistEffects', () => {
@@ -203,6 +206,8 @@ describe('WatchlistEffects', () => {
         mediaType: 'MusicAlbum' as any,
         year: 2024,
         primaryImageUrl: 'http://jellyfin.local/album.jpg',
+        jellyfinUserId: 'user-789',
+        addedOn: new Date('2024-01-03'),
       };
       const action = WatchlistActions.selectItem({ item: albumItem });
       const watchlistWithoutAlbum = ['movie123', 'series456'];
