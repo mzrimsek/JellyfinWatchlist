@@ -1,4 +1,4 @@
 <app-shared-layout>
   <h1>Welcome {{ username$ | async }}!</h1>
-  <app-home-watchlist [watchlistItems]="watchlistItems$ | async"></app-home-watchlist>
+  <app-home-watchlist [watchlistItems]="watchlistItems$ | async" (itemSelected)="removeItem($event)"></app-home-watchlist>
 </app-shared-layout>

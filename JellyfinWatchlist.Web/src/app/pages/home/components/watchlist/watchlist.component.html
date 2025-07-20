@@ -3,7 +3,7 @@
 
   <ul>
     @for (item of watchlistItems; track item.id) {
-      <app-home-watchlist-item [watchlistItem]="item"></app-home-watchlist-item>
+      <app-shared-media-item [item]="item" [isPartOfWatchlist]="true" (itemSelected)="itemSelected.emit($event)"></app-shared-media-item>
     }
   </ul>
 } @else {

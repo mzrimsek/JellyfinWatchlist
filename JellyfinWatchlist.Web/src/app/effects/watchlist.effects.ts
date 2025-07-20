@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { State, selectWatchlistIds } from '../reducers';
+import { State } from '../reducers';
 import { Store } from '@ngrx/store';
 import { concatLatestFrom } from '@ngrx/operators';
 import { catchError, exhaustMap, map, of } from 'rxjs';

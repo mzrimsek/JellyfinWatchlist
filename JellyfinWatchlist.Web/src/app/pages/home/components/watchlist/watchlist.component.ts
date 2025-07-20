@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../../../shared/models';
 
-import { WatchlistItem } from '../../../../shared/models';
-import { WatchlistItemComponent } from '../watchlist-item/watchlist-item.component';
+import { MediaItemComponent } from '../../../../shared/components/media-item/media-item.component';
 
 @Component({
   selector: 'app-home-watchlist',
-  imports: [WatchlistItemComponent],
+  imports: [MediaItemComponent],
   templateUrl: './watchlist.component.html',
   styleUrl: './watchlist.component.scss',
 })
 export class WatchlistComponent {
   @Input() watchlistItems: WatchlistItem[] | null = [];
+  @Output() itemSelected = new EventEmitter<SelectWatchlistItemPayload>();
 }
