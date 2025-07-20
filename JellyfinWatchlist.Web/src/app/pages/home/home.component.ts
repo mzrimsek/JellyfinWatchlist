@@ -3,16 +3,16 @@ import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { MediaItemListComponent } from '../../shared/components/media-item-list/media-item-list.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
-import { WatchlistComponent } from './components/watchlist/watchlist.component';
 import { selectAllWatchlist } from '../../reducers';
 import { selectCurrentUserName } from '../../reducers';
 
 @Component({
   selector: 'app-home',
-  imports: [LayoutComponent, CommonModule, WatchlistComponent],
+  imports: [LayoutComponent, CommonModule, MediaItemListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

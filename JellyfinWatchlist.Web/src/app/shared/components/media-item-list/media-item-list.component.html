@@ -1,0 +1,10 @@
+<div class="items">
+  @for (mediaItem of items; track mediaItem.id) {
+    <div class="item">
+      <app-shared-media-item
+        [item]="mediaItem"
+        [isPartOfWatchlist]="itemIsPartOfWatchlist(mediaItem)"
+        (itemSelected)="itemSelected.emit($event)"></app-shared-media-item>
+    </div>
+  }
+</div>

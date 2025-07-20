@@ -7,14 +7,14 @@ import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
-import { ResultsListComponent } from './components/results-list/results-list.component';
+import { MediaItemListComponent } from '../../shared/components/media-item-list/media-item-list.component';
 import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
 
 @Component({
   selector: 'app-search',
-  imports: [LayoutComponent, FormComponent, ResultsListComponent, CommonModule],
+  imports: [LayoutComponent, FormComponent, CommonModule, MediaItemListComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })

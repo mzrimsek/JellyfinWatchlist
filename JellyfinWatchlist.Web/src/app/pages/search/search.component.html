@@ -1,11 +1,13 @@
 <app-shared-layout>
   @if (searchForm) {
     <div class="search-page">
-      <app-search-form [group]="searchForm" (search)="search()"></app-search-form>
-      <app-search-results-list
-        [results]="(searchResults$ | async) ?? []"
+      <app-search-form
+        [group]="searchForm"
+        (search)="search()"></app-search-form>
+      <app-shared-media-item-list
+        [items]="(searchResults$ | async) ?? []"
         [watchlistIds]="(watchlistIds$ | async) ?? []"
-        (itemSelected)="selectItem($event)"></app-search-results-list>
+        (itemSelected)="selectItem($event)"></app-shared-media-item-list>
     </div>
   }
 </app-shared-layout>

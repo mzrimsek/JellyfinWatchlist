@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
-import { ResultsListComponent } from './components/results-list/results-list.component';
+import { MediaItemListComponent } from '../../shared/components/media-item-list/media-item-list.component';
 import { SearchActions } from '../../actions/search.actions';
 import { SearchComponent } from './search.component';
 import { Store } from '@ngrx/store';
@@ -54,7 +54,7 @@ describe('SearchComponent', () => {
         snapshot: { params: {}, queryParams: {} },
       }),
     ],
-    mocks: [LayoutComponent, FormComponent, ResultsListComponent],
+    mocks: [LayoutComponent, FormComponent, MediaItemListComponent],
     shallow: true,
     detectChanges: false,
   });
@@ -156,7 +156,7 @@ describe('SearchComponent', () => {
     });
 
     it('should render results list with correct inputs', () => {
-      const resultsComponent = spectator.query(ResultsListComponent);
+      const resultsComponent = spectator.query(MediaItemListComponent);
       expect(resultsComponent).toBeTruthy();
     });
 
@@ -171,7 +171,7 @@ describe('SearchComponent', () => {
 
     it('should handle itemSelected event from results list', () => {
       spyOn(component, 'selectItem');
-      const resultsComponent = spectator.query(ResultsListComponent);
+      const resultsComponent = spectator.query(MediaItemListComponent);
       const testPayload: SelectWatchlistItemPayload = {
         item: {
           id: '1',

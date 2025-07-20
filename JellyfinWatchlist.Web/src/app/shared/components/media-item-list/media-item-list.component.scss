@@ -1,0 +1,7 @@
+@use "../../../../../variables.scss";
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: variables.$base-spacing * 2;
+}
