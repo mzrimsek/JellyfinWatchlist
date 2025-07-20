@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { WatchlistItem } from '../../shared/models';
+import { selectAllWatchlist } from '../../reducers';
 import { selectCurrentUserName } from '../../reducers';
 
 @Component({
@@ -14,10 +16,12 @@ import { selectCurrentUserName } from '../../reducers';
 })
 export class HomeComponent implements OnInit {
   username$: Observable<string> | undefined;
+  watchlist$: Observable<WatchlistItem[]> | undefined;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.username$ = this.store.select(selectCurrentUserName);
+    this.watchlist$ = this.store.select(selectAllWatchlist);
   }
 }
