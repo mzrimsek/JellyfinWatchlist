@@ -16,9 +16,5 @@
     display: flex;
     flex-wrap: wrap;
     gap: variables.$base-spacing * 2;
-
-    .item {
-      width: 200px;
-    }
   }
 }

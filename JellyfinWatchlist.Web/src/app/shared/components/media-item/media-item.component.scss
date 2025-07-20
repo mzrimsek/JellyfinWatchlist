@@ -6,6 +6,7 @@
   grid-template-columns: 1fr;
   position: relative;
   height: 100%;
+  max-width: 200px;
 
   img {
     grid-row: 1 / 2;
