@@ -1,7 +1,13 @@
 @use "../../../../variables.scss";
 
+mat-card-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .items {
   display: flex;
   flex-wrap: wrap;
+  margin-top: variables.$base-spacing * 2;
   gap: variables.$base-spacing * 2;
 }
