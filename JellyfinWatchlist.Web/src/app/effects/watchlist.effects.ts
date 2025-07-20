@@ -41,7 +41,7 @@ export class WatchlistEffects {
           return of(WatchlistActions.addItemFailed({ error: 'User not logged in' }));
         }
         return this.watchlistService.addWatchlistItem(currentUser.Id, item).pipe(
-          map(() => WatchlistActions.addItemSucceeded({ item })),
+          map((result) => WatchlistActions.addItemSucceeded({ item: result })),
           catchError((error) => of(WatchlistActions.addItemFailed({ error }))),
         );
       }),
