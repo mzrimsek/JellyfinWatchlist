@@ -228,6 +228,10 @@ describe('WatchlistReducer with EntityAdapter', () => {
   `@ngneat/spectator/jest`) to avoid Jest/Karma compatibility issues. The
   project uses Karma with Jasmine, not Jest, so jest-specific imports will cause
   module resolution errors.
+- **Jasmine Matcher Compatibility**: Use `.length` property instead of
+  `.toHaveLength()` matcher. Jasmine doesn't include Jest's `.toHaveLength()`
+  matcher, so use standard JavaScript `.length` property for array length
+  assertions.
 
 ```typescript
 // ✅ Correct import for Karma/Jasmine setup
@@ -239,6 +243,12 @@ import {
 
 // ❌ Avoid this - causes Jest module resolution errors in Karma
 import { mockProvider } from '@ngneat/spectator/jest';
+
+// ✅ Correct Jasmine array length assertion
+expect(items.length).toBe(2);
+
+// ❌ Avoid this - Jest matcher not available in Jasmine
+expect(items).toHaveLength(2);
 ```
 
 ## Project-Specific Patterns
@@ -303,7 +313,8 @@ export class WatchlistController {
 - **Testing Achievement**: 341 passing tests (100% success rate)
 - **Testing Coverage**:
   - ✅ **Components**: 80+ tests across 10 components using Spectator
-  - ✅ **Services**: 4 tests for JellyfinService with SDK integration
+  - ✅ **Services**: 22 tests (4 JellyfinService SDK integration + 18
+    WatchlistService HTTP testing)
   - ✅ **NgRx Reducers**: 108+ tests across 5 reducers with state immutability
     verification
   - ✅ **NgRx Effects**: 97+ tests across 6 effects with comprehensive service

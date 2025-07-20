@@ -4,4 +4,7 @@ export const environment: Environment = {
   jellyfin: {
     baseUrl: '',
   },
+  watchlist: {
+    baseUrl: '',
+  },
 };

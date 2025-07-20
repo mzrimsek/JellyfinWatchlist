@@ -1,6 +1,6 @@
 # 📺 JellyfinWatchlist
 
-> A comprehensive full-stack application for managing Jellyfin media server.
+> Track the shows and movies you want to watch without having to pollute your Jellyfin favorites!
 
 ## 🚀 Project Status
 
@@ -9,17 +9,11 @@
 [![Web CI](https://github.com/mzrimsek/JellyfinWatchlist/actions/workflows/web-ci.yml/badge.svg)](https://github.com/mzrimsek/JellyfinWatchlist/actions/workflows/web-ci.yml)
 [![Workflow Validation](https://github.com/mzrimsek/JellyfinWatchlist/actions/workflows/workflow-validation.yml/badge.svg)](https://github.com/mzrimsek/JellyfinWatchlist/actions/workflows/workflow-validation.yml)
 
-## 📖 Overview
-
-JellyfinWatchlist is a modern full-stack application that provides an enhanced
-watchlist management experience for Jellyfin media servers. Copilot may have
-helped a bit :)
-
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** 20.x or 22.x
+- **Node.js** 22.x or newer
 - **npm** (latest version)
 - **Jellyfin Server** (accessible via network)
 
@@ -130,8 +124,8 @@ PORT=3000
 ```typescript
 export const environment = {
   production: false,
-  jellyfinBaseUrl: 'http://your-jellyfin-server:8096',
-  apiBaseUrl: 'http://localhost:3000',
+  jellyfinBaseUrl: "http://your-jellyfin-server:8096",
+  apiBaseUrl: "http://localhost:3000",
 };
 ```
 

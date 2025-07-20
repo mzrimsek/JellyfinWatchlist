@@ -4,6 +4,7 @@ import { catchError, exhaustMap, map, of } from 'rxjs';
 
 import { CurrentUserActions } from '../actions/current-user.actions';
 import { JellyfinService } from '../services/jellyfin.service';
+import { WatchlistActions } from '../actions/watchlist.actions';
 
 @Injectable()
 export class CurrentUserEffects {
@@ -19,6 +20,13 @@ export class CurrentUserEffects {
           catchError(() => of(CurrentUserActions.getFailed())),
         ),
       ),
+    );
+  });
+
+  getCurrentUserSucceededLoadWatchlist$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CurrentUserActions.getSucceeded),
+      map(() => WatchlistActions.loadWatchlist()),
     );
   });
 

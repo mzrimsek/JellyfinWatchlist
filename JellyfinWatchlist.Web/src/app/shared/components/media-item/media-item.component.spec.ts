@@ -1,4 +1,5 @@
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+
 import { MediaItemComponent } from './media-item.component';
 import { WatchlistItem } from '../../models';
 
@@ -27,6 +28,8 @@ describe('MediaItemComponent', () => {
       mediaType: 'Movie',
       year: 2024,
       primaryImageUrl: 'test-url',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
     };
     spectator.setInput('item', mockItem);
     spectator.detectChanges();
@@ -41,6 +44,8 @@ describe('MediaItemComponent', () => {
       mediaType: 'Movie',
       year: 2024,
       primaryImageUrl: 'test-url',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
     };
     spectator.setInput('item', mockItem);
 

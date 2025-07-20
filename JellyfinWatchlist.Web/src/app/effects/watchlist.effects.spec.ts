@@ -4,8 +4,9 @@ import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistEffects } from './watchlist.effects';
+import { WatchlistService } from '../services/watchlist.service';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { selectWatchlistIds } from '../reducers';
 
 // Mock data
 const mockItem = {
@@ -14,6 +15,8 @@ const mockItem = {
   mediaType: 'Movie' as any,
   year: 2024,
   primaryImageUrl: 'http://jellyfin.local/image.jpg',
+  jellyfinUserId: 'user-123',
+  addedOn: new Date('2024-01-01'),
 };
 
 const mockItem2 = {
@@ -22,6 +25,8 @@ const mockItem2 = {
   mediaType: 'Series' as any,
   year: 2023,
   primaryImageUrl: 'http://jellyfin.local/series.jpg',
+  jellyfinUserId: 'user-456',
+  addedOn: new Date('2024-01-02'),
 };
 
 describe('WatchlistEffects', () => {
@@ -31,12 +36,19 @@ describe('WatchlistEffects', () => {
 
   beforeEach(() => {
     const storeSpy = jasmine.createSpyObj('Store', ['select']);
+    const watchlistServiceSpy = jasmine.createSpyObj('WatchlistService', [
+      'addWatchlistItem',
+      'removeWatchlistItem',
+      'getWatchlist',
+    ]);
 
     TestBed.configureTestingModule({
       providers: [
         WatchlistEffects,
+        provideHttpClientTesting(),
         provideMockActions(() => actions$),
         { provide: Store, useValue: storeSpy },
+        { provide: WatchlistService, useValue: watchlistServiceSpy },
       ],
     });
 
@@ -62,7 +74,7 @@ describe('WatchlistEffects', () => {
 
     it('should return WatchlistActions.removeItem when item is already in watchlist', (done) => {
       const action = WatchlistActions.selectItem({ item: mockItem });
-      const expectedAction = WatchlistActions.removeItem({ item: mockItem });
+      const expectedAction = WatchlistActions.removeItem({ itemId: mockItem.id });
       const existingWatchlistIds = ['movie123', 'series456']; // mockItem.id included
 
       actions$ = of(action);
@@ -92,7 +104,7 @@ describe('WatchlistEffects', () => {
     it('should convert number IDs to strings for comparison', (done) => {
       const numericIdItem = { ...mockItem, id: '123' };
       const action = WatchlistActions.selectItem({ item: numericIdItem });
-      const expectedAction = WatchlistActions.removeItem({ item: numericIdItem });
+      const expectedAction = WatchlistActions.removeItem({ itemId: numericIdItem.id });
       const numericWatchlistIds = [123, 456]; // Numbers in watchlist
 
       actions$ = of(action);
@@ -191,7 +203,7 @@ describe('WatchlistEffects', () => {
       store.select.and.returnValue(of(fullWatchlist));
 
       effects.itemSelected$.subscribe((result) => {
-        expect(result).toEqual(WatchlistActions.removeItem({ item: existingItem }));
+        expect(result).toEqual(WatchlistActions.removeItem({ itemId: existingItem.id }));
         done();
       });
     });
@@ -203,6 +215,8 @@ describe('WatchlistEffects', () => {
         mediaType: 'MusicAlbum' as any,
         year: 2024,
         primaryImageUrl: 'http://jellyfin.local/album.jpg',
+        jellyfinUserId: 'user-789',
+        addedOn: new Date('2024-01-03'),
       };
       const action = WatchlistActions.selectItem({ item: albumItem });
       const watchlistWithoutAlbum = ['movie123', 'series456'];
@@ -234,7 +248,7 @@ describe('WatchlistEffects', () => {
         store.select.and.returnValue(of(watchlistWithItem));
 
         effects.itemSelected$.subscribe((toggleResult) => {
-          expect(toggleResult).toEqual(WatchlistActions.removeItem({ item: mockItem }));
+          expect(toggleResult).toEqual(WatchlistActions.removeItem({ itemId: mockItem.id }));
           done();
         });
       });

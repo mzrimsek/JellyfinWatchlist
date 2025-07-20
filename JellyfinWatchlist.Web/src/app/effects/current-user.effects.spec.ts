@@ -5,6 +5,7 @@ import { CurrentUserActions } from '../actions/current-user.actions';
 import { CurrentUserEffects } from './current-user.effects';
 import { JellyfinService } from '../services/jellyfin.service';
 import { TestBed } from '@angular/core/testing';
+import { WatchlistActions } from '../actions/watchlist.actions';
 import { provideMockActions } from '@ngrx/effects/testing';
 
 // Mock user data
@@ -119,6 +120,50 @@ describe('CurrentUserEffects', () => {
     });
   });
 
+  describe('getCurrentUserSucceededLoadWatchlist$', () => {
+    it('should return WatchlistActions.loadWatchlist when getCurrentUser succeeds', (done) => {
+      const action = CurrentUserActions.getSucceeded({ user: mockUser });
+      const expectedAction = WatchlistActions.loadWatchlist();
+
+      actions$ = of(action);
+
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should not trigger on other actions', (done) => {
+      const action = CurrentUserActions.get();
+      actions$ = of(action);
+
+      let effectTriggered = false;
+
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe(() => {
+        effectTriggered = true;
+      });
+
+      // Since this effect only listens to getSucceeded, it shouldn't trigger
+      setTimeout(() => {
+        expect(effectTriggered).toBe(false);
+        done();
+      }, 100);
+    });
+
+    it('should handle different user types consistently', (done) => {
+      const adminUser = { ...mockUser, Name: 'Admin User', Id: 'admin123' };
+      const action = CurrentUserActions.getSucceeded({ user: adminUser });
+      const expectedAction = WatchlistActions.loadWatchlist();
+
+      actions$ = of(action);
+
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+  });
+
   describe('getCurrentUserFailed$', () => {
     beforeEach(() => {
       spyOn(console, 'log');
@@ -171,6 +216,16 @@ describe('CurrentUserEffects', () => {
       effects.getCurrentUser$.subscribe((result) => {
         expect(result).toEqual(CurrentUserActions.getSucceeded({ user: mockUser }));
         expect(jellyfinService.getCurrentUser).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should trigger watchlist load after successful user retrieval', (done) => {
+      const action = CurrentUserActions.getSucceeded({ user: mockUser });
+      actions$ = of(action);
+
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
+        expect(result).toEqual(WatchlistActions.loadWatchlist());
         done();
       });
     });
