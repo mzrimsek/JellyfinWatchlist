@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistEffects } from './watchlist.effects';
+import { WatchlistService } from '../services/watchlist.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 
@@ -35,6 +36,11 @@ describe('WatchlistEffects', () => {
 
   beforeEach(() => {
     const storeSpy = jasmine.createSpyObj('Store', ['select']);
+    const watchlistServiceSpy = jasmine.createSpyObj('WatchlistService', [
+      'addWatchlistItem',
+      'removeWatchlistItem',
+      'getWatchlist',
+    ]);
 
     TestBed.configureTestingModule({
       providers: [
@@ -42,6 +48,7 @@ describe('WatchlistEffects', () => {
         provideHttpClientTesting(),
         provideMockActions(() => actions$),
         { provide: Store, useValue: storeSpy },
+        { provide: WatchlistService, useValue: watchlistServiceSpy },
       ],
     });
 
