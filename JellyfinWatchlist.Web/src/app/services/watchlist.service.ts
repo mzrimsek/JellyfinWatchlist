@@ -1,7 +1,7 @@
 import { AddWatchlistItem, WatchlistItem } from '../shared/models';
+import { Injectable, inject } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class WatchlistService {
   private controllerUrl = `${environment.watchlist.baseUrl}/watchlist`;
-  constructor(private readonly httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   getWatchlist(userId: string) {
     return this.httpClient.get<WatchlistItem[]>(`${this.controllerUrl}/${userId}`);

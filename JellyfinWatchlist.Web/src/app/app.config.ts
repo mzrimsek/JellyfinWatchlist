@@ -9,6 +9,7 @@ import { SystemInfoEffects } from './effects/system-info.effects';
 import { WatchlistEffects } from './effects/watchlist.effects';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(reducers, { metaReducers }),
     provideRouterStore(),
+    provideHttpClient(),
     provideEffects(
       InitEffects,
       LoginEffects,
