@@ -44,10 +44,13 @@ npm run migration:generate    # Create new TypeORM migrations
 ```bash
 cd JellyfinWatchlist.Web
 ng serve                      # Dev server on :4200
-ng test                       # Karma unit tests with Spectator
-ng test --watch=false         # Single run tests
-ng test --code-coverage       # Test coverage report
+npx ng test                   # Karma unit tests with Spectator (PREFERRED)
+npx ng test --watch=false     # Single run tests (PREFERRED)
+npx ng test --code-coverage   # Test coverage report (PREFERRED)
 ```
+
+**IMPORTANT:** Always use `npx ng test` instead of `npm test` for Angular testing.
+The Angular CLI handles command line arguments more effectively and consistently than npm.
 
 ### Formatting & Code Quality
 
