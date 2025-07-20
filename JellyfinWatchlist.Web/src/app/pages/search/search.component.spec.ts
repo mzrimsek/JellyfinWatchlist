@@ -1,4 +1,5 @@
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +11,6 @@ import { SearchActions } from '../../actions/search.actions';
 import { SearchComponent } from './search.component';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
-import { WatchlistItem } from '../../shared/models';
 import { of } from 'rxjs';
 
 describe('SearchComponent', () => {
@@ -125,7 +125,7 @@ describe('SearchComponent', () => {
   });
 
   describe('selectItem', () => {
-    it('should dispatch selectItem action with the provided item', () => {
+    it('should dispatch selectItem action with the provided payload', () => {
       const item: WatchlistItem = {
         id: '1',
         name: 'Test Movie',
@@ -135,13 +135,11 @@ describe('SearchComponent', () => {
         jellyfinUserId: 'user1',
         addedOn: new Date(),
       };
-
-      component.selectItem(item);
-
-      expect(store.dispatch).toHaveBeenCalledWith(WatchlistActions.selectItem({ item }));
+      const payload: SelectWatchlistItemPayload = { item, action: 'add' };
+      component.selectItem(payload);
+      expect(store.dispatch).toHaveBeenCalledWith(WatchlistActions.selectItem({ payload }));
     });
   });
-
   describe('template integration', () => {
     beforeEach(() => {
       spectator.detectChanges();
@@ -174,19 +172,22 @@ describe('SearchComponent', () => {
     it('should handle itemSelected event from results list', () => {
       spyOn(component, 'selectItem');
       const resultsComponent = spectator.query(ResultsListComponent);
-      const testItem: WatchlistItem = {
-        id: '1',
-        name: 'Test',
-        year: 2023,
-        mediaType: 'Movie',
-        primaryImageUrl: '',
-        jellyfinUserId: 'user1',
-        addedOn: new Date(),
+      const testPayload: SelectWatchlistItemPayload = {
+        item: {
+          id: '1',
+          name: 'Test',
+          year: 2023,
+          mediaType: 'Movie',
+          primaryImageUrl: '',
+          jellyfinUserId: 'user1',
+          addedOn: new Date(),
+        },
+        action: 'add',
       };
 
-      resultsComponent!.itemSelected.emit(testItem);
+      resultsComponent!.itemSelected.emit(testPayload);
 
-      expect(component.selectItem).toHaveBeenCalledWith(testItem);
+      expect(component.selectItem).toHaveBeenCalledWith(testPayload);
     });
   });
 });

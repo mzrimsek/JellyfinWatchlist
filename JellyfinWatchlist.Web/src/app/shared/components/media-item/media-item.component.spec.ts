@@ -1,7 +1,7 @@
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../models';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 import { MediaItemComponent } from './media-item.component';
-import { WatchlistItem } from '../../models';
 
 describe('MediaItemComponent', () => {
   let spectator: Spectator<MediaItemComponent>;
@@ -48,12 +48,42 @@ describe('MediaItemComponent', () => {
       addedOn: new Date(),
     };
     spectator.setInput('item', mockItem);
+    spectator.setInput('isPartOfWatchlist', false);
 
-    let emittedItem: WatchlistItem | undefined;
-    spectator.output('itemSelected').subscribe((item) => (emittedItem = item));
+    let emittedPayload: SelectWatchlistItemPayload | undefined;
+    spectator.output('itemSelected').subscribe((payload) => (emittedPayload = payload));
 
     component.selectItem();
 
-    expect(emittedItem).toEqual(mockItem);
+    const expectedPayload: SelectWatchlistItemPayload = {
+      item: mockItem,
+      action: 'add',
+    };
+    expect(emittedPayload).toEqual(expectedPayload);
+  });
+
+  it('should emit remove action when item is already in watchlist', () => {
+    const mockItem: WatchlistItem = {
+      id: '123',
+      name: 'Test Movie',
+      mediaType: 'Movie',
+      year: 2024,
+      primaryImageUrl: 'test-url',
+      jellyfinUserId: 'user1',
+      addedOn: new Date(),
+    };
+    spectator.setInput('item', mockItem);
+    spectator.setInput('isPartOfWatchlist', true);
+
+    let emittedPayload: SelectWatchlistItemPayload | undefined;
+    spectator.output('itemSelected').subscribe((payload) => (emittedPayload = payload));
+
+    component.selectItem();
+
+    const expectedPayload: SelectWatchlistItemPayload = {
+      item: mockItem,
+      action: 'remove',
+    };
+    expect(emittedPayload).toEqual(expectedPayload);
   });
 });

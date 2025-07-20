@@ -1,10 +1,10 @@
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../../../shared/models';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 import { MatCardModule } from '@angular/material/card';
 import { MediaItemComponent } from '../../../../shared/components/media-item/media-item.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ResultsListComponent } from './results-list.component';
-import { WatchlistItem } from '../../../../shared/models';
 
 describe('ResultsListComponent', () => {
   let spectator: Spectator<ResultsListComponent>;
@@ -144,9 +144,13 @@ describe('ResultsListComponent', () => {
       spyOn(component.itemSelected, 'emit');
 
       const mediaItem = spectator.query(MediaItemComponent);
-      mediaItem!.itemSelected.emit(mockResults[0]);
+      const testPayload: SelectWatchlistItemPayload = {
+        item: mockResults[0],
+        action: 'add',
+      };
+      mediaItem!.itemSelected.emit(testPayload);
 
-      expect(component.itemSelected.emit).toHaveBeenCalledWith(mockResults[0]);
+      expect(component.itemSelected.emit).toHaveBeenCalledWith(testPayload);
     });
 
     it('should not render result list when no results', () => {

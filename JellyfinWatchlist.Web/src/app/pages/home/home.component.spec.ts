@@ -1,3 +1,4 @@
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 
 import { ActivatedRoute } from '@angular/router';
@@ -5,6 +6,7 @@ import { HomeComponent } from './home.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Store } from '@ngrx/store';
+import { WatchlistActions } from '../../actions/watchlist.actions';
 import { of } from 'rxjs';
 import { selectCurrentUserName } from '../../reducers';
 
@@ -90,6 +92,54 @@ describe('HomeComponent', () => {
     });
   });
 
+  describe('removeItem', () => {
+    beforeEach(() => {
+      store.dispatch.calls.reset();
+    });
+
+    it('should dispatch removeItem action when action is remove', () => {
+      const mockItem: WatchlistItem = {
+        id: '123',
+        name: 'Test Movie',
+        mediaType: 'Movie',
+        year: 2024,
+        primaryImageUrl: 'http://example.com/image.jpg',
+        jellyfinUserId: 'user-123',
+        addedOn: new Date(),
+      };
+      const payload: SelectWatchlistItemPayload = {
+        item: mockItem,
+        action: 'remove',
+      };
+
+      component.removeItem(payload);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        WatchlistActions.removeItem({ itemId: mockItem.id }),
+      );
+    });
+
+    it('should not dispatch action when action is add', () => {
+      const mockItem: WatchlistItem = {
+        id: '123',
+        name: 'Test Movie',
+        mediaType: 'Movie',
+        year: 2024,
+        primaryImageUrl: 'http://example.com/image.jpg',
+        jellyfinUserId: 'user-123',
+        addedOn: new Date(),
+      };
+      const payload: SelectWatchlistItemPayload = {
+        item: mockItem,
+        action: 'add',
+      };
+
+      component.removeItem(payload);
+
+      expect(store.dispatch).not.toHaveBeenCalled();
+    });
+  });
+
   describe('template rendering', () => {
     beforeEach(() => {
       spectator.detectChanges();
@@ -108,12 +158,10 @@ describe('HomeComponent', () => {
       expect(spectator.query('h1')).toContainText(`Welcome ${testUsername}!`);
     });
 
-    it('should render TODO section', () => {
-      expect(spectator.query('h2')).toContainText('TODO');
-      expect(spectator.query('ol')).toExist();
-      expect(spectator.queryAll('li')).toHaveLength(2);
-      expect(spectator.queryAll('li')[0]).toContainText('Persist watch list');
-      expect(spectator.queryAll('li')[1]).toContainText('Display watch list on home page');
+    it('should render watchlist component', () => {
+      spectator.detectChanges();
+
+      expect(spectator.query('app-home-watchlist')).toExist();
     });
 
     it('should handle empty username gracefully', () => {

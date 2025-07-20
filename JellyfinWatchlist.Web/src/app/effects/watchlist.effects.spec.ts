@@ -1,32 +1,54 @@
 import { Action, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 
+import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 import { TestBed } from '@angular/core/testing';
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { WatchlistEffects } from './watchlist.effects';
+import { WatchlistItem } from '../shared/models';
 import { WatchlistService } from '../services/watchlist.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 
 // Mock data
-const mockItem = {
+const mockItem: WatchlistItem = {
   id: 'movie123',
   name: 'Test Movie',
-  mediaType: 'Movie' as any,
+  mediaType: BaseItemKind.Movie,
   year: 2024,
   primaryImageUrl: 'http://jellyfin.local/image.jpg',
   jellyfinUserId: 'user-123',
   addedOn: new Date('2024-01-01'),
 };
 
-const mockItem2 = {
+const mockItem2: WatchlistItem = {
   id: 'series456',
   name: 'Test Series',
-  mediaType: 'Series' as any,
+  mediaType: BaseItemKind.Series,
   year: 2023,
   primaryImageUrl: 'http://jellyfin.local/series.jpg',
   jellyfinUserId: 'user-456',
   addedOn: new Date('2024-01-02'),
+};
+
+const numericIdItem: WatchlistItem = {
+  id: '12345',
+  name: 'Numeric ID Item',
+  mediaType: BaseItemKind.Movie,
+  year: 2024,
+  primaryImageUrl: 'http://jellyfin.local/numeric.jpg',
+  jellyfinUserId: 'user-123',
+  addedOn: new Date('2024-01-01'),
+};
+
+const uppercaseIdItem: WatchlistItem = {
+  id: 'UPPERCASE123',
+  name: 'Uppercase ID Item',
+  mediaType: BaseItemKind.Movie,
+  year: 2024,
+  primaryImageUrl: 'http://jellyfin.local/uppercase.jpg',
+  jellyfinUserId: 'user-123',
+  addedOn: new Date('2024-01-01'),
 };
 
 describe('WatchlistEffects', () => {
@@ -57,43 +79,55 @@ describe('WatchlistEffects', () => {
   });
 
   describe('itemSelected$', () => {
-    it('should return WatchlistActions.addItem when item is not in watchlist', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
+    it('should return WatchlistActions.addItem when action is add', (done) => {
+      const payload = { item: mockItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const expectedAction = WatchlistActions.addItem({ item: mockItem });
-      const existingWatchlistIds = ['series456', 'book789']; // mockItem.id not included
 
       actions$ = of(action);
-      store.select.and.returnValue(of(existingWatchlistIds));
 
       effects.itemSelected$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
-        expect(store.select).toHaveBeenCalled();
         done();
       });
     });
 
-    it('should return WatchlistActions.removeItem when item is already in watchlist', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
+    it('should return WatchlistActions.removeItem when action is remove', (done) => {
+      const payload = { item: mockItem, action: 'remove' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const expectedAction = WatchlistActions.removeItem({ itemId: mockItem.id });
-      const existingWatchlistIds = ['movie123', 'series456']; // mockItem.id included
+
+      actions$ = of(action);
+
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle different item types correctly', (done) => {
+      const payload = { item: mockItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: mockItem });
+      const existingWatchlistIds: string[] = [];
 
       actions$ = of(action);
       store.select.and.returnValue(of(existingWatchlistIds));
 
       effects.itemSelected$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
-        expect(store.select).toHaveBeenCalled();
         done();
       });
     });
 
-    it('should handle empty watchlist', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
-      const expectedAction = WatchlistActions.addItem({ item: mockItem });
-      const emptyWatchlistIds: string[] = [];
+    it('should handle numeric item IDs correctly', (done) => {
+      const payload = { item: numericIdItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: numericIdItem });
+      const existingWatchlistIds: string[] = [];
 
       actions$ = of(action);
-      store.select.and.returnValue(of(emptyWatchlistIds));
+      store.select.and.returnValue(of(existingWatchlistIds));
 
       effects.itemSelected$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
@@ -101,29 +135,14 @@ describe('WatchlistEffects', () => {
       });
     });
 
-    it('should convert number IDs to strings for comparison', (done) => {
-      const numericIdItem = { ...mockItem, id: '123' };
-      const action = WatchlistActions.selectItem({ item: numericIdItem });
-      const expectedAction = WatchlistActions.removeItem({ itemId: numericIdItem.id });
-      const numericWatchlistIds = [123, 456]; // Numbers in watchlist
-
-      actions$ = of(action);
-      store.select.and.returnValue(of(numericWatchlistIds));
-
-      effects.itemSelected$.subscribe((result) => {
-        expect(result).toEqual(expectedAction);
-        done();
-      });
-    });
-
-    it('should handle case-sensitive ID matching', (done) => {
-      const uppercaseIdItem = { ...mockItem, id: 'MOVIE123' };
-      const action = WatchlistActions.selectItem({ item: uppercaseIdItem });
+    it('should handle uppercase item IDs correctly', (done) => {
+      const payload = { item: uppercaseIdItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const expectedAction = WatchlistActions.addItem({ item: uppercaseIdItem });
-      const lowercaseWatchlistIds = ['movie123', 'series456'];
+      const existingWatchlistIds: string[] = [];
 
       actions$ = of(action);
-      store.select.and.returnValue(of(lowercaseWatchlistIds));
+      store.select.and.returnValue(of(existingWatchlistIds));
 
       effects.itemSelected$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
@@ -131,9 +150,11 @@ describe('WatchlistEffects', () => {
       });
     });
 
-    it('should use exhaustMap to prevent multiple concurrent selections', (done) => {
-      const action1 = WatchlistActions.selectItem({ item: mockItem });
-      const action2 = WatchlistActions.selectItem({ item: mockItem2 });
+    it('should handle multiple rapid selections correctly', (done) => {
+      const payload1 = { item: mockItem, action: 'add' as const };
+      const payload2 = { item: mockItem2, action: 'add' as const };
+      const action1 = WatchlistActions.selectItem({ payload: payload1 });
+      const action2 = WatchlistActions.selectItem({ payload: payload2 });
       const existingWatchlistIds: string[] = [];
 
       actions$ = of(action1, action2);
@@ -144,37 +165,141 @@ describe('WatchlistEffects', () => {
         emissionCount++;
         if (emissionCount === 1) {
           expect(result).toEqual(WatchlistActions.addItem({ item: mockItem }));
-        }
-        if (emissionCount === 2) {
+        } else if (emissionCount === 2) {
           expect(result).toEqual(WatchlistActions.addItem({ item: mockItem2 }));
           done();
         }
       });
     });
 
-    it('should handle multiple items with different outcomes', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
-      const watchlistWithOneItem = ['series456']; // Only has series456, not movie123
+    it('should handle empty watchlist IDs array', (done) => {
+      const payload = { item: mockItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: mockItem });
+      const existingWatchlistIds: string[] = [];
 
       actions$ = of(action);
-      store.select.and.returnValue(of(watchlistWithOneItem));
+      store.select.and.returnValue(of(existingWatchlistIds));
 
       effects.itemSelected$.subscribe((result) => {
-        expect(result).toEqual(WatchlistActions.addItem({ item: mockItem }));
+        expect(result).toEqual(expectedAction);
         done();
       });
     });
 
-    it('should select correct watchlist IDs from store', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
-      const watchlistIds = ['movie123'];
+    it('should handle large watchlist IDs array', (done) => {
+      const payload = { item: mockItem, action: 'remove' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.removeItem({ itemId: mockItem.id });
+      const largeWatchlistIds = Array.from({ length: 100 }, (_, i) => `item${i}`);
+      largeWatchlistIds.push(mockItem.id); // Include our test item
 
       actions$ = of(action);
-      store.select.and.returnValue(of(watchlistIds));
+      store.select.and.returnValue(of(largeWatchlistIds));
 
-      effects.itemSelected$.subscribe(() => {
-        expect(store.select).toHaveBeenCalled();
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
         done();
+      });
+    });
+
+    it('should handle adding new item not in watchlist', (done) => {
+      const newItem: WatchlistItem = {
+        id: 'newitem123',
+        name: 'New Test Item',
+        mediaType: BaseItemKind.Movie,
+        year: 2025,
+        primaryImageUrl: 'http://jellyfin.local/newitem.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
+      };
+      const payload = { item: newItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: newItem });
+      const existingWatchlistIds = [mockItem.id, mockItem2.id]; // newItem not included
+
+      actions$ = of(action);
+      store.select.and.returnValue(of(existingWatchlistIds));
+
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle removing existing item from watchlist', (done) => {
+      const existingItem = mockItem;
+      const payload = { item: existingItem, action: 'remove' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.removeItem({ itemId: existingItem.id });
+      const existingWatchlistIds = [existingItem.id, mockItem2.id]; // existingItem included
+
+      actions$ = of(action);
+      store.select.and.returnValue(of(existingWatchlistIds));
+
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle different media types (Albums, Books, etc.)', (done) => {
+      const albumItem: WatchlistItem = {
+        id: 'album789',
+        name: 'Test Album',
+        mediaType: BaseItemKind.MusicAlbum,
+        year: 2022,
+        primaryImageUrl: 'http://jellyfin.local/album.jpg',
+        jellyfinUserId: 'user1',
+        addedOn: new Date(),
+      };
+      const payload = { item: albumItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: albumItem });
+      const existingWatchlistIds: string[] = [];
+
+      actions$ = of(action);
+      store.select.and.returnValue(of(existingWatchlistIds));
+
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle case sensitivity in ID matching', (done) => {
+      const payload = { item: mockItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
+      const expectedAction = WatchlistActions.addItem({ item: mockItem });
+      const existingWatchlistIds = ['MOVIE123', 'series456']; // Different case
+
+      actions$ = of(action);
+      store.select.and.returnValue(of(existingWatchlistIds));
+
+      effects.itemSelected$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle mixed add and remove actions', (done) => {
+      const addPayload = { item: mockItem, action: 'add' as const };
+      const removePayload = { item: mockItem, action: 'remove' as const };
+      const addAction = WatchlistActions.selectItem({ payload: addPayload });
+      const removeAction = WatchlistActions.selectItem({ payload: removePayload });
+
+      actions$ = of(addAction, removeAction);
+
+      const results: any[] = [];
+      effects.itemSelected$.subscribe({
+        next: (result) => {
+          results.push(result);
+          if (results.length === 2) {
+            expect(results[0]).toEqual(WatchlistActions.addItem({ item: mockItem }));
+            expect(results[1]).toEqual(WatchlistActions.removeItem({ itemId: mockItem.id }));
+            done();
+          }
+        },
       });
     });
   });
@@ -182,7 +307,8 @@ describe('WatchlistEffects', () => {
   describe('integration scenarios', () => {
     it('should handle adding item to existing watchlist', (done) => {
       const newItem = { ...mockItem, id: 'newMovie999' };
-      const action = WatchlistActions.selectItem({ item: newItem });
+      const payload = { item: newItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const existingWatchlist = ['movie123', 'series456'];
 
       actions$ = of(action);
@@ -196,7 +322,8 @@ describe('WatchlistEffects', () => {
 
     it('should handle removing item from full watchlist', (done) => {
       const existingItem = { ...mockItem, id: 'movie123' };
-      const action = WatchlistActions.selectItem({ item: existingItem });
+      const payload = { item: existingItem, action: 'remove' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const fullWatchlist = ['movie123', 'series456', 'album789', 'book101'];
 
       actions$ = of(action);
@@ -218,7 +345,8 @@ describe('WatchlistEffects', () => {
         jellyfinUserId: 'user-789',
         addedOn: new Date('2024-01-03'),
       };
-      const action = WatchlistActions.selectItem({ item: albumItem });
+      const payload = { item: albumItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const watchlistWithoutAlbum = ['movie123', 'series456'];
 
       actions$ = of(action);
@@ -231,7 +359,8 @@ describe('WatchlistEffects', () => {
     });
 
     it('should handle rapid toggle operations', (done) => {
-      const action = WatchlistActions.selectItem({ item: mockItem });
+      const payload = { item: mockItem, action: 'add' as const };
+      const action = WatchlistActions.selectItem({ payload });
       const emptyWatchlist: string[] = [];
 
       actions$ = of(action);
@@ -241,7 +370,8 @@ describe('WatchlistEffects', () => {
         expect(result).toEqual(WatchlistActions.addItem({ item: mockItem }));
 
         // Simulate second toggle - item should now be in watchlist
-        const toggleAction = WatchlistActions.selectItem({ item: mockItem });
+        const payload = { item: mockItem, action: 'remove' as const };
+        const toggleAction = WatchlistActions.selectItem({ payload });
         const watchlistWithItem = ['movie123'];
 
         actions$ = of(toggleAction);
