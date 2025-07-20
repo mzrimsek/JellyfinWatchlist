@@ -60,6 +60,34 @@ describe('HomeComponent', () => {
         expect(username).toBe(testUsername);
       });
     });
+
+    it('should select watchlist from store', () => {
+      spectator.detectChanges();
+
+      expect(store.select).toHaveBeenCalled();
+      expect(component.watchlist$).toBeDefined();
+    });
+
+    it('should receive watchlist from store observable', () => {
+      const testWatchlist = [
+        {
+          id: '1',
+          name: 'Test Item',
+          mediaType: 'Movie',
+          year: 2024,
+          primaryImageUrl: 'http://example.com/image.jpg',
+          jellyfinUserId: 'user-123',
+          addedOn: new Date(),
+        },
+      ];
+      store.select.and.returnValue(of(testWatchlist));
+
+      spectator.detectChanges();
+
+      component.watchlist$?.subscribe((watchlist) => {
+        expect(watchlist).toEqual(testWatchlist);
+      });
+    });
   });
 
   describe('template rendering', () => {
