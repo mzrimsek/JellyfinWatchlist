@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, map } from 'rxjs';
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
@@ -10,7 +11,6 @@ import { ResultsListComponent } from './components/results-list/results-list.com
 import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
-import { WatchlistItem } from '../../shared/models';
 
 @Component({
   selector: 'app-search',
@@ -41,7 +41,7 @@ export class SearchComponent implements OnInit {
     this.store.dispatch(SearchActions.search({ query: this.searchForm?.value.query }));
   }
 
-  selectItem(item: WatchlistItem): void {
-    this.store.dispatch(WatchlistActions.selectItem({ item }));
+  selectItem(payload: SelectWatchlistItemPayload): void {
+    this.store.dispatch(WatchlistActions.selectItem({ payload }));
   }
 }

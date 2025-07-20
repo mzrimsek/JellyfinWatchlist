@@ -18,15 +18,12 @@ export class WatchlistEffects {
   itemSelected$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(WatchlistActions.selectItem),
-      concatLatestFrom(() => this.store$.select(selectWatchlistIds)),
-      exhaustMap(([action, watchlistIds]) => {
-        const { item } = action;
-        const stringifiedWatchlistIds = watchlistIds.map((id) => id.toString());
-        const itemContainedInWatchlist = stringifiedWatchlistIds.includes(item.id);
-        if (!itemContainedInWatchlist) {
-          return of(WatchlistActions.addItem({ item }));
+      map((action) => {
+        const { payload } = action;
+        if (payload.action === 'add') {
+          return WatchlistActions.addItem({ item: payload.item });
         }
-        return of(WatchlistActions.removeItem({ itemId: item.id }));
+        return WatchlistActions.removeItem({ itemId: payload.item.id });
       }),
     );
   });
