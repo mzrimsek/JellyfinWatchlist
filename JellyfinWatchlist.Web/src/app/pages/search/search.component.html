@@ -4,10 +4,15 @@
       <app-search-form
         [group]="searchForm"
         (search)="search()"></app-search-form>
-      <app-shared-media-item-list
-        [items]="(searchResults$ | async) ?? []"
-        [watchlistIds]="(watchlistIds$ | async) ?? []"
-        (itemSelected)="selectItem($event)"></app-shared-media-item-list>
+
+      @if (hasSearched) {
+        <app-shared-media-item-list
+          [items]="(searchResults$ | async) ?? []"
+          [watchlistIds]="(watchlistIds$ | async) ?? []"
+          (itemSelected)="selectItem($event)">
+          <ng-container>{{ searchResultHeader$ | async }}</ng-container>
+        </app-shared-media-item-list>
+      }
     </div>
   }
 </app-shared-layout>

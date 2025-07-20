@@ -22,6 +22,8 @@ export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
   searchResults$: Observable<WatchlistItem[]> | undefined;
   watchlistIds$: Observable<string[]> | undefined;
+  searchResultHeader$: Observable<string> | undefined;
+  hasSearched = false;
 
   constructor(
     private store: Store,
@@ -35,10 +37,14 @@ export class SearchComponent implements OnInit {
     this.watchlistIds$ = this.store
       .select(selectWatchlistIds)
       .pipe(map((ids) => ids.map((id) => id.toString())));
+    this.searchResultHeader$ = this.searchResults$.pipe(
+      map((items) => (items.length > 0 ? `Search Results (${items.length})` : 'No Results Found')),
+    );
   }
 
   search(): void {
     this.store.dispatch(SearchActions.search({ query: this.searchForm?.value.query }));
+    this.hasSearched = true;
   }
 
   selectItem(payload: SelectWatchlistItemPayload): void {

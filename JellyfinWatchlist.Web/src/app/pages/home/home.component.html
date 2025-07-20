@@ -2,5 +2,8 @@
   <h1>Welcome {{ username$ | async }}!</h1>
   <app-shared-media-item-list
     [items]="(watchlistItems$ | async) ?? []"
-    (itemSelected)="removeItem($event)"></app-shared-media-item-list>
+    [watchlistIds]="(watchlistIds$ | async) ?? []"
+    (itemSelected)="removeItem($event)">
+    <ng-container>{{ watchlistHeader$ | async }}</ng-container>
+  </app-shared-media-item-list>
 </app-shared-layout>

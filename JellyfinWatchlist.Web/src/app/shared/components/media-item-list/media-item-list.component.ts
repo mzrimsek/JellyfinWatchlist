@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../models';
 
+import { MatCardModule } from '@angular/material/card';
 import { MediaItemComponent } from '../media-item/media-item.component';
 
 @Component({
   selector: 'app-shared-media-item-list',
-  imports: [MediaItemComponent],
+  imports: [MediaItemComponent, MatCardModule],
   templateUrl: './media-item-list.component.html',
   styleUrl: './media-item-list.component.scss',
 })
