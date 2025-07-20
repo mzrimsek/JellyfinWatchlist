@@ -13,7 +13,7 @@
 
 ### Prerequisites
 
-- **Node.js** 20.x or 22.x
+- **Node.js** 22.x or newer
 - **npm** (latest version)
 - **Jellyfin Server** (accessible via network)
 

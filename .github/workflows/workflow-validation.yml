@@ -73,6 +73,6 @@ jobs:
 
           # Check if specified Node versions are still supported
           echo "Found Node.js versions in workflows:"
-          grep -rho "node-version.*20\|node-version.*22" .github/workflows/ || echo "No specific Node versions found"
+          grep -rho "node-version.*22" .github/workflows/ || echo "No specific Node versions found"
 
           echo "✅ Node.js version matrix validated"
