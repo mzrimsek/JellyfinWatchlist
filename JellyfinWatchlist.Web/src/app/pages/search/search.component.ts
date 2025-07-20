@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, map } from 'rxjs';
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { selectSearchResults, selectWatchlistIds } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
-import { ResultsListComponent } from './components/results-list/results-list.component';
+import { MediaItemListComponent } from '../../shared/components/media-item-list/media-item-list.component';
 import { SearchActions } from '../../actions/search.actions';
 import { Store } from '@ngrx/store';
 import { WatchlistActions } from '../../actions/watchlist.actions';
-import { WatchlistItem } from '../../shared/models';
 
 @Component({
   selector: 'app-search',
-  imports: [LayoutComponent, FormComponent, ResultsListComponent, CommonModule],
+  imports: [LayoutComponent, FormComponent, CommonModule, MediaItemListComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
@@ -22,6 +22,8 @@ export class SearchComponent implements OnInit {
   searchForm: FormGroup | undefined;
   searchResults$: Observable<WatchlistItem[]> | undefined;
   watchlistIds$: Observable<string[]> | undefined;
+  searchResultHeader$: Observable<string> | undefined;
+  hasSearched = false;
 
   constructor(
     private store: Store,
@@ -35,13 +37,17 @@ export class SearchComponent implements OnInit {
     this.watchlistIds$ = this.store
       .select(selectWatchlistIds)
       .pipe(map((ids) => ids.map((id) => id.toString())));
+    this.searchResultHeader$ = this.searchResults$.pipe(
+      map((items) => (items.length > 0 ? `Search Results (${items.length})` : 'No Results Found')),
+    );
   }
 
   search(): void {
     this.store.dispatch(SearchActions.search({ query: this.searchForm?.value.query }));
+    this.hasSearched = true;
   }
 
-  selectItem(item: WatchlistItem): void {
-    this.store.dispatch(WatchlistActions.selectItem({ item }));
+  selectItem(payload: SelectWatchlistItemPayload): void {
+    this.store.dispatch(WatchlistActions.selectItem({ payload }));
   }
 }

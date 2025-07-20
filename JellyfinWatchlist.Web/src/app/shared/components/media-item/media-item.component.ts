@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { SelectWatchlistItemPayload, WatchlistItem } from '../../models';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { WatchlistItem } from '../../models';
 
 @Component({
   selector: 'app-shared-media-item',
@@ -15,10 +15,16 @@ import { WatchlistItem } from '../../models';
 export class MediaItemComponent {
   @Input() item: WatchlistItem | undefined;
   @Input() isPartOfWatchlist = false;
-  @Output() itemSelected = new EventEmitter<WatchlistItem>();
+  @Output() itemSelected = new EventEmitter<SelectWatchlistItemPayload>();
 
   selectItem(): void {
-    this.itemSelected.emit(this.item);
+    if (this.item) {
+      const payload: SelectWatchlistItemPayload = {
+        item: this.item,
+        action: this.isPartOfWatchlist ? 'remove' : 'add',
+      };
+      this.itemSelected.emit(payload);
+    }
   }
 
   get buttonText(): string {

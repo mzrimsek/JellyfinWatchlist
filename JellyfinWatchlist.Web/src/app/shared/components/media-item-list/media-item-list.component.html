@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <ng-content></ng-content>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="items">
+      @for (mediaItem of items; track mediaItem.id) {
+        <div class="item">
+          <app-shared-media-item
+            [item]="mediaItem"
+            [isPartOfWatchlist]="itemIsPartOfWatchlist(mediaItem)"
+            (itemSelected)="itemSelected.emit($event)"></app-shared-media-item>
+        </div>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>

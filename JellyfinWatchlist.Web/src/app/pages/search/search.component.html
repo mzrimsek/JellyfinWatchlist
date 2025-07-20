@@ -1,11 +1,18 @@
 <app-shared-layout>
   @if (searchForm) {
     <div class="search-page">
-      <app-search-form [group]="searchForm" (search)="search()"></app-search-form>
-      <app-search-results-list
-        [results]="(searchResults$ | async) ?? []"
-        [watchlistIds]="(watchlistIds$ | async) ?? []"
-        (itemSelected)="selectItem($event)"></app-search-results-list>
+      <app-search-form
+        [group]="searchForm"
+        (search)="search()"></app-search-form>
+
+      @if (hasSearched) {
+        <app-shared-media-item-list
+          [items]="(searchResults$ | async) ?? []"
+          [watchlistIds]="(watchlistIds$ | async) ?? []"
+          (itemSelected)="selectItem($event)">
+          <ng-container>{{ searchResultHeader$ | async }}</ng-container>
+        </app-shared-media-item-list>
+      }
     </div>
   }
 </app-shared-layout>

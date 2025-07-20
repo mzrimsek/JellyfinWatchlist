@@ -11,6 +11,7 @@
   "bracketSameLine": false,
   "embeddedLanguageFormatting": "auto",
   "htmlWhitespaceSensitivity": "css",
+  "singleAttributePerLine": true,
   "insertPragma": false,
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
