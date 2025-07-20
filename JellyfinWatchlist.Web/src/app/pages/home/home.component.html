@@ -1,10 +1,4 @@
 <app-shared-layout>
   <h1>Welcome {{ username$ | async }}!</h1>
-  <div>
-    <h2>TODO</h2>
-    <ol>
-      <li>Persist watch list</li>
-      <li>Display watch list on home page</li>
-    </ol>
-  </div>
+  <app-home-watchlist [watchlistItems]="watchlistItems$ | async"></app-home-watchlist>
 </app-shared-layout>

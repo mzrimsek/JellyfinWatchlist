@@ -1,1 +1,6 @@
-<p>watchlist-item works!</p>
+@if (watchlistItem) {
+  <li>
+    <h3>{{ watchlistItem.name }}</h3>
+    <span>Added on: {{ watchlistItem.addedOn | date }}</span>
+  </li>
+}

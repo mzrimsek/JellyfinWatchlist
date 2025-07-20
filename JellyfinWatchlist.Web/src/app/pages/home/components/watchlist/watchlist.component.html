@@ -1,1 +1,11 @@
-<p>watchlist works!</p>
+@if (watchlistItems && watchlistItems.length > 0) {
+  <h2>Watchlist</h2>
+
+  <ul>
+    @for (item of watchlistItems; track item.id) {
+      <app-home-watchlist-item [watchlistItem]="item"></app-home-watchlist-item>
+    }
+  </ul>
+} @else {
+  <p>No items in watchlist</p>
+}

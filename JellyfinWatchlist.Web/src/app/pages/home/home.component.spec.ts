@@ -65,7 +65,7 @@ describe('HomeComponent', () => {
       spectator.detectChanges();
 
       expect(store.select).toHaveBeenCalled();
-      expect(component.watchlist$).toBeDefined();
+      expect(component.watchlistItems$).toBeDefined();
     });
 
     it('should receive watchlist from store observable', () => {
@@ -84,7 +84,7 @@ describe('HomeComponent', () => {
 
       spectator.detectChanges();
 
-      component.watchlist$?.subscribe((watchlist) => {
+      component.watchlistItems$?.subscribe((watchlist) => {
         expect(watchlist).toEqual(testWatchlist);
       });
     });
