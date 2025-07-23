@@ -95,7 +95,7 @@ describe('SearchComponent', () => {
     });
 
     it('should select watchlist ids from store and map to strings', () => {
-      const mockIds = [1, 2, 3];
+      const mockIds = ['1', '2', '3'];
       store.select.and.returnValue(of(mockIds));
       spectator.detectChanges();
 
