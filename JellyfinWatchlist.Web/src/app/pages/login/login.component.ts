@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AuthActions } from '../../actions/auth.actions';
@@ -17,13 +17,11 @@ import { selectJellyfinServerName } from '../../reducers';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+
   loginForm: FormGroup | undefined;
   instanceName$: Observable<string> | undefined;
-
-  constructor(
-    private fb: FormBuilder,
-    private store: Store,
-  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

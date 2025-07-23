@@ -15,24 +15,36 @@ const initialState: State = {
 
 export const currentUserReducer = createReducer(
   initialState,
-  on(CurrentUserActions.get, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(CurrentUserActions.getSucceeded, (state, { user }) => ({
-    ...state,
-    user,
-    loading: false,
-  })),
-  on(CurrentUserActions.getFailed, (state) => ({
-    ...state,
-    user: null,
-    loading: false,
-  })),
-  on(CurrentUserActions.clear, (state) => ({
-    ...state,
-    user: null,
-  })),
+  on(
+    CurrentUserActions.get,
+    (state): State => ({
+      ...state,
+      loading: true,
+    }),
+  ),
+  on(
+    CurrentUserActions.getSucceeded,
+    (state, { user }): State => ({
+      ...state,
+      user,
+      loading: false,
+    }),
+  ),
+  on(
+    CurrentUserActions.getFailed,
+    (state): State => ({
+      ...state,
+      user: null,
+      loading: false,
+    }),
+  ),
+  on(
+    CurrentUserActions.clear,
+    (state): State => ({
+      ...state,
+      user: null,
+    }),
+  ),
 );
 
 const currentUserFeature = createFeature({

@@ -24,5 +24,5 @@ import { ReactiveInputComponent } from '../../../../shared/components/form/react
 export class FormComponent {
   @Input()
   group!: FormGroup;
-  @Output() search: EventEmitter<void> = new EventEmitter<void>();
+  @Output() searchTriggered: EventEmitter<void> = new EventEmitter<void>();
 }

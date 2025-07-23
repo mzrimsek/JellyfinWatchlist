@@ -1,4 +1,5 @@
 import { authReducer, State } from './auth.reducer';
+import { Action } from '@ngrx/store';
 import { AuthActions } from '../actions/auth.actions';
 
 describe('AuthReducer', () => {
@@ -9,7 +10,7 @@ describe('AuthReducer', () => {
 
   describe('unknown action', () => {
     it('should return the initial state', () => {
-      const action = {} as any;
+      const action = {} as Action;
       const result = authReducer(undefined, action);
 
       expect(result).toEqual(initialState);

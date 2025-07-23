@@ -11,8 +11,8 @@ import { MediaItemComponent } from '../media-item/media-item.component';
   styleUrl: './media-item-list.component.scss',
 })
 export class MediaItemListComponent {
-  @Input() items: Array<WatchlistItem> = [];
-  @Input() watchlistIds: Array<string> = [];
+  @Input() items: WatchlistItem[] = [];
+  @Input() watchlistIds: string[] = [];
   @Output() itemSelected = new EventEmitter<SelectWatchlistItemPayload>();
 
   itemIsPartOfWatchlist(item: WatchlistItem): boolean {

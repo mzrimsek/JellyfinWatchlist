@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, map } from 'rxjs';
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
-import { selectSearchResults, selectWatchlistIds } from '../../reducers';
+import { selectSearchResults, selectWatchlistIdsAsStrings } from '../../reducers';
 
 import { CommonModule } from '@angular/common';
 import { FormComponent } from './components/form/form.component';
@@ -25,18 +25,15 @@ export class SearchComponent implements OnInit {
   searchResultHeader$: Observable<string> | undefined;
   hasSearched = false;
 
-  constructor(
-    private store: Store,
-    private fb: FormBuilder,
-  ) {}
+  private store = inject(Store);
+  private fb = inject(FormBuilder);
+
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
     });
     this.searchResults$ = this.store.select(selectSearchResults);
-    this.watchlistIds$ = this.store
-      .select(selectWatchlistIds)
-      .pipe(map((ids) => ids.map((id) => id.toString())));
+    this.watchlistIds$ = this.store.select(selectWatchlistIdsAsStrings);
     this.searchResultHeader$ = this.searchResults$.pipe(
       map((items) => (items.length > 0 ? `Search Results (${items.length})` : 'No Results Found')),
     );

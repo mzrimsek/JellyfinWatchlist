@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { State, systemInfoReducer } from './system-info.reducer';
 
 import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';

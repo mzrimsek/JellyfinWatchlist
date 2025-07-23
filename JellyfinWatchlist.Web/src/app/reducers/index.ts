@@ -12,6 +12,7 @@ import {
   selectAllWatchlist as _selectAllWatchlist,
   selectWatchlistEntities as _selectWatchlistEntities,
   selectWatchlistIds as _selectWatchlistIds,
+  selectWatchlistIdsAsStrings as _selectWatchlistIdsAsStrings,
   selectWatchlistTotal as _selectWatchlistTotal,
   watchlistReducer,
 } from './watchlist.reducer';
@@ -54,6 +55,11 @@ export const selectSearchResults = createSelector(selectSearchState, (state) => 
 export const selectWatchlistState = createFeatureSelector<WatchlistState>('watchlist');
 
 export const selectWatchlistIds = createSelector(selectWatchlistState, _selectWatchlistIds);
+
+export const selectWatchlistIdsAsStrings = createSelector(
+  selectWatchlistState,
+  _selectWatchlistIdsAsStrings,
+);
 
 export const selectWatchlistEntities = createSelector(
   selectWatchlistState,

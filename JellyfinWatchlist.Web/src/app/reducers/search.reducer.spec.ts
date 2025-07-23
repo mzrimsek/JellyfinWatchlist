@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { State, initialState, searchReducer } from './search.reducer';
 
 import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';

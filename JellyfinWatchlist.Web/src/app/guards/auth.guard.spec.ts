@@ -1,6 +1,7 @@
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
+  ParamMap,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -43,13 +44,13 @@ describe('authGuard', () => {
       outlet: 'primary',
       component: null,
       routeConfig: null,
-      root: {} as any,
+      root: {} as ActivatedRouteSnapshot,
       parent: null,
       firstChild: null,
       children: [],
       pathFromRoot: [],
-      paramMap: {} as any,
-      queryParamMap: {} as any,
+      paramMap: {} as ParamMap,
+      queryParamMap: {} as ParamMap,
       title: undefined,
     } as ActivatedRouteSnapshot;
 

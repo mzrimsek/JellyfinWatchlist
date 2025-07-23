@@ -8,7 +8,6 @@ import { SearchActions } from '../actions/search.actions';
 import { SearchEffects } from './search.effects';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { selectCurrentUserId } from '../reducers';
 
 // Mock data with proper types
 const mockUserId = 'user123';

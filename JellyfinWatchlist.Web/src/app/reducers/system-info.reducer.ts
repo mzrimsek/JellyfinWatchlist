@@ -15,20 +15,29 @@ const initialState: State = {
 
 export const systemInfoReducer = createReducer(
   initialState,
-  on(SystemInfoActions.get, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(SystemInfoActions.getSucceeded, (state, { systemInfo }) => ({
-    ...state,
-    publicSystemInfo: systemInfo,
-    loading: false,
-  })),
-  on(SystemInfoActions.getFailed, (state) => ({
-    ...state,
-    publicSystemInfo: null,
-    loading: false,
-  })),
+  on(
+    SystemInfoActions.get,
+    (state): State => ({
+      ...state,
+      loading: true,
+    }),
+  ),
+  on(
+    SystemInfoActions.getSucceeded,
+    (state, { systemInfo }): State => ({
+      ...state,
+      publicSystemInfo: systemInfo,
+      loading: false,
+    }),
+  ),
+  on(
+    SystemInfoActions.getFailed,
+    (state): State => ({
+      ...state,
+      publicSystemInfo: null,
+      loading: false,
+    }),
+  ),
 );
 
 const systemInfoFeature = createFeature({

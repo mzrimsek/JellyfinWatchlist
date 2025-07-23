@@ -41,7 +41,7 @@ export class JellyfinService {
   }
 
   public logout(): Observable<void> {
-    return toObservable(this.api.logout()).pipe(map(() => {}));
+    return toObservable(this.api.logout()).pipe(map(() => undefined));
   }
 
   public getCurrentUser(): Observable<UserDto> {

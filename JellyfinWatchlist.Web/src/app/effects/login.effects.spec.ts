@@ -84,7 +84,6 @@ describe('LoginEffects', () => {
 
     it('should handle multiple login attempts', (done) => {
       const action1 = AuthActions.login({ username: 'user1', password: 'pass1' });
-      const action2 = AuthActions.login({ username: 'user2', password: 'pass2' });
 
       actions$ = of(action1);
       jellyfinService.login.and.returnValue(of(true));

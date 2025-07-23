@@ -1,5 +1,5 @@
 import { SearchActions } from '../actions/search.actions';
-import { State, selectCurrentUserId } from '../reducers';
+import { selectCurrentUserId } from '../reducers';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 @Injectable()
 export class SearchEffects {
   private actions$ = inject(Actions);
-  private store = inject(Store<State>);
+  private store = inject(Store);
   private jellyfinService = inject(JellyfinService);
   private matSnackBar = inject(MatSnackBar);
 

@@ -1,10 +1,6 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import {
-  PublicSystemInfo,
-  SearchHintResult,
-  UserDto,
-} from '@jellyfin/sdk/lib/generated-client/models';
+import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { JellyfinService } from './jellyfin.service';
 import { environment } from '../../environments/environment';
 

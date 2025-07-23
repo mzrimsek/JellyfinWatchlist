@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Action, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 

@@ -14,24 +14,36 @@ const initialState: State = {
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.login, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(AuthActions.loginSucceeded, (state) => ({
-    ...state,
-    isAuthenticated: true,
-    loading: false,
-  })),
-  on(AuthActions.loginFailed, (state) => ({
-    ...state,
-    isAuthenticated: false,
-    loading: false,
-  })),
-  on(AuthActions.logout, (state) => ({
-    ...state,
-    isAuthenticated: false,
-  })),
+  on(
+    AuthActions.login,
+    (state): State => ({
+      ...state,
+      loading: true,
+    }),
+  ),
+  on(
+    AuthActions.loginSucceeded,
+    (state): State => ({
+      ...state,
+      isAuthenticated: true,
+      loading: false,
+    }),
+  ),
+  on(
+    AuthActions.loginFailed,
+    (state): State => ({
+      ...state,
+      isAuthenticated: false,
+      loading: false,
+    }),
+  ),
+  on(
+    AuthActions.logout,
+    (state): State => ({
+      ...state,
+      isAuthenticated: false,
+    }),
+  ),
 );
 
 const authFeature = createFeature({
