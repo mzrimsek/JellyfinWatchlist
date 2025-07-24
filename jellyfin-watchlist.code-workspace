@@ -38,12 +38,16 @@
   },
   "extensions": {
     "recommendations": [
+      "PKief.angular-component-extractor",
+      "EditorConfig.EditorConfig",
+      "ghaschel.vscode-angular-html",
       "esbenp.prettier-vscode",
       "ms-vscode.vscode-typescript-next",
       "angular.ng-template",
-      "ms-vscode.vscode-json",
+
+      "andyyaldoo.vscode-json",
       "bradlc.vscode-tailwindcss",
-      "ms-vscode.vscode-eslint",
+      "dbaeumer.vscode-eslint",
     ],
   },
 }
