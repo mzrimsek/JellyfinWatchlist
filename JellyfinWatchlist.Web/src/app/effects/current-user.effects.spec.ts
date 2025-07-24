@@ -120,14 +120,14 @@ describe('CurrentUserEffects', () => {
     });
   });
 
-  describe('getCurrentUserSucceeded$', () => {
+  describe('getCurrentUserSucceededLoadWatchlist$', () => {
     it('should dispatch WatchlistActions.loadWatchlist when user is successfully fetched', (done) => {
       const action = CurrentUserActions.getSucceeded({ user: mockUser });
       const expectedAction = WatchlistActions.loadWatchlist();
 
       actions$ = of(action);
 
-      effects.getCurrentUserSucceeded$.subscribe((result) => {
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
         done();
       });
@@ -139,7 +139,7 @@ describe('CurrentUserEffects', () => {
 
       // This effect should only trigger on getSucceeded, not on get
       let effectTriggered = false;
-      effects.getCurrentUserSucceeded$.subscribe(() => {
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe(() => {
         effectTriggered = true;
       });
 
@@ -156,7 +156,7 @@ describe('CurrentUserEffects', () => {
 
       actions$ = of(action);
 
-      effects.getCurrentUserSucceeded$.subscribe((result) => {
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
         done();
       });
@@ -170,7 +170,7 @@ describe('CurrentUserEffects', () => {
       actions$ = of(action1, action2);
 
       let emissionCount = 0;
-      effects.getCurrentUserSucceeded$.subscribe((result) => {
+      effects.getCurrentUserSucceededLoadWatchlist$.subscribe((result) => {
         emissionCount++;
         expect(result).toEqual(expectedAction);
 
@@ -254,7 +254,7 @@ describe('CurrentUserEffects', () => {
         // Now test that the success triggers watchlist loading
         actions$ = of(CurrentUserActions.getSucceeded({ user: mockUser }));
 
-        effects.getCurrentUserSucceeded$.subscribe((watchlistResult) => {
+        effects.getCurrentUserSucceededLoadWatchlist$.subscribe((watchlistResult) => {
           expect(watchlistResult).toEqual(WatchlistActions.loadWatchlist());
           done();
         });
@@ -296,7 +296,7 @@ describe('CurrentUserEffects', () => {
 
         // Step 2: Success action triggers watchlist load
         actions$ = of(CurrentUserActions.getSucceeded({ user: mockUser }));
-        effects.getCurrentUserSucceeded$.subscribe((watchlistResult) => {
+        effects.getCurrentUserSucceededLoadWatchlist$.subscribe((watchlistResult) => {
           step++;
           expect(step).toBe(2);
           expect(watchlistResult).toEqual(WatchlistActions.loadWatchlist());
@@ -335,7 +335,7 @@ describe('CurrentUserEffects', () => {
         let watchlistLoadTriggered = false;
         actions$ = of(CurrentUserActions.getFailed());
 
-        effects.getCurrentUserSucceeded$.subscribe(() => {
+        effects.getCurrentUserSucceededLoadWatchlist$.subscribe(() => {
           watchlistLoadTriggered = true;
         });
 
