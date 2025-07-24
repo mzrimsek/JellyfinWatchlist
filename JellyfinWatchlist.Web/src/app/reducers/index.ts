@@ -1,4 +1,10 @@
-import { ActionReducerMap, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  ActionReducer,
+  ActionReducerMap,
+  MetaReducer,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 import { State as AuthState, authReducer } from './auth.reducer';
 import { State as CurrentUserState, currentUserReducer, selectUser } from './current-user.reducer';
 import { State as SearchState, searchReducer, selectSearchState } from './search.reducer';
@@ -19,6 +25,7 @@ import {
 
 import { environment } from '../../environments/environment';
 import { isDevMode } from '@angular/core';
+import { localStorageSync } from 'ngrx-store-localstorage';
 
 export interface State {
   auth: AuthState;
@@ -36,7 +43,15 @@ export const reducers: ActionReducerMap<State> = {
   watchlist: watchlistReducer,
 };
 
-export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];
+const localStorageSyncReducer = (reducer: ActionReducer<unknown>): ActionReducer<unknown> =>
+  localStorageSync({
+    keys: ['auth'],
+  })(reducer);
+
+const sharedMetaReducers: MetaReducer<any, any>[] = [localStorageSyncReducer];
+export const metaReducers: MetaReducer<State>[] = isDevMode()
+  ? [...sharedMetaReducers] // development mode metareducers
+  : [...sharedMetaReducers]; // production mode metareducers
 
 // System Info Selectors
 export const selectJellyfinServerName = createSelector(
