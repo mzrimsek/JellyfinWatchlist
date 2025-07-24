@@ -21,9 +21,9 @@ export class LoginEffects {
       ofType(AuthActions.login),
       exhaustMap((action) =>
         this.jellyfinService.login(action.username, action.password).pipe(
-          map((success) => {
-            if (success) {
-              return AuthActions.loginSucceeded();
+          map((accessToken) => {
+            if (accessToken) {
+              return AuthActions.loginSucceeded({ accessToken });
             } else {
               return AuthActions.loginFailed();
             }
