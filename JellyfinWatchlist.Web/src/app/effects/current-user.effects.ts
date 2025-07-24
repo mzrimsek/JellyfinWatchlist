@@ -23,7 +23,7 @@ export class CurrentUserEffects {
     );
   });
 
-  getCurrentUserSucceededLoadWatchlist$ = createEffect(() => {
+  getCurrentUserSucceeded$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CurrentUserActions.getSucceeded),
       map(() => WatchlistActions.loadWatchlist()),

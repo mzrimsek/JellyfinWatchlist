@@ -3,12 +3,12 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { AuthActions } from '../actions/auth.actions';
 
 export interface State {
-  isAuthenticated: boolean;
+  accessToken: string | null;
   loading: boolean;
 }
 
 const initialState: State = {
-  isAuthenticated: false,
+  accessToken: null,
   loading: false,
 };
 
@@ -23,25 +23,25 @@ export const authReducer = createReducer(
   ),
   on(
     AuthActions.loginSucceeded,
-    (state): State => ({
+    (state, action): State => ({
       ...state,
-      isAuthenticated: true,
       loading: false,
+      accessToken: action.accessToken,
     }),
   ),
   on(
     AuthActions.loginFailed,
     (state): State => ({
       ...state,
-      isAuthenticated: false,
       loading: false,
+      accessToken: null,
     }),
   ),
   on(
     AuthActions.logout,
     (state): State => ({
       ...state,
-      isAuthenticated: false,
+      accessToken: null,
     }),
   ),
 );
@@ -51,4 +51,4 @@ const authFeature = createFeature({
   reducer: authReducer,
 });
 
-export const { name, reducer, selectAuthState, selectIsAuthenticated, selectLoading } = authFeature;
+export const { name, reducer, selectAuthState, selectAccessToken, selectLoading } = authFeature;

@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
   watchlistHeader$: Observable<string> | undefined;
 
   ngOnInit(): void {
+    this.store.dispatch(WatchlistActions.loadWatchlist());
+
     this.username$ = this.store.select(selectCurrentUserName);
     this.watchlistItems$ = this.store.select(selectAllWatchlist);
     this.watchlistIds$ = this.watchlistItems$.pipe(map((items) => items.map((item) => item.id)));
