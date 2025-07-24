@@ -1,4 +1,5 @@
 import { Api, Jellyfin } from '@jellyfin/sdk';
+import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import {
   PublicSystemInfo,
@@ -6,11 +7,12 @@ import {
   UserDto,
 } from '@jellyfin/sdk/lib/generated-client/models';
 
-import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
+import { selectAccessToken } from '../reducers/auth.reducer';
 import { toObservable } from '../shared/utils';
 
 @Injectable({
@@ -29,19 +31,28 @@ export class JellyfinService {
   });
   private api: Api;
   constructor() {
-    // TODO need to persist this so we don't have to login every time
     this.api = this.sdk.createApi(environment.jellyfin.baseUrl);
+
+    // if we have already logged in and are reloading the page
+    // we can grab the access token from the store and authorize the api
+    const store = inject(Store);
+    const accessToken$ = store.select(selectAccessToken);
+    accessToken$.subscribe((token) => {
+      if (token) {
+        this.api.accessToken = token;
+      }
+    });
   }
 
-  public login(username: string, password: string): Observable<boolean> {
+  public login(username: string, password: string): Observable<string | null> {
     return toObservable(this.api.authenticateUserByName(username, password)).pipe(
-      map((response) => response.status === 200 && !!response.data.AccessToken),
-      catchError(() => of(false)),
+      map((response) => (response.data.AccessToken ? response.data.AccessToken : null)),
+      catchError(() => of(null)),
     );
   }
 
   public logout(): Observable<void> {
-    return toObservable(this.api.logout()).pipe(map(() => {}));
+    return toObservable(this.api.logout()).pipe(map(() => undefined));
   }
 
   public getCurrentUser(): Observable<UserDto> {

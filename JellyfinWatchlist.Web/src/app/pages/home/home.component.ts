@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 
@@ -17,14 +17,16 @@ import { selectCurrentUserName } from '../../reducers';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  private store = inject(Store);
+
   username$: Observable<string> | undefined;
   watchlistItems$: Observable<WatchlistItem[]> | undefined;
   watchlistIds$: Observable<string[]> | undefined;
   watchlistHeader$: Observable<string> | undefined;
 
-  constructor(private store: Store) {}
-
   ngOnInit(): void {
+    this.store.dispatch(WatchlistActions.loadWatchlist());
+
     this.username$ = this.store.select(selectCurrentUserName);
     this.watchlistItems$ = this.store.select(selectAllWatchlist);
     this.watchlistIds$ = this.watchlistItems$.pipe(map((items) => items.map((item) => item.id)));

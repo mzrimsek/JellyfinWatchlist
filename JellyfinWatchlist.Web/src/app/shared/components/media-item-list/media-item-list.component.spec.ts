@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../models';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 

@@ -1,4 +1,5 @@
-import { State, adapter, initialState, watchlistReducer } from './watchlist.reducer';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { adapter, initialState, watchlistReducer } from './watchlist.reducer';
 
 import { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models';
 import { WatchlistActions } from '../actions/watchlist.actions';

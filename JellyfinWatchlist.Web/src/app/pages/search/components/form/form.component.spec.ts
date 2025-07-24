@@ -114,13 +114,13 @@ describe('FormComponent (Search)', () => {
       component.group.patchValue({ query: 'test search' });
       spectator.detectChanges();
 
-      spyOn(component.search, 'emit');
+      spyOn(component.searchTriggered, 'emit');
 
       const form = spectator.query('form');
       expect(form).toBeTruthy();
       spectator.dispatchFakeEvent(form!, 'submit');
 
-      expect(component.search.emit).toHaveBeenCalledWith();
+      expect(component.searchTriggered.emit).toHaveBeenCalledWith();
     });
 
     it('should emit search event when submit button is clicked', () => {
@@ -128,13 +128,13 @@ describe('FormComponent (Search)', () => {
       component.group.patchValue({ query: 'test search' });
       spectator.detectChanges();
 
-      spyOn(component.search, 'emit');
+      spyOn(component.searchTriggered, 'emit');
 
       const button = spectator.query('button[type="submit"]');
       expect(button).toBeTruthy();
       spectator.click(button!);
 
-      expect(component.search.emit).toHaveBeenCalledWith();
+      expect(component.searchTriggered.emit).toHaveBeenCalledWith();
     });
   });
 

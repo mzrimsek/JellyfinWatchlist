@@ -4,7 +4,7 @@ import { SearchActions } from '../actions/search.actions';
 import { WatchlistItem } from '../shared/models';
 
 export interface State {
-  results: Array<WatchlistItem>;
+  results: WatchlistItem[];
   loading: boolean;
 }
 
@@ -15,24 +15,36 @@ export const initialState: State = {
 
 export const searchReducer = createReducer(
   initialState,
-  on(SearchActions.search, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(SearchActions.searchSucceeded, (state, { results }) => ({
-    ...state,
-    results,
-    loading: false,
-  })),
-  on(SearchActions.searchFailed, (state) => ({
-    ...state,
-    results: [],
-    loading: false,
-  })),
-  on(SearchActions.clear, (state) => ({
-    ...state,
-    results: [],
-  })),
+  on(
+    SearchActions.search,
+    (state): State => ({
+      ...state,
+      loading: true,
+    }),
+  ),
+  on(
+    SearchActions.searchSucceeded,
+    (state, { results }): State => ({
+      ...state,
+      results,
+      loading: false,
+    }),
+  ),
+  on(
+    SearchActions.searchFailed,
+    (state): State => ({
+      ...state,
+      results: [],
+      loading: false,
+    }),
+  ),
+  on(
+    SearchActions.clear,
+    (state): State => ({
+      ...state,
+      results: [],
+    }),
+  ),
 );
 
 const searchFeature = createFeature({

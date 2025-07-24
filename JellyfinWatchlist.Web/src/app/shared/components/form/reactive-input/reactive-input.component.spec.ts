@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 import { MatFormFieldModule } from '@angular/material/form-field';

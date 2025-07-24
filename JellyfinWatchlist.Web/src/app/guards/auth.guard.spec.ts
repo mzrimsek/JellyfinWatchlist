@@ -1,6 +1,7 @@
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
+  ParamMap,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -43,13 +44,13 @@ describe('authGuard', () => {
       outlet: 'primary',
       component: null,
       routeConfig: null,
-      root: {} as any,
+      root: {} as ActivatedRouteSnapshot,
       parent: null,
       firstChild: null,
       children: [],
       pathFromRoot: [],
-      paramMap: {} as any,
-      queryParamMap: {} as any,
+      paramMap: {} as ParamMap,
+      queryParamMap: {} as ParamMap,
       title: undefined,
     } as ActivatedRouteSnapshot;
 
@@ -64,8 +65,8 @@ describe('authGuard', () => {
   });
 
   describe('authentication checks', () => {
-    it('should allow access when user is authenticated', (done) => {
-      store.select.and.returnValue(of(true));
+    it('should allow access when user has valid access token', (done) => {
+      store.select.and.returnValue(of('valid-access-token'));
 
       const result = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -76,8 +77,8 @@ describe('authGuard', () => {
       });
     });
 
-    it('should deny access when user is not authenticated', (done) => {
-      store.select.and.returnValue(of(false));
+    it('should deny access when user has no access token', (done) => {
+      store.select.and.returnValue(of(null));
 
       const result = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -88,8 +89,8 @@ describe('authGuard', () => {
       });
     });
 
-    it('should redirect to login page when authentication fails', (done) => {
-      store.select.and.returnValue(of(false));
+    it('should redirect to login page when access token is null', (done) => {
+      store.select.and.returnValue(of(null));
 
       const result = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -100,8 +101,8 @@ describe('authGuard', () => {
       });
     });
 
-    it('should not redirect when user is authenticated', (done) => {
-      store.select.and.returnValue(of(true));
+    it('should not redirect when user has valid access token', (done) => {
+      store.select.and.returnValue(of('valid-token'));
 
       const result = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -113,8 +114,8 @@ describe('authGuard', () => {
   });
 
   describe('store integration', () => {
-    it('should select authentication status from store', () => {
-      store.select.and.returnValue(of(true));
+    it('should select access token from store', () => {
+      store.select.and.returnValue(of('test-token'));
 
       executeGuard(mockRoute, mockState);
 
@@ -122,7 +123,7 @@ describe('authGuard', () => {
     });
 
     it('should handle multiple authentication checks', (done) => {
-      store.select.and.returnValue(of(false));
+      store.select.and.returnValue(of(null));
 
       const result1 = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -132,7 +133,7 @@ describe('authGuard', () => {
 
         // Reset for second call
         router.navigate.calls.reset();
-        store.select.and.returnValue(of(true));
+        store.select.and.returnValue(of('valid-token'));
 
         const result2 = executeGuard(mockRoute, mockState) as Observable<boolean>;
 
@@ -147,7 +148,7 @@ describe('authGuard', () => {
 
   describe('route parameters', () => {
     it('should work with different route snapshots', (done) => {
-      store.select.and.returnValue(of(true));
+      store.select.and.returnValue(of('access-token'));
 
       const customRoute = Object.assign({}, mockRoute, {
         params: { id: '123' },
@@ -163,7 +164,7 @@ describe('authGuard', () => {
     });
 
     it('should work with different router states', (done) => {
-      store.select.and.returnValue(of(true));
+      store.select.and.returnValue(of('token-123'));
 
       const customState = {
         url: '/different/protected/route',
@@ -180,8 +181,8 @@ describe('authGuard', () => {
   });
 
   describe('guard behavior', () => {
-    it('should return observable that emits authentication state', (done) => {
-      store.select.and.returnValue(of(true));
+    it('should return observable that emits boolean based on access token', (done) => {
+      store.select.and.returnValue(of('valid-access-token'));
 
       const result = executeGuard(mockRoute, mockState);
 
@@ -194,8 +195,8 @@ describe('authGuard', () => {
       });
     });
 
-    it('should handle authentication state correctly for protected routes', (done) => {
-      store.select.and.returnValue(of(false));
+    it('should handle null access token correctly for protected routes', (done) => {
+      store.select.and.returnValue(of(null));
 
       const protectedState = {
         url: '/search',
@@ -208,6 +209,26 @@ describe('authGuard', () => {
         expect(canActivate).toBe(false);
         expect(router.navigate).toHaveBeenCalledWith(['/login']);
         done();
+      });
+    });
+
+    it('should correctly map access token to boolean authentication state', (done) => {
+      // Test with valid token
+      store.select.and.returnValue(of('jwt-token-123'));
+
+      const result1 = executeGuard(mockRoute, mockState) as Observable<boolean>;
+
+      result1.subscribe((canActivate1: boolean) => {
+        expect(canActivate1).toBe(true);
+
+        // Test with null token
+        store.select.and.returnValue(of(null));
+        const result2 = executeGuard(mockRoute, mockState) as Observable<boolean>;
+
+        result2.subscribe((canActivate2: boolean) => {
+          expect(canActivate2).toBe(false);
+          done();
+        });
       });
     });
   });

@@ -1,4 +1,5 @@
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 
@@ -45,7 +46,7 @@ describe('SearchComponent', () => {
     providers: [
       FormBuilder,
       mockProvider(Store, {
-        select: jasmine.createSpy('select').and.callFake((selector) => {
+        select: jasmine.createSpy('select').and.callFake(() => {
           // Default return empty array for most selectors
           return of([]);
         }),
@@ -94,7 +95,7 @@ describe('SearchComponent', () => {
     });
 
     it('should select watchlist ids from store and map to strings', () => {
-      const mockIds = [1, 2, 3];
+      const mockIds = ['1', '2', '3'];
       store.select.and.returnValue(of(mockIds));
       spectator.detectChanges();
 
@@ -247,7 +248,7 @@ describe('SearchComponent', () => {
       const formComponent = spectator.query(FormComponent);
 
       if (formComponent) {
-        formComponent.search.emit();
+        formComponent.searchTriggered.emit();
         expect(component.search).toHaveBeenCalled();
       } else {
         // For shallow rendering with mocks, test the method directly

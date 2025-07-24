@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectWatchlistItemPayload, WatchlistItem } from '../../shared/models';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 

@@ -1,4 +1,5 @@
-import { currentUserReducer, State } from './current-user.reducer';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { State, currentUserReducer } from './current-user.reducer';
 import { CurrentUserActions } from '../actions/current-user.actions';
 import { UserDto } from '@jellyfin/sdk/lib/generated-client/models';
 

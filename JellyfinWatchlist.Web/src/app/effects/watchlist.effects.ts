@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 
 import { WatchlistActions } from '../actions/watchlist.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { State } from '../reducers';
 import { Store } from '@ngrx/store';
 import { concatLatestFrom } from '@ngrx/operators';
 import { catchError, exhaustMap, map, of } from 'rxjs';
@@ -12,7 +11,7 @@ import { selectUser } from '../reducers/current-user.reducer';
 @Injectable()
 export class WatchlistEffects {
   private actions$ = inject(Actions);
-  private store$ = inject(Store<State>);
+  private store = inject(Store);
   private watchlistService = inject(WatchlistService);
 
   itemSelected$ = createEffect(() => {
@@ -31,7 +30,7 @@ export class WatchlistEffects {
   addItem$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(WatchlistActions.addItem),
-      concatLatestFrom(() => this.store$.select(selectUser)),
+      concatLatestFrom(() => this.store.select(selectUser)),
       exhaustMap(([action, currentUser]) => {
         const { item } = action;
         if (!currentUser || !currentUser.Id) {
@@ -48,7 +47,7 @@ export class WatchlistEffects {
   removeItem$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(WatchlistActions.removeItem),
-      concatLatestFrom(() => this.store$.select(selectUser)),
+      concatLatestFrom(() => this.store.select(selectUser)),
       exhaustMap(([action, currentUser]) => {
         const { itemId } = action;
         if (!currentUser || !currentUser.Id) {
@@ -65,8 +64,8 @@ export class WatchlistEffects {
   loadWatchlist$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(WatchlistActions.loadWatchlist),
-      concatLatestFrom(() => this.store$.select(selectUser)),
-      exhaustMap(([action, currentUser]) => {
+      concatLatestFrom(() => this.store.select(selectUser)),
+      exhaustMap(([, currentUser]) => {
         if (!currentUser || !currentUser.Id) {
           return of(WatchlistActions.loadWatchlistFailed({ error: 'User not logged in' }));
         }

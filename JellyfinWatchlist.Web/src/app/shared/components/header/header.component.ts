@@ -1,5 +1,5 @@
 import { AuthActions } from '../../../actions/auth.actions';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  constructor(private store: Store) {}
+  private store = inject(Store);
 
   logout() {
     this.store.dispatch(AuthActions.logout());

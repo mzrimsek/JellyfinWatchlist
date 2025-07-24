@@ -42,10 +42,11 @@ describe('LoginEffects', () => {
   describe('login$', () => {
     it('should return AuthActions.loginSucceeded when login succeeds', (done) => {
       const action = AuthActions.login({ username: 'testuser', password: 'testpass' });
-      const expectedAction = AuthActions.loginSucceeded();
+      const accessToken = 'test-access-token';
+      const expectedAction = AuthActions.loginSucceeded({ accessToken });
 
       actions$ = of(action);
-      jellyfinService.login.and.returnValue(of(true));
+      jellyfinService.login.and.returnValue(of(accessToken));
 
       effects.login$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
@@ -59,7 +60,7 @@ describe('LoginEffects', () => {
       const expectedAction = AuthActions.loginFailed();
 
       actions$ = of(action);
-      jellyfinService.login.and.returnValue(of(false));
+      jellyfinService.login.and.returnValue(of(null));
 
       effects.login$.subscribe((result) => {
         expect(result).toEqual(expectedAction);
@@ -84,13 +85,13 @@ describe('LoginEffects', () => {
 
     it('should handle multiple login attempts', (done) => {
       const action1 = AuthActions.login({ username: 'user1', password: 'pass1' });
-      const action2 = AuthActions.login({ username: 'user2', password: 'pass2' });
+      const accessToken = 'user1-access-token';
 
       actions$ = of(action1);
-      jellyfinService.login.and.returnValue(of(true));
+      jellyfinService.login.and.returnValue(of(accessToken));
 
       effects.login$.subscribe((result) => {
-        expect(result).toEqual(AuthActions.loginSucceeded());
+        expect(result).toEqual(AuthActions.loginSucceeded({ accessToken }));
         expect(jellyfinService.login).toHaveBeenCalledWith('user1', 'pass1');
         done();
       });
@@ -99,7 +100,7 @@ describe('LoginEffects', () => {
 
   describe('loginSucceededNavigate$', () => {
     it('should navigate to home page when login succeeds', (done) => {
-      const action = AuthActions.loginSucceeded();
+      const action = AuthActions.loginSucceeded({ accessToken: 'test-token' });
       actions$ = of(action);
 
       effects.loginSucceededNavigate$.subscribe(() => {
@@ -122,7 +123,7 @@ describe('LoginEffects', () => {
 
   describe('loginSucceededGetCurrentUser$', () => {
     it('should dispatch get current user action when login succeeds', (done) => {
-      const action = AuthActions.loginSucceeded();
+      const action = AuthActions.loginSucceeded({ accessToken: 'test-token' });
       const expectedAction = CurrentUserActions.get();
 
       actions$ = of(action);
@@ -160,7 +161,7 @@ describe('LoginEffects', () => {
     });
 
     it('should not show snack bar on login success', (done) => {
-      const action = AuthActions.loginSucceeded();
+      const action = AuthActions.loginSucceeded({ accessToken: 'test-token' });
       actions$ = of(action);
 
       // Since this effect only listens to loginFailed, it shouldn't trigger
@@ -240,15 +241,16 @@ describe('LoginEffects', () => {
   describe('effect integration', () => {
     it('should handle complete login flow', (done) => {
       const loginAction = AuthActions.login({ username: 'user', password: 'pass' });
+      const accessToken = 'integration-test-token';
       actions$ = of(loginAction);
 
-      jellyfinService.login.and.returnValue(of(true));
+      jellyfinService.login.and.returnValue(of(accessToken));
 
       effects.login$.subscribe((result) => {
-        expect(result).toEqual(AuthActions.loginSucceeded());
+        expect(result).toEqual(AuthActions.loginSucceeded({ accessToken }));
 
         // Test that successful login triggers navigation and user loading
-        const successAction = AuthActions.loginSucceeded();
+        const successAction = AuthActions.loginSucceeded({ accessToken });
         actions$ = of(successAction);
 
         effects.loginSucceededNavigate$.subscribe(() => {

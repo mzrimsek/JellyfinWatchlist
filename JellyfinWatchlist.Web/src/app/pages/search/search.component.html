@@ -3,7 +3,7 @@
     <div class="search-page">
       <app-search-form
         [group]="searchForm"
-        (search)="search()"></app-search-form>
+        (searchTriggered)="search()"></app-search-form>
 
       @if (hasSearched) {
         <app-shared-media-item-list
