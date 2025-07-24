@@ -120,6 +120,67 @@ describe('CurrentUserEffects', () => {
     });
   });
 
+  describe('getCurrentUserSucceeded$', () => {
+    it('should dispatch WatchlistActions.loadWatchlist when user is successfully fetched', (done) => {
+      const action = CurrentUserActions.getSucceeded({ user: mockUser });
+      const expectedAction = WatchlistActions.loadWatchlist();
+
+      actions$ = of(action);
+
+      effects.getCurrentUserSucceeded$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should not trigger on other actions', (done) => {
+      const action = CurrentUserActions.get();
+      actions$ = of(action);
+
+      // This effect should only trigger on getSucceeded, not on get
+      let effectTriggered = false;
+      effects.getCurrentUserSucceeded$.subscribe(() => {
+        effectTriggered = true;
+      });
+
+      setTimeout(() => {
+        expect(effectTriggered).toBe(false);
+        done();
+      }, 100);
+    });
+
+    it('should trigger on any successful user fetch regardless of user data', (done) => {
+      const differentUser = { ...mockUser, Id: 'different-user', Name: 'Different User' };
+      const action = CurrentUserActions.getSucceeded({ user: differentUser });
+      const expectedAction = WatchlistActions.loadWatchlist();
+
+      actions$ = of(action);
+
+      effects.getCurrentUserSucceeded$.subscribe((result) => {
+        expect(result).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should handle multiple successful user actions', (done) => {
+      const action1 = CurrentUserActions.getSucceeded({ user: mockUser });
+      const action2 = CurrentUserActions.getSucceeded({ user: { ...mockUser, Name: 'User 2' } });
+      const expectedAction = WatchlistActions.loadWatchlist();
+
+      actions$ = of(action1, action2);
+
+      let emissionCount = 0;
+      effects.getCurrentUserSucceeded$.subscribe((result) => {
+        emissionCount++;
+        expect(result).toEqual(expectedAction);
+
+        if (emissionCount === 2) {
+          done();
+        }
+      });
+    });
+  });
+
   describe('getCurrentUserFailed$', () => {
     beforeEach(() => {
       spyOn(console, 'log');
@@ -156,6 +217,23 @@ describe('CurrentUserEffects', () => {
         done();
       });
     });
+
+    it('should handle multiple failed actions', (done) => {
+      const action1 = CurrentUserActions.getFailed();
+      const action2 = CurrentUserActions.getFailed();
+
+      actions$ = of(action1, action2);
+
+      let logCallCount = 0;
+      effects.getCurrentUserFailed$.subscribe(() => {
+        logCallCount++;
+        if (logCallCount === 2) {
+          expect(console.log).toHaveBeenCalledTimes(2);
+          expect(console.log).toHaveBeenCalledWith('Failed to get current user');
+          done();
+        }
+      });
+    });
   });
 
   describe('effects integration', () => {
@@ -163,7 +241,7 @@ describe('CurrentUserEffects', () => {
       spyOn(console, 'log');
     });
 
-    it('should handle complete success flow', (done) => {
+    it('should handle complete success flow with watchlist loading', (done) => {
       const action = CurrentUserActions.get();
       actions$ = of(action);
 
@@ -172,7 +250,14 @@ describe('CurrentUserEffects', () => {
       effects.getCurrentUser$.subscribe((result) => {
         expect(result).toEqual(CurrentUserActions.getSucceeded({ user: mockUser }));
         expect(jellyfinService.getCurrentUser).toHaveBeenCalled();
-        done();
+
+        // Now test that the success triggers watchlist loading
+        actions$ = of(CurrentUserActions.getSucceeded({ user: mockUser }));
+
+        effects.getCurrentUserSucceeded$.subscribe((watchlistResult) => {
+          expect(watchlistResult).toEqual(WatchlistActions.loadWatchlist());
+          done();
+        });
       });
     });
 
@@ -195,6 +280,31 @@ describe('CurrentUserEffects', () => {
       });
     });
 
+    it('should handle full user authentication workflow', (done) => {
+      // Test the complete flow: get user -> success -> load watchlist
+      const getUserAction = CurrentUserActions.get();
+      jellyfinService.getCurrentUser.and.returnValue(of(mockUser));
+
+      let step = 0;
+
+      // Step 1: Initial get user action
+      actions$ = of(getUserAction);
+      effects.getCurrentUser$.subscribe((getUserResult) => {
+        step++;
+        expect(step).toBe(1);
+        expect(getUserResult).toEqual(CurrentUserActions.getSucceeded({ user: mockUser }));
+
+        // Step 2: Success action triggers watchlist load
+        actions$ = of(CurrentUserActions.getSucceeded({ user: mockUser }));
+        effects.getCurrentUserSucceeded$.subscribe((watchlistResult) => {
+          step++;
+          expect(step).toBe(2);
+          expect(watchlistResult).toEqual(WatchlistActions.loadWatchlist());
+          done();
+        });
+      });
+    });
+
     it('should handle multiple user types', (done) => {
       const adminUser = { ...mockUser, Name: 'Admin User', Id: 'admin123' };
       const action = CurrentUserActions.get();
@@ -209,6 +319,30 @@ describe('CurrentUserEffects', () => {
           expect(result.user).toEqual(adminUser);
         }
         done();
+      });
+    });
+
+    it('should not load watchlist on user fetch failure', (done) => {
+      const action = CurrentUserActions.get();
+      actions$ = of(action);
+
+      jellyfinService.getCurrentUser.and.returnValue(throwError(() => new Error('Auth failed')));
+
+      effects.getCurrentUser$.subscribe((result) => {
+        expect(result).toEqual(CurrentUserActions.getFailed());
+
+        // Verify that getCurrentUserSucceeded$ doesn't trigger on failure
+        let watchlistLoadTriggered = false;
+        actions$ = of(CurrentUserActions.getFailed());
+
+        effects.getCurrentUserSucceeded$.subscribe(() => {
+          watchlistLoadTriggered = true;
+        });
+
+        setTimeout(() => {
+          expect(watchlistLoadTriggered).toBe(false);
+          done();
+        }, 100);
       });
     });
   });
