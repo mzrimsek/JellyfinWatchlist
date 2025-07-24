@@ -45,7 +45,7 @@ export const reducers: ActionReducerMap<State> = {
 
 const localStorageSyncReducer = (reducer: ActionReducer<unknown>): ActionReducer<unknown> =>
   localStorageSync({
-    keys: ['auth'],
+    keys: ['auth', 'systemInfo', 'currentUser', 'watchlist'],
     rehydrate: true,
     storage: localStorage,
   })(reducer);
