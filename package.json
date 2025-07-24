@@ -1,0 +1,17 @@
+{
+  "name": "jellyfin-watchlist-workspace",
+  "version": "1.0.0",
+  "description": "Development workspace for Jellyfin Watchlist API and Web projects",
+  "private": true,
+  "scripts": {
+    "install": "npm run install:api && npm run install:web",
+    "install:api": "cd JellyfinWatchlist.Api && npm install",
+    "install:web": "cd JellyfinWatchlist.Web && npm install",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "cd JellyfinWatchlist.Api && npm run start:dev",
+    "dev:web": "cd JellyfinWatchlist.Web && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

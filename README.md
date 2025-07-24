@@ -24,7 +24,26 @@ git clone https://github.com/mzrimsek/JellyfinWatchlist.git
 cd JellyfinWatchlist
 ```
 
-### 2. Setup API Server
+### 2. Quick Development Setup
+
+For unified development of both projects:
+
+```bash
+# Install dependencies for both projects
+npm install
+
+# Start both API and Web in development mode
+npm run dev
+```
+
+This will start:
+
+- **API Server**: http://localhost:3000 (with hot reload)
+- **Web Application**: http://localhost:4200 (with hot reload)
+
+### 3. Individual Project Setup
+
+#### Setup API Server
 
 ```bash
 cd JellyfinWatchlist.Api
@@ -43,7 +62,7 @@ npm run start:dev
 
 The API will be available at `http://localhost:3000`
 
-### 3. Setup Web Application
+#### Setup Web Application
 
 ```bash
 cd ../JellyfinWatchlist.Web
