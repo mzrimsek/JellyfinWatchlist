@@ -8,6 +8,7 @@ import { JellyfinService } from '../services/jellyfin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SearchActions } from '../actions/search.actions';
+import { WatchlistActions } from '../actions/watchlist.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -83,6 +84,7 @@ export class LoginEffects {
     { dispatch: false },
   );
 
+  // this can probably be made into a metareducer
   logoutClearSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
@@ -94,6 +96,13 @@ export class LoginEffects {
     return this.actions$.pipe(
       ofType(AuthActions.logout),
       map(() => CurrentUserActions.clear()),
+    );
+  });
+
+  logoutClearWatchlist$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthActions.logout),
+      map(() => WatchlistActions.clear()),
     );
   });
 }

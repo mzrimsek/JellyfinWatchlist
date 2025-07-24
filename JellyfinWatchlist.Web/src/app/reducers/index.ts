@@ -25,7 +25,7 @@ import {
 
 import { environment } from '../../environments/environment';
 import { isDevMode } from '@angular/core';
-import { localStorageSync } from 'ngrx-store-localstorage';
+import { localStorageSyncReducer } from './local-storage-sync.meta-reducer';
 
 export interface State {
   auth: AuthState;
@@ -42,13 +42,6 @@ export const reducers: ActionReducerMap<State> = {
   search: searchReducer,
   watchlist: watchlistReducer,
 };
-
-const localStorageSyncReducer = (reducer: ActionReducer<unknown>): ActionReducer<unknown> =>
-  localStorageSync({
-    keys: ['auth', 'systemInfo', 'currentUser', 'watchlist'],
-    rehydrate: true,
-    storage: localStorage,
-  })(reducer);
 
 const sharedMetaReducers: MetaReducer<any, any>[] = [localStorageSyncReducer];
 export const metaReducers: MetaReducer<State>[] = isDevMode()
