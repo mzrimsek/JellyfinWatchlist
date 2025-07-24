@@ -9,9 +9,12 @@
     "install:web": "cd JellyfinWatchlist.Web && npm install",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "cd JellyfinWatchlist.Api && npm run start:dev",
-    "dev:web": "cd JellyfinWatchlist.Web && npm start"
+    "dev:web": "cd JellyfinWatchlist.Web && npm start",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.1.0",
+    "prettier": "^3.4.2"
   }
 }

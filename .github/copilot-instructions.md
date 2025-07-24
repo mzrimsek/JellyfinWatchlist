@@ -49,8 +49,9 @@ npx ng test --watch=false     # Single run tests (PREFERRED)
 npx ng test --code-coverage   # Test coverage report (PREFERRED)
 ```
 
-**IMPORTANT:** Always use `npx ng test` instead of `npm test` for Angular testing.
-The Angular CLI handles command line arguments more effectively and consistently than npm.
+**IMPORTANT:** Always use `npx ng test` instead of `npm test` for Angular
+testing. The Angular CLI handles command line arguments more effectively and
+consistently than npm.
 
 ### Formatting & Code Quality
 
@@ -99,7 +100,7 @@ afterEach(async () => {
 
 ```typescript
 // Unified test environment setup
-import { setupTestEnvironment } from "../src/test-utils";
+import { setupTestEnvironment } from '../src/test-utils';
 
 // Sets CONFIG_PATH='./test-config' and JELLYFIN_INSTANCE='http://localhost:8096'
 setupTestEnvironment();
@@ -131,8 +132,8 @@ const createComponent = createComponentFactory({
   imports: [ReactiveFormsModule],
   providers: [
     mockProvider(Store, {
-      select: jasmine.createSpy("select").and.returnValue(of("mockData")),
-      dispatch: jasmine.createSpy("dispatch"),
+      select: jasmine.createSpy('select').and.returnValue(of('mockData')),
+      dispatch: jasmine.createSpy('dispatch'),
     }),
   ],
   detectChanges: false, // Manual control for better test setup
@@ -152,11 +153,11 @@ const createService = createServiceFactory({
 
 ```typescript
 // Reducer testing with standard Angular testing
-describe("AuthReducer", () => {
+describe('AuthReducer', () => {
   const initialState: State = { isAuthenticated: false, loading: false };
 
-  it("should handle login action", () => {
-    const action = AuthActions.login({ username: "test", password: "test" });
+  it('should handle login action', () => {
+    const action = AuthActions.login({ username: 'test', password: 'test' });
     const result = authReducer(initialState, action);
 
     expect(result).toEqual({ isAuthenticated: false, loading: true });
@@ -165,12 +166,12 @@ describe("AuthReducer", () => {
 });
 
 // Effects testing with mock services
-describe("LoginEffects", () => {
+describe('LoginEffects', () => {
   let effects: LoginEffects;
   let service: jasmine.SpyObj<JellyfinService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj("JellyfinService", ["login"]);
+    const spy = jasmine.createSpyObj('JellyfinService', ['login']);
     TestBed.configureTestingModule({
       providers: [
         LoginEffects,
@@ -180,13 +181,13 @@ describe("LoginEffects", () => {
     });
     effects = TestBed.inject(LoginEffects);
     service = TestBed.inject(
-      JellyfinService
+      JellyfinService,
     ) as jasmine.SpyObj<JellyfinService>;
   });
 
-  it("should handle successful login", () => {
+  it('should handle successful login', () => {
     service.login.and.returnValue(of(mockResponse));
-    const action = AuthActions.login({ username: "test", password: "test" });
+    const action = AuthActions.login({ username: 'test', password: 'test' });
     actions$ = of(action);
 
     effects.login$.subscribe((result) => {
@@ -196,13 +197,13 @@ describe("LoginEffects", () => {
 });
 
 // EntityAdapter testing for complex state management
-describe("WatchlistReducer with EntityAdapter", () => {
-  it("should maintain alphabetical sorting when adding items", () => {
+describe('WatchlistReducer with EntityAdapter', () => {
+  it('should maintain alphabetical sorting when adding items', () => {
     let state = adapter.addOne(mockItem1, initialState); // 'B Movie'
     state = adapter.addOne(mockItem2, initialState); // 'A Movie'
 
-    expect(state.ids).toEqual(["movie-a", "movie-b"]); // Sorted by name
-    expect(adapter.getSelectors().selectAll(state)[0].name).toBe("A Movie");
+    expect(state.ids).toEqual(['movie-a', 'movie-b']); // Sorted by name
+    expect(adapter.getSelectors().selectAll(state)[0].name).toBe('A Movie');
   });
 });
 ```
@@ -213,8 +214,10 @@ describe("WatchlistReducer with EntityAdapter", () => {
 - **EntityAdapter Testing**: Comprehensive testing of sorting, CRUD operations,
   and large datasets
 - **Effects Testing**: Mock service dependencies with realistic success/error
-  scenarios. Modern effects use direct payload mapping - avoid complex store state checking
-- **Payload Structure**: All watchlist actions use `SelectWatchlistItemPayload` with `{ item: WatchlistItem, action: 'add' | 'remove' }`
+  scenarios. Modern effects use direct payload mapping - avoid complex store
+  state checking
+- **Payload Structure**: All watchlist actions use `SelectWatchlistItemPayload`
+  with `{ item: WatchlistItem, action: 'add' | 'remove' }`
 - **Type Safety**: Full TypeScript integration with Jellyfin SDK types and
   strict type checking
 - **Edge Cases**: Test duplicate handling, rapid state changes, and boundary
@@ -243,10 +246,10 @@ import {
   createComponentFactory,
   Spectator,
   mockProvider,
-} from "@ngneat/spectator";
+} from '@ngneat/spectator';
 
 // ❌ Avoid this - causes Jest module resolution errors in Karma
-import { mockProvider } from "@ngneat/spectator/jest";
+import { mockProvider } from '@ngneat/spectator/jest';
 
 // ✅ Correct Jasmine array length assertion
 expect(items.length).toBe(2);
@@ -289,8 +292,11 @@ export class WatchlistController {
 - **Selectors**: Exported from reducer files, re-exported from
   `reducers/index.ts`
 - **Effects**: Handle async operations, one effect class per feature
-- **Action Payloads**: Use structured payload objects (e.g., `SelectWatchlistItemPayload` with `{ item: WatchlistItem, action: 'add' | 'remove' }`)
-- **Effects Simplification**: Modern effects use direct payload mapping instead of complex store state checking
+- **Action Payloads**: Use structured payload objects (e.g.,
+  `SelectWatchlistItemPayload` with
+  `{ item: WatchlistItem, action: 'add' | 'remove' }`)
+- **Effects Simplification**: Modern effects use direct payload mapping instead
+  of complex store state checking
 - **Testing**: Use standard Angular testing for reducers/effects, Spectator for
   components using store
 
@@ -330,7 +336,9 @@ export class WatchlistController {
   comprehensive testing
 - **Test Patterns**: Established robust patterns for EntityAdapter, async
   effects, type-safe mocking, and payload-based action testing
-- **Recent Improvements**: Simplified effects testing to use direct payload mapping instead of complex store state checking, updated all component tests for new payload structure
+- **Recent Improvements**: Simplified effects testing to use direct payload
+  mapping instead of complex store state checking, updated all component tests
+  for new payload structure
 
 ## Integration Points
 
