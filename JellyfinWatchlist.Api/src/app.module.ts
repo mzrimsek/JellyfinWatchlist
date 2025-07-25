@@ -7,6 +7,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WatchlistItem } from './entities';
 import { WatchlistModule } from './watchlist/watchlist.module';
+import { WebConfigModule } from './web-config/web-config.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { WatchlistModule } from './watchlist/watchlist.module';
       migrationsRun: true, // Automatically runs migrations on startup
     }),
     WatchlistModule,
+    WebConfigModule,
   ],
 })
 export class AppModule {}
