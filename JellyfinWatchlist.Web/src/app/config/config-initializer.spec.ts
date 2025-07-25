@@ -1,40 +1,48 @@
 import { TestBed } from '@angular/core/testing';
 import { ConfigService } from '../services/config.service';
-import { configInitializerFactory, CONFIG_INITIALIZER_PROVIDER } from './config-initializer';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FactoryProvider } from '@angular/core';
+import { initializeConfig, provideConfigInitializer } from './config-initializer';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { runInInjectionContext, inject, Injector } from '@angular/core';
 
 describe('Config Initializer', () => {
-  describe('configInitializerFactory', () => {
-    it('should return a function that calls loadConfig', async () => {
-      const loadConfigSpy = jasmine.createSpy('loadConfig').and.returnValue(Promise.resolve());
-      const mockConfigService: Pick<ConfigService, 'loadConfig'> = {
-        loadConfig: loadConfigSpy,
-      };
+  describe('initializeConfig', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [ConfigService, provideHttpClient(), provideHttpClientTesting()],
+      });
+    });
 
-      const initializerFn = configInitializerFactory(mockConfigService as ConfigService);
+    it('should call loadConfig on ConfigService', async () => {
+      const injector = TestBed.inject(Injector);
 
-      expect(typeof initializerFn).toBe('function');
+      await runInInjectionContext(injector, async () => {
+        const configService = inject(ConfigService);
+        const loadConfigSpy = spyOn(configService, 'loadConfig').and.returnValue(Promise.resolve());
 
-      await initializerFn();
+        await initializeConfig();
 
-      expect(loadConfigSpy).toHaveBeenCalledOnceWith();
+        expect(loadConfigSpy).toHaveBeenCalledOnceWith();
+      });
     });
   });
 
-  describe('CONFIG_INITIALIZER_PROVIDER', () => {
-    it('should be properly configured', () => {
-      const provider = CONFIG_INITIALIZER_PROVIDER as FactoryProvider;
+  describe('provideConfigInitializer', () => {
+    it('should return a provider', () => {
+      const provider = provideConfigInitializer();
 
-      expect(provider.useFactory).toBe(configInitializerFactory);
-      expect(provider.deps).toEqual([ConfigService]);
-      expect(provider.multi).toBe(true);
+      // provideAppInitializer returns a provider, we just check it's defined
+      expect(provider).toBeDefined();
     });
 
     it('should be usable in Angular DI system', () => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        providers: [CONFIG_INITIALIZER_PROVIDER, ConfigService],
+        providers: [
+          provideConfigInitializer(),
+          ConfigService,
+          provideHttpClient(),
+          provideHttpClientTesting(),
+        ],
       });
 
       expect(() => TestBed.inject(ConfigService)).not.toThrow();

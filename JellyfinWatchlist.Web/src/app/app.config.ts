@@ -1,7 +1,7 @@
 import { ApplicationConfig, isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { metaReducers, reducers } from './reducers';
 
-import { CONFIG_INITIALIZER_PROVIDER } from './config/config-initializer';
+import { provideConfigInitializer } from './config/config-initializer';
 import { CurrentUserEffects } from './effects/current-user.effects';
 import { InitEffects } from './effects/init.effects';
 import { LoginEffects } from './effects/login.effects';
@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(reducers, { metaReducers }),
     provideRouterStore(),
     provideHttpClient(),
-    CONFIG_INITIALIZER_PROVIDER, // Load configuration before app initialization
+    provideConfigInitializer(), // Load configuration before app initialization
     provideEffects(
       InitEffects,
       LoginEffects,
