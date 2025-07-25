@@ -4,9 +4,9 @@
   "description": "Development workspace for Jellyfin Watchlist API and Web projects",
   "private": true,
   "scripts": {
-    "install": "npm run install:api && npm run install:web",
-    "install:api": "cd JellyfinWatchlist.Api && npm install",
-    "install:web": "cd JellyfinWatchlist.Web && npm install",
+    "deps": "npm run deps:api && npm run deps:web",
+    "deps:api": "cd JellyfinWatchlist.Api && npm install",
+    "deps:web": "cd JellyfinWatchlist.Web && npm install",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "cd JellyfinWatchlist.Api && npm run start:dev",
     "dev:web": "cd JellyfinWatchlist.Web && npm start",
