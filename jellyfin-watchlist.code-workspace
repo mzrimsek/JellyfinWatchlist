@@ -1,0 +1,52 @@
+{
+  "folders": [
+    {
+      "name": "🌐 Web",
+      "path": "./JellyfinWatchlist.Web",
+    },
+    {
+      "name": "🚀 API",
+      "path": "./JellyfinWatchlist.Api",
+    },
+    {
+      "name": "📁 Root",
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+    "eslint.workingDirectories": ["./JellyfinWatchlist.Api", "./JellyfinWatchlist.Web"],
+    "files.associations": {
+      "*.json": "jsonc",
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.angular": true,
+      "**/coverage": true,
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.angular": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "PKief.angular-component-extractor",
+      "EditorConfig.EditorConfig",
+      "ghaschel.vscode-angular-html",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "angular.ng-template",
+      "andyyaldoo.vscode-json",
+      "bradlc.vscode-tailwindcss",
+      "dbaeumer.vscode-eslint",
+    ],
+  },
+}

@@ -1,0 +1,72 @@
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start:dev",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Webpack compiled successfully"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Debugger listening on"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "isBackground": false,
+      "problemMatcher": "$tsc"
+    },
+    {
+      "type": "npm",
+      "script": "test:watch",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Test Suites:"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test:e2e",
+      "isBackground": false,
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

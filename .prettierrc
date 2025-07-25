@@ -33,14 +33,7 @@
       }
     },
     {
-      "files": "*.scss",
-      "options": {
-        "printWidth": 120,
-        "singleQuote": false
-      }
-    },
-    {
-      "files": "*.css",
+      "files": ["*.scss", "*.css"],
       "options": {
         "printWidth": 120,
         "singleQuote": false
