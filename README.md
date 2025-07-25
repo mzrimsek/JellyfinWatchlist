@@ -14,17 +14,20 @@
 
 ### Option 1: Docker (Recommended for Production)
 
-The easiest way to deploy JellyfinWatchlist is using Docker with runtime configuration.
+The easiest way to deploy JellyfinWatchlist is using Docker with runtime
+configuration.
 
 #### Docker Compose Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/mzrimsek/JellyfinWatchlist.git
    cd JellyfinWatchlist
    ```
 
 2. **Create environment configuration**:
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
@@ -38,11 +41,13 @@ The easiest way to deploy JellyfinWatchlist is using Docker with runtime configu
 **To test the Docker build manually:**
 
 1. **Build the image** (requires Docker running):
+
    ```bash
    docker build -t jellyfin-watchlist .
    ```
 
 2. **Run with custom environment**:
+
    ```bash
    docker run -p 3000:3000 \
      -e JELLYFIN_BASE_URL=http://your-jellyfin-server:8096 \
@@ -50,35 +55,41 @@ The easiest way to deploy JellyfinWatchlist is using Docker with runtime configu
    ```
 
 3. **Run with persistent data (recommended)**:
+
    ```bash
    # Create a local directory for data persistence
    mkdir -p ./data
-   
+
    docker run -p 3000:3000 \
      -e JELLYFIN_BASE_URL=http://your-jellyfin-server:8096 \
      -v ./data:/app/config \
      jellyfin-watchlist
    ```
 
-**Note:** If Docker is not available, you can run locally using the development setup below.
+**Note:** If Docker is not available, you can run locally using the development
+setup below.
 
 The application will be available at `http://localhost:3000`
 
 #### Environment Variables
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `JELLYFIN_BASE_URL` | Your Jellyfin server URL | `http://localhost:8096` | ✅ |
-| `CONFIG_PATH` | Config directory path (for volume mounting) | `/app/config` | Optional |
-| `PORT` | API server port | `3000` | Optional |
-| `HOST` | API server host | `localhost` | Optional |
-| `HTTPS` | Enable HTTPS protocol | `false` | Optional |
+| Variable            | Description                                 | Default                 | Required |
+| ------------------- | ------------------------------------------- | ----------------------- | -------- |
+| `JELLYFIN_BASE_URL` | Your Jellyfin server URL                    | `http://localhost:8096` | ✅       |
+| `CONFIG_PATH`       | Config directory path (for volume mounting) | `/app/config`           | Optional |
+| `PORT`              | API server port                             | `3000`                  | Optional |
+| `HOST`              | API server host                             | `localhost`             | Optional |
+| `HTTPS`             | Enable HTTPS protocol                       | `false`                 | Optional |
 
-**Note:** `NODE_ENV` is automatically set to `production` in the Docker container. The watchlist API URL is dynamically generated based on the server's actual configuration (`PORT`, `HOST`, `HTTPS`).
+**Note:** `NODE_ENV` is automatically set to `production` in the Docker
+container. The watchlist API URL is dynamically generated based on the server's
+actual configuration (`PORT`, `HOST`, `HTTPS`).
 
 #### Data Persistence
 
-The SQLite database and configuration files are stored in the `CONFIG_PATH` directory (`/app/config` by default). **Volume mounting is recommended** for data persistence:
+The SQLite database and configuration files are stored in the `CONFIG_PATH`
+directory (`/app/config` by default). **Volume mounting is recommended** for
+data persistence:
 
 ```bash
 # Docker Compose (recommended)
@@ -111,7 +122,8 @@ PORT=443
 JELLYFIN_BASE_URL=https://jellyfin.yourdomain.com
 ```
 
-The API will automatically generate the correct `watchlist.baseUrl` in the runtime configuration based on these settings.
+The API will automatically generate the correct `watchlist.baseUrl` in the
+runtime configuration based on these settings.
 
 ### Option 2: Development Setup
 
@@ -280,7 +292,7 @@ ng build --configuration=production
 ### **Docker Support** ✅
 
 - ✅ Multi-stage Docker builds for optimized production images
-- ✅ Docker Compose setup for easy deployment  
+- ✅ Docker Compose setup for easy deployment
 - ✅ Runtime environment-based configuration management
 - ✅ Static file serving with production optimizations
 

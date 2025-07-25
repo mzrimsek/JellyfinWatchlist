@@ -3,6 +3,7 @@
 ## ✅ Completed Implementation
 
 ### Phase 1: Fr### Option 2: Direct Docker
+
 ```bash
 docker build -t jellyfin-watchlist .
 
@@ -19,49 +20,60 @@ docker run -p 3000:3000 \
 ```
 
 ### Option 3: Development Mode
+
 ```bash
 # Terminal 1 - API
 cd JellyfinWatchlist.Api && npm run start:dev
 
-# Terminal 2 - Web  
+# Terminal 2 - Web
 cd JellyfinWatchlist.Web && npm start
 ```
 
 ## 📁 **Data Persistence Strategy**
 
 ### Volume Mounting
+
 - **SQLite Database**: Stored in `CONFIG_PATH` directory (`/app/config`)
 - **Configuration Files**: Any additional config stored in same directory
 - **Volume Declaration**: Dockerfile includes `VOLUME ["/app/config"]`
 - **Recommended Mount**: `-v /host/data:/app/config` for persistence
 
 ### Benefits
+
 - **Data Survives**: Container restarts and updates preserve watchlist data
 - **Backup Friendly**: Simple directory to backup/restore
 - **Development**: Easy access to database for debugging
-- **Migration**: Move data between environments by copying directoryonfiguration ✅
+- **Migration**: Move data between environments by copying directoryonfiguration
+  ✅
 - **ConfigService**: Runtime config loading with HTTP API calls
-- **APP_INITIALIZER**: Proper bootstrap timing for async config loading  
+- **APP_INITIALIZER**: Proper bootstrap timing for async config loading
 - **Config Loading Component**: User-friendly loading UI with Material Design
-- **Service Updates**: All services now use runtime config (JellyfinService, etc.)
+- **Service Updates**: All services now use runtime config (JellyfinService,
+  etc.)
 - **Test Coverage**: All 358 frontend tests passing
 
 ### Phase 2: Backend Configuration Endpoint ✅
+
 - **ConfigController**: NestJS endpoint serving environment variables as JSON
 - **Static File Serving**: NestJS configured to serve Angular build files
 - **API Integration**: Frontend loads config from `/api/config` endpoint
 - **Test Coverage**: All 50 backend tests passing (5/5 config tests)
 
 ### Phase 3: Docker Deployment ✅
-- **Multi-stage Dockerfile**: Optimized build with web builder, API builder, and runtime
-- **docker-compose.yml**: Complete orchestration with environment variable examples
-- **Environment Configuration**: Runtime injection of JELLYFIN_BASE_URL, WATCHLIST_BASE_URL
+
+- **Multi-stage Dockerfile**: Optimized build with web builder, API builder, and
+  runtime
+- **docker-compose.yml**: Complete orchestration with environment variable
+  examples
+- **Environment Configuration**: Runtime injection of JELLYFIN_BASE_URL,
+  WATCHLIST_BASE_URL
 - **.dockerignore**: Optimized build context excluding unnecessary files
 - **Documentation**: Complete README with Docker setup instructions
 
 ## 🔧 Technical Architecture
 
 ### Runtime Configuration Flow
+
 1. **Container Start**: Environment variables injected at runtime
 2. **NestJS Boot**: Serves static Angular files + API endpoints
 3. **Angular Init**: APP_INITIALIZER calls ConfigService.loadConfig()
@@ -69,6 +81,7 @@ cd JellyfinWatchlist.Web && npm start
 5. **Service Ready**: All services use injected configuration
 
 ### File Structure Created/Modified
+
 ```
 📁 Root/
 ├── Dockerfile                     # ✅ Multi-stage build
@@ -94,6 +107,7 @@ cd JellyfinWatchlist.Web && npm start
 ## 🎯 Docker Strategy Benefits
 
 ### Best Practices Implemented
+
 1. **Runtime Configuration**: No rebuild needed for different environments
 2. **Multi-stage Builds**: Optimized production image size
 3. **Single Container**: Both frontend and backend in one deployable unit
@@ -102,16 +116,19 @@ cd JellyfinWatchlist.Web && npm start
 6. **Health Checks**: Built-in health endpoint for container orchestration
 
 ### Environment Variable Strategy
+
 - **Build Time**: Only Angular build configuration (production vs development)
 - **Runtime**: Only JELLYFIN_BASE_URL needs external configuration
 - **Internal**: Watchlist API URL is always localhost:3000 (same container)
-- **Automatic**: NODE_ENV=production set in Dockerfile (no external config needed)
+- **Automatic**: NODE_ENV=production set in Dockerfile (no external config
+  needed)
 - **Fallback**: Graceful degradation to compile-time defaults
 - **Type Safety**: TypeScript interfaces for configuration structure
 
 ## 🚀 Deployment Options
 
 ### Option 1: Docker Compose (Recommended)
+
 ```bash
 cp .env.example .env
 # Edit .env with your Jellyfin URL
@@ -119,6 +136,7 @@ docker-compose up -d
 ```
 
 ### Option 2: Direct Docker
+
 ```bash
 docker build -t jellyfin-watchlist .
 docker run -p 3000:3000 \
@@ -127,11 +145,12 @@ docker run -p 3000:3000 \
 ```
 
 ### Option 3: Development Mode
+
 ```bash
 # Terminal 1
 cd JellyfinWatchlist.Api && npm run start:dev
 
-# Terminal 2  
+# Terminal 2
 cd JellyfinWatchlist.Web && npm start
 ```
 
@@ -145,9 +164,11 @@ cd JellyfinWatchlist.Web && npm start
 
 ## 🎉 Mission Accomplished
 
-Your original question about Docker strategies for Angular environment variables has been fully implemented with:
+Your original question about Docker strategies for Angular environment variables
+has been fully implemented with:
 
-1. **Runtime Configuration**: Environment variables injected at container runtime
+1. **Runtime Configuration**: Environment variables injected at container
+   runtime
 2. **Single Container**: Unified deployment with frontend + backend
 3. **Best Practices**: Multi-stage builds, health checks, proper static serving
 4. **Production Ready**: Complete with documentation and testing
