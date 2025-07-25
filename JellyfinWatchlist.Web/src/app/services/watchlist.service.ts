@@ -2,14 +2,18 @@ import { AddWatchlistItem, WatchlistItem } from '../shared/models';
 import { Injectable, inject } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WatchlistService {
-  private controllerUrl = `${environment.watchlist.baseUrl}/watchlist`;
   private httpClient = inject(HttpClient);
+  private configService = inject(ConfigService);
+
+  private get controllerUrl(): string {
+    return `${this.configService.watchlistBaseUrl}/watchlist`;
+  }
 
   getWatchlist(userId: string) {
     return this.httpClient.get<WatchlistItem[]>(`${this.controllerUrl}/${userId}`);

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  jellyfin-watchlist:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - JELLYFIN_BASE_URL=${JELLYFIN_BASE_URL:-http://localhost:8096}
+      - CONFIG_PATH=/app/config
+    volumes:
+      - ./config:/app/config
+    restart: unless-stopped

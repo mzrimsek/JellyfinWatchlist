@@ -1,18 +1,20 @@
 import { Api, Jellyfin } from '@jellyfin/sdk';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, catchError, map, of, take, switchMap } from 'rxjs';
 import {
   PublicSystemInfo,
   SearchHintResult,
   UserDto,
+  AuthenticationResult,
 } from '@jellyfin/sdk/lib/generated-client/models';
 
 import { Store } from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 import { getSearchApi } from '@jellyfin/sdk/lib/utils/api/search-api';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
 import { selectAccessToken } from '../reducers/auth.reducer';
+import { AxiosResponse } from 'axios';
 import { toObservable } from '../shared/utils';
 
 @Injectable({
@@ -29,52 +31,116 @@ export class JellyfinService {
       id: 'JellyfinWatchlist',
     },
   });
-  private api: Api;
-  constructor() {
-    this.api = this.sdk.createApi(environment.jellyfin.baseUrl);
+  private api: Api | null = null;
+  private configService = inject(ConfigService);
+  private store = inject(Store);
 
-    // if we have already logged in and are reloading the page
-    // we can grab the access token from the store and authorize the api
-    const store = inject(Store);
-    const accessToken$ = store.select(selectAccessToken);
+  constructor() {
+    // Initialize API once configuration is loaded
+    this.initializeApi();
+  }
+
+  private initializeApi(): void {
+    // Wait for configuration to be loaded, then initialize the API
+    this.configService.config$
+      .pipe(
+        take(1), // Only take the first emission (when config is loaded)
+      )
+      .subscribe((config) => {
+        if (config.jellyfin.baseUrl) {
+          this.api = this.sdk.createApi(config.jellyfin.baseUrl);
+          this.setupAccessTokenSubscription();
+        }
+      });
+  }
+
+  private setupAccessTokenSubscription(): void {
+    if (!this.api) return;
+
+    // Set up access token subscription for authentication
+    const accessToken$ = this.store.select(selectAccessToken);
     accessToken$.subscribe((token) => {
-      if (token) {
+      if (token && this.api) {
         this.api.accessToken = token;
       }
     });
   }
 
+  private ensureApiInitialized(): Observable<Api> {
+    if (this.api) {
+      return of(this.api);
+    }
+
+    // If API is not initialized, wait for configuration to load
+    return this.configService.config$.pipe(
+      take(1),
+      map((config) => {
+        if (!this.api && config.jellyfin.baseUrl) {
+          this.api = this.sdk.createApi(config.jellyfin.baseUrl);
+          this.setupAccessTokenSubscription();
+        }
+        if (!this.api) {
+          throw new Error('Unable to initialize Jellyfin API - base URL not configured');
+        }
+        return this.api;
+      }),
+    );
+  }
+
   public login(username: string, password: string): Observable<string | null> {
-    return toObservable(this.api.authenticateUserByName(username, password)).pipe(
-      map((response) => (response.data.AccessToken ? response.data.AccessToken : null)),
-      catchError(() => of(null)),
+    return this.ensureApiInitialized().pipe(
+      switchMap((api: Api) =>
+        toObservable(api.authenticateUserByName(username, password)).pipe(
+          map((response: AxiosResponse<AuthenticationResult>) =>
+            response.data.AccessToken ? response.data.AccessToken : null,
+          ),
+          catchError(() => of(null)),
+        ),
+      ),
     );
   }
 
   public logout(): Observable<void> {
-    return toObservable(this.api.logout()).pipe(map(() => undefined));
+    return this.ensureApiInitialized().pipe(
+      switchMap((api: Api) => toObservable(api.logout()).pipe(map(() => undefined))),
+    );
   }
 
   public getCurrentUser(): Observable<UserDto> {
-    const userApi = getUserApi(this.api);
-    return toObservable(userApi.getCurrentUser()).pipe(map((response) => response.data));
+    return this.ensureApiInitialized().pipe(
+      switchMap((api: Api) => {
+        const userApi = getUserApi(api);
+        return toObservable(userApi.getCurrentUser()).pipe(
+          map((response: AxiosResponse<UserDto>) => response.data),
+        );
+      }),
+    );
   }
 
   public getSystemInfo(): Observable<PublicSystemInfo> {
-    const systemApi = getSystemApi(this.api);
-    return toObservable(systemApi.getPublicSystemInfo()).pipe(map((response) => response.data));
+    return this.ensureApiInitialized().pipe(
+      switchMap((api: Api) => {
+        const systemApi = getSystemApi(api);
+        return toObservable(systemApi.getPublicSystemInfo()).pipe(
+          map((response: AxiosResponse<PublicSystemInfo>) => response.data),
+        );
+      }),
+    );
   }
 
   public search(query: string, userId: string): Observable<SearchHintResult> {
-    const searchApi = getSearchApi(this.api);
-
-    return toObservable(
-      searchApi.getSearchHints({
-        searchTerm: query,
-        userId,
-        includeItemTypes: ['Movie', 'Series'],
+    return this.ensureApiInitialized().pipe(
+      switchMap((api: Api) => {
+        const searchApi = getSearchApi(api);
+        return toObservable(
+          searchApi.getSearchHints({
+            searchTerm: query,
+            userId,
+            includeItemTypes: ['Movie', 'Series'],
+          }),
+        ).pipe(map((response: AxiosResponse<SearchHintResult>) => response.data));
       }),
-    ).pipe(map((response) => response.data));
+    );
   }
 
   public getItemPrimaryImageUrl(
@@ -86,6 +152,7 @@ export class JellyfinService {
   ): string {
     // TODO: This is a hack to get the image url. We should use the SDK to get the image url
     // someone enlighten me on how to properly convert the image I am getting back to a data url and I will fix this
-    return `${environment.jellyfin.baseUrl}/Items/${itemId}/Images/Primary?tag=${tag}&quality=${quality}&fillHeight=${fillHeight}&fillWidth=${fillWidth}`;
+    const baseUrl = this.configService.jellyfinBaseUrl;
+    return `${baseUrl}/Items/${itemId}/Images/Primary?tag=${tag}&quality=${quality}&fillHeight=${fillHeight}&fillWidth=${fillWidth}`;
   }
 }

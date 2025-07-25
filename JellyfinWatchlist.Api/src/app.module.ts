@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 import * as path from 'path';
 
 import { ConfigModule } from '@nestjs/config';
+import { ConfigModule as RuntimeConfigModule } from './config/config.module';
 import { HealthModule } from './health/health.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +12,7 @@ import { WatchlistModule } from './watchlist/watchlist.module';
 @Module({
   imports: [
     HealthModule,
+    RuntimeConfigModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       validationSchema: Joi.object({

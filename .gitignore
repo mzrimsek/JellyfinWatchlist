@@ -67,6 +67,9 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-**/config
+# Runtime config directories (not source code)
+/config
+JellyfinWatchlist.Api/config
+JellyfinWatchlist.Web/config
 **/test-config
 **/coverage

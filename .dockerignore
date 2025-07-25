@@ -1,0 +1,54 @@
+# Dependencies
+**/node_modules
+**/npm-debug.log*
+
+# Build outputs
+**/dist
+**/build
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Testing
+**/coverage
+**/.nyc_output
+
+# Logs
+**/logs
+**/*.log
+
+# Runtime data
+**/pids
+**/*.pid
+**/*.seed
+**/*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Database files
+**/*.db
+**/*.sqlite
+**/*.sql
+
+# Angular specific
+**/e2e/
+**/.angular/

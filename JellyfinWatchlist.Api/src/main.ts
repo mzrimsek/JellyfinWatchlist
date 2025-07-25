@@ -1,4 +1,6 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
@@ -8,7 +10,7 @@ declare const module: {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Swagger Configuration
   const config = new DocumentBuilder()
@@ -21,6 +23,23 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   app.enableCors();
+
+  // Serve static files from the Angular build (in production)
+  if (process.env.NODE_ENV === 'production') {
+    // Serve static files
+    app.useStaticAssets(join(__dirname, '..', 'public'), {
+      index: false, // Don't serve index.html automatically
+    });
+
+    // Fallback to index.html for client-side routing (SPA)
+    app.use('*', (req: any, res: any, next: any) => {
+      if (req.originalUrl.startsWith('/api/')) {
+        next(); // Let API routes handle their own responses
+      } else {
+        res.sendFile(join(__dirname, '..', 'public', 'index.html'));
+      }
+    });
+  }
 
   await app.listen(process.env.PORT ?? 3000);
 
