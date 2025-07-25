@@ -1,10 +1,4 @@
-import {
-  ActionReducer,
-  ActionReducerMap,
-  MetaReducer,
-  createFeatureSelector,
-  createSelector,
-} from '@ngrx/store';
+import { ActionReducerMap, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
 import { State as AuthState, authReducer } from './auth.reducer';
 import { State as CurrentUserState, currentUserReducer, selectUser } from './current-user.reducer';
 import { State as SearchState, searchReducer, selectSearchState } from './search.reducer';
@@ -43,6 +37,7 @@ export const reducers: ActionReducerMap<State> = {
   watchlist: watchlistReducer,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const sharedMetaReducers: MetaReducer<any, any>[] = [localStorageSyncReducer];
 export const metaReducers: MetaReducer<State>[] = isDevMode()
   ? [...sharedMetaReducers] // development mode metareducers

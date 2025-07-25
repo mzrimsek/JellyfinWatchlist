@@ -8,7 +8,7 @@ describe('LocalStorageSyncMetaReducer', () => {
 
   beforeEach(() => {
     // Create a mock reducer that returns the state it receives
-    mockReducer = jasmine.createSpy('mockReducer').and.callFake((state, action) => state || {});
+    mockReducer = jasmine.createSpy('mockReducer').and.callFake((state) => state || {});
 
     // Apply the meta-reducer to the mock reducer
     wrappedReducer = localStorageSyncReducer(mockReducer);

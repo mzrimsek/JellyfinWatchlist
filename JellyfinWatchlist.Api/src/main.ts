@@ -33,9 +33,12 @@ async function bootstrap() {
 
     // Fallback to index.html for client-side routing (SPA)
     app.use('*', (req: any, res: any, next: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       if (req.originalUrl.startsWith('/api/')) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         next(); // Let API routes handle their own responses
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         res.sendFile(join(__dirname, '..', 'public', 'index.html'));
       }
     });
